@@ -82,7 +82,7 @@ function EntryPage({ onContinue }) {
           <h1 style={{ fontSize: "clamp(36px,6vw,56px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.08, fontFamily: "'Plus Jakarta Sans',sans-serif", color: "white", margin: 0 }}>
             Hey, I'm{" "}
             <span style={{ background: "linear-gradient(120deg,#a855f7 0%,#e879f9 45%,#38bdf8 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              HibobTheDev.
+              Hibob.
             </span>
           </h1>
         </div>
