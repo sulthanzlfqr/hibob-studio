@@ -3,6 +3,7 @@ import qrisImg from "./assets/qris.png";
 
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const PURCHASE_HUB_URL = "https://www.roblox.com/games/95916036763591/Hibob-Purchase-Hub";
+const PARCEL_URL = "https://cockpit.parcelroblox.com/";
 
 // ─── GANTI INI NANTI ────────────────────────────────────────────────
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1508425500564000820/1UYOB8QtG15PWHlgDW1IPC0l_rpHz_tShPW37GN51Twh0fg60EZumgQq_UT3eTfmo-1J";
@@ -147,7 +148,8 @@ export default function CheckoutPage({ product, onBack }) {
           <div style={{ width: 80, height: 80, borderRadius: "50%", background: "linear-gradient(135deg,#7c3aed,#a855f7)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", fontSize: 36 }}>✓</div>
           <h2 style={{ fontSize: 28, fontWeight: 900, color: "white", marginBottom: 12, letterSpacing: "-0.03em" }}>Pesanan Terkirim!</h2>
           <p style={{ color: "rgba(255,255,255,.5)", lineHeight: 1.75, marginBottom: 8 }}>Bukti pembayaran Anda telah kami terima. Pesanan akan diverifikasi secara manual, dan akun Anda akan di-whitelist setelah pembayaran terkonfirmasi.</p>
-          <p style={{ color: "rgba(255,255,255,.4)", fontSize: 14, lineHeight: 1.75, marginBottom: 28 }}>Pastikan akun Discord Anda telah terhubung dengan akun Roblox Anda di <strong style={{ color: "#a855f7" }}>Parcel</strong> — karena sistem whitelist kami menggunakan Parcel.</p>
+          <p style={{ color: "rgba(255,255,255,.4)", fontSize: 14, lineHeight: 1.75, marginBottom: 16 }}>Pastikan akun Discord Anda telah terhubung dengan akun Roblox Anda di Parcel — karena sistem whitelist kami menggunakan Parcel.</p>
+          <a href={PARCEL_URL} target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "11px 22px", borderRadius: 10, background: "rgba(168,85,247,.12)", border: "1px solid rgba(168,85,247,.3)", color: "#c084fc", fontWeight: 700, fontSize: 13, textDecoration: "none", marginBottom: 20 }}>🔗 Hubungkan Akun di Parcel →</a>
           <a href={DISCORD_URL} target="_blank" rel="noreferrer"
             style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 28px", borderRadius: 12, background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "white", fontWeight: 800, fontSize: 15, textDecoration: "none", marginBottom: 16 }}>
             <Icon name="discord" size={18} /> Bergabung ke Discord
@@ -211,7 +213,7 @@ export default function CheckoutPage({ product, onBack }) {
         {step === 1 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={{ background: "rgba(168,85,247,.06)", border: "1px solid rgba(168,85,247,.2)", borderRadius: 14, padding: "14px 18px", fontSize: 13, color: "rgba(255,255,255,.6)", lineHeight: 1.65 }}>
-              ⚠️ Setelah pesanan dikonfirmasi, pastikan akun <strong style={{ color: "#a855f7" }}>Discord Anda telah terhubung dengan akun Roblox Anda di Parcel</strong> — karena sistem whitelist kami menggunakan Parcel.
+              ⚠️ Setelah pesanan dikonfirmasi, pastikan akun Discord Anda telah terhubung dengan akun Roblox Anda di <a href={PARCEL_URL} target="_blank" rel="noreferrer" style={{color:"#a855f7",fontWeight:700}}>Parcel</a> — karena sistem whitelist kami menggunakan Parcel. Belum terhubung? <a href={PARCEL_URL} target="_blank" rel="noreferrer" style={{color:"#c084fc",fontWeight:700,textDecoration:"underline"}}>Klik di sini untuk menghubungkan akun →</a>
             </div>
 
             {[
