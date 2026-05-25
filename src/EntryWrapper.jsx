@@ -101,7 +101,7 @@ function EntryPage({ onContinue }) {
             onMouseEnter={() => setHoverBtn("port")}
             onMouseLeave={() => setHoverBtn(null)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
-            View Portfolio
+            View My Portfolio and Products
           </button>
 
           {/* Join Discord */}
@@ -125,7 +125,7 @@ function EntryPage({ onContinue }) {
 
         {/* Caption */}
         <p style={{ marginTop: 20, fontSize: 12, color: "rgba(255,255,255,.18)", fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 500, textAlign: "center", opacity: visible ? 1 : 0, transition: `opacity ${ease}`, transitionDelay: "0.32s" }}>
-          English language version
+          Thanks for stopping by!
         </p>
       </div>
 
