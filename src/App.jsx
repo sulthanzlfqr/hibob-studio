@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import avatarImg from "./assets/avatar.png";
+import CheckoutPage from "./CheckoutPage";
 
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const EMAIL_URL = "mailto:sulthan.zlfqr@gmail.com";
@@ -51,21 +52,21 @@ const iconPaths = {
 
 const content = {
   id: {
-    hero: { badge: "Full-Stack Roblox Developer", h1a: "Hai, Gua", h1b: "Hibob.", h1c: "Gua Bikin Roblox", h1d: "Experiences.", sub: "2 tahun develop game Roblox — custom Blender assets, OOP + Knit Framework, dan aftersales yang beneran aktif. Harga mid-range, hasil premium.", cta1: "Hire Me", cta2: "Lihat Projects" },
+    hero: { badge: "Full-Stack Roblox Developer", h1a: "Hai, Gua", h1b: "HibobTheDev.", h1c: "Gua Bikin Roblox", h1d: "Experiences.", sub: "2 tahun develop game Roblox bareng tim — custom Blender assets, OOP + Knit Framework, dan aftersales yang beneran aktif. Harga mid-range, hasil premium.", cta1: "Hire Me", cta2: "Lihat Projects" },
     why: { label: "Kenapa Gua?", h2a: "Bukan Sekadar", h2b: "Developer Biasa.", sub: "Gua gabungin craftsmanship, sistem yang solid, dan aftersales yang beneran ada — bukan cuma janji." },
     services: { label: "Services", h2a: "Apa yang Gua", h2b: "Bisa Bikin.", sub: "Full-stack Roblox development — dari map sampai sistem, dari GUI sampai launch." },
-    projects: { label: "Projects", h2a: "Game yang", h2b: "Udah Gua Bikin.", sub: "Beberapa project dikerjain bareng tim. Dari map, sistem, sampai polish terakhir.", play: "Main Sekarang" },
-    products: { label: "Products", h2a: "Ready-to-Use", h2b: "Roblox Systems.", sub: "Sistem siap pakai yang bisa langsung lu integrasi ke game lu. Dibeli sekali, update selamanya.", showcase: "Lihat Showcase", buy: "Beli di Discord" },
+    projects: { label: "Projects", h2a: "Game yang", h2b: "Udah Gua Bikin.", sub: "Dikerjain bareng tim — gua, Anoj1ng, dan Naka. Dari map, sistem, sampai polish terakhir.", play: "Main Sekarang" },
+    products: { label: "Products", h2a: "Ready-to-Use", h2b: "Roblox Systems.", sub: "Sistem siap pakai yang bisa langsung lu integrasi ke game lu. Dibeli sekali, update selamanya.", showcase: "Lihat Showcase", buy: "Beli Produk" },
     pricing: { label: "Commission Pricing", h2a: "Harga", h2b: "Transparan.", sub: "Mid-range price, premium quality. Semua bisa dinegosiasiin sesuai scope dan budget lu.", note: "* Semua harga bisa dinegosiasikan. Pembayaran via Robux juga tersedia.", startFrom: "mulai dari" },
     testimonials: { label: "Testimonials", h2a: "Kata", h2b: "Klien Gua.", sub: "Bukan sekadar review — ini feedback nyata dari orang-orang yang udah kerja bareng gua." },
     contact: { label: "Open for Commission", h2a: "Ada Project?", h2b: "Let's Work Together.", sub: "Reach out lewat Discord atau Email. Gua fast reply dan siap diskusi scope, timeline, sama budget.", cta1: "Discord — Paling Cepet", cta2: "Email" },
   },
   en: {
-    hero: { badge: "Full-Stack Roblox Developer", h1a: "Hi, I'm", h1b: "Hibob.", h1c: "I Build Roblox", h1d: "Experiences.", sub: "2 years developing Roblox games — custom Blender assets, OOP + Knit Framework, and real active aftersales. Mid-range price, premium results.", cta1: "Hire Me", cta2: "View Projects" },
+    hero: { badge: "Full-Stack Roblox Developer", h1a: "Hi, I'm", h1b: "HibobTheDev.", h1c: "I Build Roblox", h1d: "Experiences.", sub: "2 years developing Roblox games with my team — custom Blender assets, OOP + Knit Framework, and real active aftersales. Mid-range price, premium results.", cta1: "Hire Me", cta2: "View Projects" },
     why: { label: "Why Me?", h2a: "More Than Just", h2b: "A Developer.", sub: "I combine craftsmanship, solid systems, and real aftersales — not just promises." },
     services: { label: "Services", h2a: "What I", h2b: "Can Build.", sub: "Full-stack Roblox development — from maps and systems to GUI and launch polish." },
-    projects: { label: "Projects", h2a: "Games I've", h2b: "Built.", sub: "Built with the team — me, Anoj1ng, and Naka. Map, systems, and final polish.", play: "Play Now" },
-    products: { label: "Products", h2a: "Ready-to-Use", h2b: "Roblox Systems.", sub: "Plug-and-play systems you can integrate directly into your game. Buy once, update forever.", showcase: "View Showcase", buy: "Buy on Discord" },
+    projects: { label: "Projects", h2a: "Games I've", h2b: "Built.", sub: "From solo projects to team collabs — building, scripting, GUI, all the way to launch.", play: "Play Now" },
+    products: { label: "Products", h2a: "Ready-to-Use", h2b: "Roblox Systems.", sub: "Plug-and-play systems you can integrate directly into your game. Buy once, update forever.", showcase: "View Showcase", buy: "Buy Product" },
     pricing: { label: "Commission Pricing", h2a: "Transparent", h2b: "Pricing.", sub: "Mid-range price, premium quality. Everything is negotiable based on your scope and budget.", note: "* All prices are negotiable. Robux payment is also available.", startFrom: "starting from" },
     testimonials: { label: "Testimonials", h2a: "What Clients", h2b: "Say.", sub: "Not just reviews — real feedback from people who've worked with me." },
     contact: { label: "Open for Commission", h2a: "Have a Project?", h2b: "Let's Work Together.", sub: "Reach out via Discord or Email. I reply fast and I'm ready to discuss scope, timeline, and budget.", cta1: "Discord — Fastest", cta2: "Email" },
@@ -73,15 +74,19 @@ const content = {
 };
 
 const projects = [
-  { title: "Mount Aetheria", category: "Adventure / Mountain", desc: { id: "Premium mountain experience dengan atmospheric route design, smooth progression, dan polished journey dari spawn ke summit.", en: "Premium mountain experience with atmospheric route design, smooth progression, and a polished journey from spawn to summit." }, url: "https://www.roblox.com/games/114127426604041/MOUNT-AETHERIA-V3", badge: "MA", year: "2024" },
-  { title: "Mount Elythera", category: "Exploration", desc: { id: "Scenic climbing world dengan immersive terrain dari Blender dan clean exploration flow yang enak dimainin.", en: "Scenic climbing world with immersive Blender terrain and a clean exploration flow." }, url: "https://www.roblox.com/games/102754646900067/Mount-Elythera", badge: "ME", year: "2024" },
-  { title: "Mount Perseus", category: "Adventure Systems", desc: { id: "Mountain project dengan OOP architecture, gameplay systems terstruktur, dan interface yang polished.", en: "Mountain project with OOP architecture, structured gameplay systems, and a polished interface." }, url: "https://www.roblox.com/games/70976156417927/Mount-Perseus", badge: "MP", year: "2024" },
-  { title: "Pulau Cerdas Cermat", category: "Educational", desc: { id: "Educational experience dengan quiz interactions dan player-friendly pacing yang smooth.", en: "Educational experience with quiz interactions and smooth player-friendly pacing." }, url: "https://www.roblox.com/games/115372750478468/Pulau-Cerdas-Cermat", badge: "PCC", year: "2025" },
-  { title: "Mutual Space Club", category: "Social / Hangout", desc: { id: "Social space dengan custom assets eksklusif, visual identity kuat, dan atmosphere yang nyaman buat hangout.", en: "Social space with exclusive custom assets, strong visual identity, and a comfortable hangout atmosphere." }, url: "https://www.roblox.com/games/121781236784127/Mutual-Space-Club", badge: "MSC", year: "2025" },
+  { title: "Mount Aetheria", category: "Adventure / Mountain", roles: ["Scripting","GUI","Building"], desc: { id: "Premium mountain experience dengan atmospheric route design, smooth progression, dan polished journey dari spawn ke summit.", en: "Premium mountain experience with atmospheric route design, smooth progression, and a polished journey from spawn to summit." }, url: "https://www.roblox.com/games/114127426604041/MOUNT-AETHERIA-V3", badge: "MA", year: "2024" },
+  { title: "Mount Elythera", category: "Exploration", roles: ["Full Handle"], desc: { id: "Scenic climbing world dengan immersive terrain dari Blender dan clean exploration flow yang enak dimainin.", en: "Scenic climbing world with immersive Blender terrain and a clean exploration flow." }, url: "https://www.roblox.com/games/102754646900067/Mount-Elythera", badge: "ME", year: "2024" },
+  { title: "Mount Perseus", category: "Adventure Systems", roles: ["Full Handle"], desc: { id: "Mountain project dengan OOP architecture, gameplay systems terstruktur, dan interface yang polished.", en: "Mountain project with OOP architecture, structured gameplay systems, and a polished interface." }, url: "https://www.roblox.com/games/70976156417927/Mount-Perseus", badge: "MP", year: "2024" },
+  { title: "Mount Exodus", category: "Adventure / Mountain", roles: ["Full Handle"], desc: { id: "Mountain experience dengan full development dari building sampai sistem dan polish akhir.", en: "Mountain experience with full development from building to systems and final polish." }, url: "https://www.roblox.com/games/93648214389456/Mount-Exodus", badge: "MX", year: "2024" },
+  { title: "Pulau Cerdas Cermat", category: "Educational", roles: ["Scripting","Building"], desc: { id: "Educational experience dengan quiz interactions dan player-friendly pacing yang smooth.", en: "Educational experience with quiz interactions and smooth player-friendly pacing." }, url: "https://www.roblox.com/games/115372750478468/Pulau-Cerdas-Cermat", badge: "PCC", year: "2025" },
+  { title: "Mutual Space Club", category: "Social / Hangout", roles: ["Full Handle"], desc: { id: "Social space dengan custom assets eksklusif, visual identity kuat, dan atmosphere yang nyaman buat hangout.", en: "Social space with exclusive custom assets, strong visual identity, and a comfortable hangout atmosphere." }, url: "https://www.roblox.com/games/121781236784127/Mutual-Space-Club", badge: "MSC", year: "2025" },
+  { title: "Podblox ID", category: "Social / Hangout", roles: ["Building"], desc: { id: "Social experience dengan custom building yang detail dan environment yang immersive.", en: "Social experience with detailed custom building and an immersive environment." }, url: "https://www.roblox.com/games/127647754933864/PODBLOX-ID", badge: "PB", year: "2025" },
+  { title: "Frost Reaper Club", category: "Club / Social", roles: ["Scripting","GUI"], desc: { id: "Club map dengan sistem scripting yang solid dan GUI yang clean dan interaktif.", en: "Club map with solid scripting systems and a clean, interactive GUI." }, url: "https://www.roblox.com/games/116765847157533/NEW-FROST-REAPER-CLUB", badge: "FR", year: "2025" },
+  { title: "Escape from Robby", category: "Horror / Escape", roles: ["Full Handle"], desc: { id: "Horror escape experience dengan full development — building, scripting, dan GUI dari awal sampai launch.", en: "Horror escape experience with full development — building, scripting, and GUI from start to launch." }, url: "https://www.roblox.com/games/117308005555854/Escape-from-Robby", badge: "ER", year: "2025" },
 ];
 
 const products = [
-  { id: "club-kit", name: "Hibob Club Kit", tag: "Full System", icon: "box", price: { id: "Harga di Discord", en: "Price on Discord" }, update: { id: "Free updates selamanya!", en: "Free updates forever!" }, desc: { id: "Sistem manajemen club Roblox yang lengkap dan terintegrasi. Dirancang buat komunitas yang butuh operasional profesional, efisien, dan realtime.", en: "A complete, integrated club management system for Roblox. Designed for communities that need professional, efficient, and real-time operations." }, features: ["Centralized Admin Panel","Role & Permission System","NameTag & Title System","VIP / VVIP Shop Integration","Dance, Sync & Carry System","Donation System","Leaderboard System","Leveling & Progression","Realtime Sync System","Knit Framework Architecture"], showcase: "https://www.tiktok.com/@hibobbb67/video/7638638271001595143", highlight: true },
+  { id: "club-kit", name: "Hibob Club Kit", tag: "Full System", icon: "box", price: { id: "Rp1.000.000 / R$20.000", en: "IDR 1,000,000 / R$20,000" }, update: { id: "Free updates selamanya!", en: "Free updates forever!" }, desc: { id: "Sistem manajemen club Roblox yang lengkap dan terintegrasi. Dirancang buat komunitas yang butuh operasional profesional, efisien, dan realtime.", en: "A complete, integrated club management system for Roblox. Designed for communities that need professional, efficient, and real-time operations." }, features: ["Centralized Admin Panel","Role & Permission System","NameTag & Title System","VIP / VVIP Shop Integration","Dance, Sync & Carry System","Donation System","Leaderboard System","Leveling & Progression","Realtime Sync System","Knit Framework Architecture"], showcase: "https://www.tiktok.com/@hibobbb67/video/7638638271001595143", highlight: true },
   { id: "music-system", name: "Hibob Music System", tag: "Audio System", icon: "music", price: { id: "Rp300.000 / R$6.000", en: "IDR 300,000 / R$6,000" }, update: { id: "Launch price — harga naik sebentar lagi!", en: "Launch price — going up soon!" }, desc: { id: "Solusi audio management profesional buat Roblox Club Map lu. Dibangun untuk sinkronisasi sempurna, interaktivitas tinggi, dan sound processing yang advanced.", en: "A professional-grade audio management solution for your Roblox Club Map. Built for perfect sync, high interactivity, and advanced sound processing." }, features: ["Full Server Sync — realtime audio sync","Smart Playback — Auto Queue & Request System","Playlist grouping + Smart Search UI","Players can add songs via Asset ID","MusicZones — area-based sound","Crossfade, EQ, Reverb, Compressor","DJ Mode — authorized-only control","Script obfuscation for asset security","Whitelist via Roblox & Discord (Parcel)","Dedicated Discord support"], showcase: "https://www.tiktok.com/@hibobbb67/video/7629686621918498055", highlight: false },
 ];
 
@@ -92,7 +97,7 @@ const services = [
 ];
 
 const whyMe = [
-  { icon: "box", title: { id: "Custom Assets dari Blender", en: "Custom Blender Assets" }, desc: { id: "Semua aset dibuat manual dari basepart dan Blender. Gak ada aset pasaran — setiap build 100% eksklusif.", en: "All assets built manually from baseparts and Blender. No marketplace assets — every build is 100% exclusive." } },
+  { icon: "box", title: { id: "Assets Fleksibel", en: "Flexible Assets" }, desc: { id: "Asset disesuaikan sama scope dan budget lu — bisa custom Blender, basepart manual, atau marketplace. Yang penting hasilnya maksimal.", en: "Assets are tailored to your scope and budget — custom Blender, manual baseparts, or marketplace. What matters is the result." } },
   { icon: "cpu", title: { id: "OOP + Knit Framework", en: "OOP + Knit Framework" }, desc: { id: "Scripting pakai OOP dan Knit Framework. Kode bersih, modular, dan gampang di-maintain jangka panjang.", en: "Scripting with OOP and Knit Framework. Clean, modular code that's easy to maintain long-term." } },
   { icon: "shield", title: { id: "Aftersales Aktif", en: "Active Aftersales" }, desc: { id: "Puluhan klien udah tim gua handle, termasuk bug fix dan revisi minor post-launch yang masuk dalam setiap project.", en: "Dozens of clients handled by our team, including bug fixes and minor post-launch revisions included in every project." } },
   { icon: "users", title: { id: "Tim yang Solid", en: "Solid Team" }, desc: { id: "Gua kerja bareng Anoj1ng dan Naka. Project besar/medium dikerjain bareng, project kecil bisa solo — fleksibel sesuai kebutuhan.", en: "I work alongside Anoj1ng and Naka. Medium/large projects are team efforts, smaller ones can go solo — flexible to your needs." } },
@@ -102,7 +107,7 @@ const whyMe = [
 
 const pricing = [
   { name: { id: "GUI Design", en: "GUI Design" }, price: "500rb", desc: { id: "Interface yang polished dan responsive.", en: "Polished and responsive interface design." }, features: { id: ["HUD & Menu design","Onboarding screens","Visual hierarchy","Smooth animations","1x revisi gratis"], en: ["HUD & Menu design","Onboarding screens","Visual hierarchy","Smooth animations","1 free revision"] }, highlight: false, cta: { id: "Diskusi Project", en: "Discuss Project" } },
-  { name: { id: "Scripting / Building", en: "Scripting / Building" }, price: "1.5jt", desc: { id: "Sistem terstruktur atau world building eksklusif.", en: "Structured systems or exclusive world building." }, features: { id: ["OOP + Knit Framework","Custom Blender assets","Optimized performance","Clean & modular code","Aftersales support","2x revisi gratis"], en: ["OOP + Knit Framework","Custom Blender assets","Optimized performance","Clean & modular code","Aftersales support","2 free revisions"] }, highlight: true, cta: { id: "Diskusi Project", en: "Discuss Project" } },
+  { name: { id: "Scripting / Building", en: "Scripting / Building" }, price: "1.5jt", desc: { id: "Sistem terstruktur atau world building eksklusif.", en: "Structured systems or exclusive world building." }, features: { id: ["OOP + Knit Framework","Assets menyesuaikan budget","Optimized performance","Clean & modular code","Aftersales support","2x revisi gratis"], en: ["OOP + Knit Framework","Assets menyesuaikan budget","Optimized performance","Clean & modular code","Aftersales support","2 free revisions"] }, highlight: true, cta: { id: "Diskusi Project", en: "Discuss Project" } },
   { name: { id: "Full Game Dev", en: "Full Game Dev" }, price: "Custom", desc: { id: "End-to-end development dari konsep sampai launch.", en: "End-to-end development from concept to launch." }, features: { id: ["Building + Scripting + GUI","Game design consultation","Full OOP architecture","Launch support","Aftersales aktif","Revisi minor unlimited"], en: ["Building + Scripting + GUI","Game design consultation","Full OOP architecture","Launch support","Active aftersales","Unlimited minor revisions"] }, highlight: false, cta: { id: "Hubungi Dulu", en: "Get in Touch" } },
 ];
 
@@ -115,7 +120,7 @@ const testimonials = [
 const stats = [
   { value: "30+", label: { id: "Klien Terlayani", en: "Clients Served" } },
   { value: "2+", label: { id: "Tahun Experience", en: "Years Experience" } },
-  { value: "100%", label: { id: "Custom Assets", en: "Custom Assets" } },
+  { value: "100%", label: { id: "Client Satisfied", en: "Client Satisfied" } },
 ];
 
 function useScrollProgress() {
@@ -265,7 +270,8 @@ export default function App() {
   const activeSection = useActiveSection();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
-  const [lang, setLang] = useState("id");
+  const [lang, setLang] = useState("en");
+  const [checkoutProduct, setCheckoutProduct] = useState(null);
   useReveal();
 
   useEffect(() => {
@@ -276,6 +282,10 @@ export default function App() {
 
   const c = content[lang];
   const nav = navItems[lang];
+
+  if (checkoutProduct) {
+    return <CheckoutPage product={checkoutProduct} onBack={() => setCheckoutProduct(null)} />;
+  }
 
   return (
     <div style={{ background: "#03010f", minHeight: "100vh", color: "white", overflowX: "hidden" }}>
@@ -315,7 +325,7 @@ export default function App() {
       <div style={{ position: "relative", zIndex: 1, animation: "fadeIn .6s ease both", paddingTop: 66 }}>
 
         {/* HEADER — always visible */}
-        <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, borderBottom: "1px solid rgba(255,255,255,.06)", backdropFilter: "blur(40px)", background: "rgba(3,1,15,.55)" }}>
+        <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, borderBottom: "1px solid rgba(255,255,255,.06)", backdropFilter: "blur(20px)", background: "rgba(3,1,15,.55)" }}>
           <div style={{ position: "absolute", bottom: 0, left: 0, height: 2, width: `${progress * 100}%`, background: "linear-gradient(90deg,#a855f7,#e879f9,#38bdf8)", transition: "width .1s linear", borderRadius: "0 2px 2px 0" }} />
           <nav style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 66 }}>
             <a href="#home" onClick={(e) => scrollTo(e, "#home")} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", transition: "opacity .2s" }}
@@ -483,7 +493,12 @@ export default function App() {
                         <span style={{ fontSize: 11, fontWeight: 800, padding: "3px 9px", borderRadius: 999, background: "rgba(168,85,247,.12)", border: "1px solid rgba(168,85,247,.25)", color: "#c084fc" }}>{p.badge}</span>
                       </div>
                     </div>
-                    <h3 style={{ fontSize: 20, fontWeight: 800 }}>{p.title}</h3>
+                    <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 10 }}>{p.title}</h3>
+                    <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                      {p.roles.map((r, ri) => (
+                        <span key={ri} style={{ fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: r === "Full Handle" ? "rgba(56,189,248,.1)" : "rgba(168,85,247,.1)", border: r === "Full Handle" ? "1px solid rgba(56,189,248,.25)" : "1px solid rgba(168,85,247,.2)", color: r === "Full Handle" ? "#38bdf8" : "#c084fc", letterSpacing: ".05em", textTransform: "uppercase" }}>{r}</span>
+                      ))}
+                    </div>
                   </div>
                   <div style={{ padding: "16px 22px 22px" }}>
                     <p style={{ fontSize: 13.5, color: "rgba(255,255,255,.46)", lineHeight: 1.78, marginBottom: 18 }}>{p.desc[lang]}</p>
@@ -548,12 +563,12 @@ export default function App() {
                       onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,.06)"}>
                       <Icon name="play" size={14} /> {c.products.showcase}
                     </a>
-                    <a href={DISCORD_URL} target="_blank" rel="noreferrer"
-                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13.5, color: "white", textDecoration: "none", background: prod.highlight ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(168,85,247,.15)", border: prod.highlight ? "1px solid rgba(168,85,247,.5)" : "1px solid rgba(168,85,247,.3)", transition: "all .2s" }}
+                    <button onClick={() => setCheckoutProduct({ name: prod.name, price: prod.price[lang], hasRobux: true })}
+                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13.5, color: "white", textDecoration: "none", background: prod.highlight ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(168,85,247,.15)", border: prod.highlight ? "1px solid rgba(168,85,247,.5)" : "1px solid rgba(168,85,247,.3)", transition: "all .2s", cursor: "pointer", fontFamily: "inherit" }}
                       onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
                       onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
                       <Icon name="message" size={14} /> {c.products.buy}
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
