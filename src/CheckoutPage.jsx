@@ -5,6 +5,18 @@ const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const PURCHASE_HUB_URL = "https://www.roblox.com/games/95916036763591/Hibob-Purchase-Hub";
 const PARCEL_URL = "https://cockpit.parcelroblox.com/";
 
+const VOUCHERS = {
+  "SPESIAL IDUL ADHA": { discount: 100000, type: "fixed", maxUse: 20, label: "Harga spesial jadi Rp100.000!" },
+};
+
+const getVoucherUsage = (code) => {
+  try { return parseInt(localStorage.getItem(`voucher_${code}`) || "0"); } catch { return 0; }
+};
+
+const incrementVoucherUsage = (code) => {
+  try { localStorage.setItem(`voucher_${code}`, getVoucherUsage(code) + 1); } catch {}
+};
+
 // ─── GANTI INI NANTI ────────────────────────────────────────────────
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1508425500564000820/1UYOB8QtG15PWHlgDW1IPC0l_rpHz_tShPW37GN51Twh0fg60EZumgQq_UT3eTfmo-1J";
 
@@ -82,6 +94,8 @@ export default function CheckoutPage({ product, onBack }) {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
+  const [voucher, setVoucher] = useState("");
+  const [voucherStatus, setVoucherStatus] = useState(null);
   const fileRef = useRef();
 
   const handleFile = (e) => {
@@ -96,6 +110,18 @@ export default function CheckoutPage({ product, onBack }) {
   const canNext = form.name && form.discord && form.roblox;
   const canSubmit = form.method === "robux" ? true : (form.method && proof);
 
+  const checkVoucher = () => {
+    const code = voucher.trim().toUpperCase();
+    if (!code) { setVoucherStatus(null); return; }
+    const v = VOUCHERS[code];
+    if (!v) { setVoucherStatus({ valid: false, msg: "Kode voucher tidak valid." }); return; }
+    if (product.voucherOnly && product.voucherOnly !== code) { setVoucherStatus({ valid: false, msg: `Voucher ini tidak berlaku untuk produk ${product.name}.` }); return; }
+    if (product.voucherOnly === code && !product.voucherOnly) { setVoucherStatus({ valid: false, msg: "Voucher ini hanya berlaku untuk produk tertentu." }); return; }
+    const used = getVoucherUsage(code);
+    if (used >= v.maxUse) { setVoucherStatus({ valid: false, msg: "Kode voucher sudah habis digunakan." }); return; }
+    setVoucherStatus({ valid: true, code, ...v, used, msg: `Voucher valid! ${v.label} (sisa ${v.maxUse - used}x)` });
+  };
+
   const handleRobux = () => {
     window.open(PURCHASE_HUB_URL, "_blank");
   };
@@ -105,6 +131,8 @@ export default function CheckoutPage({ product, onBack }) {
     if (!canNext || !canSubmit) return;
     setSubmitting(true);
     setError("");
+
+    if (voucherStatus?.valid) incrementVoucherUsage(voucherStatus.code);
 
     try {
       const fd = new FormData();
@@ -120,6 +148,7 @@ export default function CheckoutPage({ product, onBack }) {
             { name: "🎮 Roblox", value: form.roblox, inline: true },
             { name: "📦 Product", value: product.name, inline: true },
             { name: "💰 Metode Bayar", value: form.method.toUpperCase(), inline: true },
+            { name: "🎟️ Voucher", value: voucherStatus?.valid ? `${voucherStatus.code} (${voucherStatus.label})` : "Tidak ada", inline: true },
             { name: "⚠️ Reminder", value: "Cek bukti pembayaran di attachment. Whitelist via Parcel setelah terverifikasi.", inline: false },
           ],
           footer: { text: "HibobTheDev • Checkout System" },
@@ -228,6 +257,32 @@ export default function CheckoutPage({ product, onBack }) {
                   style={{ width: "100%", padding: "13px 16px", borderRadius: 12, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.1)", color: "white", fontSize: 14, fontFamily: "inherit", transition: "all .2s" }} />
               </div>
             ))}
+
+            {/* Voucher */}
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,.6)", display: "block", marginBottom: 8 }}>
+                Kode Voucher <span style={{fontSize:11,color:"rgba(255,255,255,.3)",fontWeight:500}}>(opsional)</span>
+              </label>
+              {product.voucherOnly && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, padding: "10px 14px", borderRadius: 10, background: "rgba(255,199,0,.07)", border: "1px solid rgba(255,199,0,.2)" }}>
+                  <span style={{ fontSize: 16 }}>🎁</span>
+                  <p style={{ fontSize: 12, color: "#fbbf24", fontWeight: 600 }}>Produk ini memiliki voucher spesial! Cek kodenya di <a href={DISCORD_URL} target="_blank" rel="noreferrer" style={{ color: "#5865f2", fontWeight: 700, textDecoration: "none" }}>Discord kami →</a></p>
+                </div>
+              )}
+              <div style={{ display: "flex", gap: 8 }}>
+                <input className="inp" value={voucher} onChange={(e) => { setVoucher(e.target.value.toUpperCase()); setVoucherStatus(null); }}
+                  placeholder="Masukkan kode voucher"
+                  style={{ flex: 1, padding: "13px 16px", borderRadius: 12, background: "rgba(255,255,255,.04)", border: voucherStatus ? (voucherStatus.valid ? "1px solid rgba(74,222,128,.4)" : "1px solid rgba(248,113,113,.4)") : "1px solid rgba(255,255,255,.1)", color: "white", fontSize: 14, fontFamily: "inherit", transition: "all .2s" }} />
+                <button onClick={checkVoucher} style={{ padding: "13px 18px", borderRadius: 12, background: "rgba(168,85,247,.15)", border: "1px solid rgba(168,85,247,.3)", color: "#c084fc", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap", transition: "all .2s" }}>
+                  Cek
+                </button>
+              </div>
+              {voucherStatus && (
+                <p style={{ fontSize: 12, fontWeight: 600, marginTop: 7, color: voucherStatus.valid ? "#4ade80" : "#f87171" }}>
+                  {voucherStatus.valid ? "✓" : "✗"} {voucherStatus.msg}
+                </p>
+              )}
+            </div>
 
             <button onClick={() => canNext && setStep(2)} disabled={!canNext}
               style={{ marginTop: 8, padding: "14px", borderRadius: 12, border: "none", background: canNext ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(255,255,255,.06)", color: canNext ? "white" : "rgba(255,255,255,.3)", fontSize: 15, fontWeight: 800, cursor: canNext ? "pointer" : "not-allowed", transition: "all .2s", fontFamily: "inherit" }}>

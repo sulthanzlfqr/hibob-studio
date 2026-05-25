@@ -88,6 +88,7 @@ const projects = [
 const products = [
   { id: "club-kit", name: "Hibob Club Kit", tag: "Full System", icon: "box", price: { id: "Rp1.000.000 / R$20.000", en: "IDR 1,000,000 / R$20,000" }, update: { id: "Free updates selamanya!", en: "Free updates forever!" }, desc: { id: "Sistem manajemen club Roblox yang lengkap dan terintegrasi. Dirancang buat komunitas yang butuh operasional profesional, efisien, dan realtime.", en: "A complete, integrated club management system for Roblox. Designed for communities that need professional, efficient, and real-time operations." }, features: ["Centralized Admin Panel","Role & Permission System","NameTag & Title System","VIP / VVIP Shop Integration","Dance, Sync & Carry System","Donation System","Leaderboard System","Leveling & Progression","Realtime Sync System","Knit Framework Architecture"], showcase: "https://www.tiktok.com/@hibobbb67/video/7638638271001595143", highlight: true },
   { id: "music-system", name: "Hibob Music System", tag: "Audio System", icon: "music", price: { id: "Rp300.000 / R$6.000", en: "IDR 300,000 / R$6,000" }, update: { id: "Launch price — harga naik sebentar lagi!", en: "Launch price — going up soon!" }, desc: { id: "Solusi audio management profesional buat Roblox Club Map lu. Dibangun untuk sinkronisasi sempurna, interaktivitas tinggi, dan sound processing yang advanced.", en: "A professional-grade audio management solution for your Roblox Club Map. Built for perfect sync, high interactivity, and advanced sound processing." }, features: ["Full Server Sync — realtime audio sync","Smart Playback — Auto Queue & Request System","Playlist grouping + Smart Search UI","Players can add songs via Asset ID","MusicZones — area-based sound","Crossfade, EQ, Reverb, Compressor","DJ Mode — authorized-only control","Script obfuscation for asset security","Whitelist via Roblox & Discord (Parcel)","Dedicated Discord support"], showcase: "https://www.tiktok.com/@hibobbb67/video/7629686621918498055", highlight: false },
+  { id: "visual-system", name: "Hibob Visual System", tag: "UI Effect Module", icon: "zap", price: { id: "Rp500.000", en: "IDR 500,000" }, update: { id: "Ada voucher spesial! Cek di Discord kami.", en: "Special voucher available! Check our Discord." }, desc: { id: "Modul profesional untuk animasi dan efek visual yang eye-catching pada UI game kamu. Bikin game terlihat lebih polished dan interaktif.", en: "Professional UI effect module for stunning animations and visual effects. Make your game look more polished and interactive." }, features: ["FADE, FLASH, PULSE, STROBE, HOLD, RANDOM effects","Smooth transitions — customizable duration & speed","Background, border, text & stroke color control","Hover & press effects untuk interactive feedback","Config-based system — setup sekali, pakai berkali-kali","Modular architecture — plug & play","Works dengan buttons, labels, topbar, screens","UIGridLayout & UIListLayout support","Haptic feedback support","Production-ready & performance optimized"], showcase: "https://discord.gg/qzCdpasNhG", highlight: false, voucherOnly: "SPESIAL IDUL ADHA" },
 ];
 
 const services = [
@@ -308,7 +309,7 @@ export default function App() {
         ::selection{background:rgba(168,85,247,.35)}
         .nav-link:hover{color:white!important;background:rgba(255,255,255,.06)!important}
         .lang-btn:hover{background:rgba(168,85,247,.2)!important;color:white!important}
-        @media(max-width:768px){ .hero-grid{grid-template-columns:1fr!important} .hero-right{display:none!important} .why-grid{grid-template-columns:1fr!important} .pricing-grid{grid-template-columns:1fr!important} .products-grid{grid-template-columns:1fr!important} .hide-mob{display:none!important} .show-mob{display:flex!important} }
+        @media(max-width:768px){ .hero-grid{grid-template-columns:1fr!important} .hero-right{display:none!important} .why-grid{grid-template-columns:1fr!important} .pricing-grid{grid-template-columns:1fr!important} .products-grid{grid-template-columns:1fr!important} .products-grid-item{grid-template-columns:1fr!important} .hide-mob{display:none!important} .show-mob{display:flex!important} }
         @media(min-width:769px){.show-mob{display:none!important}}
         @media(prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important} [data-reveal]{opacity:1!important;transform:none!important;filter:none!important} }
       `}</style>
@@ -524,7 +525,7 @@ export default function App() {
             <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>{c.products.h2a} <span className="gt">{c.products.h2b}</span></h2>
             <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 520, lineHeight: 1.78 }}>{c.products.sub}</p>
           </div>
-          <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+          <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 18 }}>
             {products.map((prod, i) => (
               <div key={prod.id} data-reveal data-d={`${i + 1}`}
                 style={{ position: "relative", background: prod.highlight ? "rgba(168,85,247,.07)" : "rgba(255,255,255,.03)", border: prod.highlight ? "1px solid rgba(168,85,247,.4)" : "1px solid rgba(255,255,255,.07)", borderRadius: 22, overflow: "hidden", transition: "transform .3s cubic-bezier(.22,1,.36,1), border-color .3s" }}
@@ -563,7 +564,7 @@ export default function App() {
                       onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,.06)"}>
                       <Icon name="play" size={14} /> {c.products.showcase}
                     </a>
-                    <button onClick={() => setCheckoutProduct({ name: prod.name, price: prod.price[lang], hasRobux: true })}
+                    <button onClick={() => setCheckoutProduct({ name: prod.name, price: prod.price[lang], hasRobux: true, voucherOnly: prod.voucherOnly || null })}
                       style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13.5, color: "white", textDecoration: "none", background: prod.highlight ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(168,85,247,.15)", border: prod.highlight ? "1px solid rgba(168,85,247,.5)" : "1px solid rgba(168,85,247,.3)", transition: "all .2s", cursor: "pointer", fontFamily: "inherit" }}
                       onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
                       onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
