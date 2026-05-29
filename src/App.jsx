@@ -4,23 +4,19 @@ import CheckoutPage from "./CheckoutPage";
 
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const EMAIL_URL = "mailto:sulthan.zlfqr@gmail.com";
-const ROBLOX_URL = "https://www.roblox.com/users/8949415735/profile";
+const PANEL_URL = "https://panel.hibobstudio.com";
 
 const navItems = {
   id: [
     { label: "Home", href: "#home" },
-    { label: "Services", href: "#services" },
-    { label: "Projects", href: "#projects" },
     { label: "Products", href: "#products" },
-    { label: "Pricing", href: "#pricing" },
+    { label: "Plans", href: "#pricing" },
     { label: "Contact", href: "#contact" },
   ],
   en: [
     { label: "Home", href: "#home" },
-    { label: "Services", href: "#services" },
-    { label: "Projects", href: "#projects" },
     { label: "Products", href: "#products" },
-    { label: "Pricing", href: "#pricing" },
+    { label: "Plans", href: "#pricing" },
     { label: "Contact", href: "#contact" },
   ],
 };
@@ -52,24 +48,24 @@ const iconPaths = {
 
 const content = {
   id: {
-    hero: { badge: "Full-Stack Roblox Developer", h1a: "Hai, Gua", h1b: "HibobTheDev.", h1c: "Gua Bikin Roblox", h1d: "Experiences.", sub: "2 tahun develop game Roblox bareng tim — custom Blender assets, OOP + Knit Framework, dan aftersales yang beneran aktif. Harga mid-range, hasil premium.", cta1: "Hire Me", cta2: "Lihat Projects" },
+    hero: { badge: "Creator Infrastructure Platform", h1a: "Infrastruktur", h1b: "creator.", h1c: "Untuk creator Roblox", h1d: "yang serius.", sub: "Berhenti kelola audio, aset, identitas, dan lisensi secara manual. Hibob Studio adalah platform yang terhubung, dibangun untuk cara creator Roblox serius bekerja.", cta1: "Open Creator Panel", cta2: "Jelajahi Produk" },
     why: { label: "Kenapa Gua?", h2a: "Bukan Sekadar", h2b: "Developer Biasa.", sub: "Gua gabungin craftsmanship, sistem yang solid, dan aftersales yang beneran ada — bukan cuma janji." },
     services: { label: "Services", h2a: "Apa yang Gua", h2b: "Bisa Bikin.", sub: "Full-stack Roblox development — dari map sampai sistem, dari GUI sampai launch." },
     projects: { label: "Projects", h2a: "Game yang", h2b: "Udah Gua Bikin.", sub: "Dikerjain bareng tim — gua, Anoj1ng, dan Naka. Dari map, sistem, sampai polish terakhir.", play: "Main Sekarang" },
     products: { label: "Products", h2a: "Ready-to-Use", h2b: "Roblox Systems.", sub: "Sistem siap pakai yang bisa langsung lu integrasi ke game lu. Dibeli sekali, update selamanya.", showcase: "Lihat Showcase", buy: "Beli Produk" },
-    pricing: { label: "Commission Pricing", h2a: "Harga", h2b: "Transparan.", sub: "Mid-range price, premium quality. Semua bisa dinegosiasiin sesuai scope dan budget lu.", note: "* Semua harga bisa dinegosiasikan. Pembayaran via Robux juga tersedia.", startFrom: "mulai dari" },
+    pricing: { label: "Creator Plans", h2a: "Pilih level", h2b: "akses kamu.", sub: "Akses platform untuk setiap tahap perjalanan creator kamu. Mulai gratis, scale kapan pun siap.", note: "", startFrom: "mulai" },
     testimonials: { label: "Testimonials", h2a: "Kata", h2b: "Klien Gua.", sub: "Bukan sekadar review — ini feedback nyata dari orang-orang yang udah kerja bareng gua." },
-    contact: { label: "Open for Commission", h2a: "Ada Project?", h2b: "Let's Work Together.", sub: "Reach out lewat Discord atau Email. Gua fast reply dan siap diskusi scope, timeline, sama budget.", cta1: "Discord — Paling Cepet", cta2: "Email" },
+    contact: { label: "Mulai Sekarang", h2a: "Infrastruktur creator", h2b: "kamu sudah siap.", sub: "Buka Creator Panel untuk akses Audio Forge, License Manager, Donation Platform, dan lainnya — semuanya dari satu ekosistem yang terhubung.", cta1: "Open Creator Panel", cta2: "Gabung Komunitas" },
   },
   en: {
-    hero: { badge: "Full-Stack Roblox Developer", h1a: "Hi, I'm", h1b: "HibobTheDev.", h1c: "I Build Roblox", h1d: "Experiences.", sub: "2 years developing Roblox games with my team — custom Blender assets, OOP + Knit Framework, and real active aftersales. Mid-range price, premium results.", cta1: "Hire Me", cta2: "View Projects" },
+    hero: { badge: "Creator Infrastructure Platform", h1a: "Creator", h1b: "infrastructure.", h1c: "For serious Roblox", h1d: "creators.", sub: "Stop managing audio, assets, identity, and licensing manually. Hibob Studio is the connected platform built for how serious Roblox creators actually work.", cta1: "Open Creator Panel", cta2: "Explore Products" },
     why: { label: "Why Me?", h2a: "More Than Just", h2b: "A Developer.", sub: "I combine craftsmanship, solid systems, and real aftersales — not just promises." },
     services: { label: "Services", h2a: "What I", h2b: "Can Build.", sub: "Full-stack Roblox development — from maps and systems to GUI and launch polish." },
     projects: { label: "Projects", h2a: "Games I've", h2b: "Built.", sub: "From solo projects to team collabs — building, scripting, GUI, all the way to launch.", play: "Play Now" },
     products: { label: "Products", h2a: "Ready-to-Use", h2b: "Roblox Systems.", sub: "Plug-and-play systems you can integrate directly into your game. Buy once, update forever.", showcase: "View Showcase", buy: "Buy Product" },
-    pricing: { label: "Commission Pricing", h2a: "Transparent", h2b: "Pricing.", sub: "Mid-range price, premium quality. Everything is negotiable based on your scope and budget.", note: "* All prices are negotiable. Robux payment is also available.", startFrom: "starting from" },
+    pricing: { label: "Creator Plans", h2a: "Choose your", h2b: "level of access.", sub: "Platform access for every stage of your creator journey. Start free, scale when you're ready.", note: "", startFrom: "from" },
     testimonials: { label: "Testimonials", h2a: "What Clients", h2b: "Say.", sub: "Not just reviews — real feedback from people who've worked with me." },
-    contact: { label: "Open for Commission", h2a: "Have a Project?", h2b: "Let's Work Together.", sub: "Reach out via Discord or Email. I reply fast and I'm ready to discuss scope, timeline, and budget.", cta1: "Discord — Fastest", cta2: "Email" },
+    contact: { label: "Get Started", h2a: "Your creator", h2b: "infrastructure is ready.", sub: "Open Creator Panel to access Audio Forge, License Manager, Donation Platform, and more — all from one connected ecosystem.", cta1: "Open Creator Panel", cta2: "Join Community" },
   },
 };
 
@@ -107,9 +103,9 @@ const whyMe = [
 ];
 
 const pricing = [
-  { name: { id: "GUI Design", en: "GUI Design" }, price: "500rb", desc: { id: "Interface yang polished dan responsive.", en: "Polished and responsive interface design." }, features: { id: ["HUD & Menu design","Onboarding screens","Visual hierarchy","Smooth animations","1x revisi gratis"], en: ["HUD & Menu design","Onboarding screens","Visual hierarchy","Smooth animations","1 free revision"] }, highlight: false, cta: { id: "Diskusi Project", en: "Discuss Project" } },
-  { name: { id: "Scripting / Building", en: "Scripting / Building" }, price: "1.5jt", desc: { id: "Sistem terstruktur atau world building eksklusif.", en: "Structured systems or exclusive world building." }, features: { id: ["OOP + Knit Framework","Assets menyesuaikan budget","Optimized performance","Clean & modular code","Aftersales support","2x revisi gratis"], en: ["OOP + Knit Framework","Assets menyesuaikan budget","Optimized performance","Clean & modular code","Aftersales support","2 free revisions"] }, highlight: true, cta: { id: "Diskusi Project", en: "Discuss Project" } },
-  { name: { id: "Full Game Dev", en: "Full Game Dev" }, price: "Custom", desc: { id: "End-to-end development dari konsep sampai launch.", en: "End-to-end development from concept to launch." }, features: { id: ["Building + Scripting + GUI","Game design consultation","Full OOP architecture","Launch support","Aftersales aktif","Revisi minor unlimited"], en: ["Building + Scripting + GUI","Game design consultation","Full OOP architecture","Launch support","Active aftersales","Unlimited minor revisions"] }, highlight: false, cta: { id: "Hubungi Dulu", en: "Get in Touch" } },
+  { name: { id: "Starter", en: "Starter" }, price: "500rb", desc: { id: "Mulai explore platform Hibob Studio.", en: "Start exploring the Hibob Studio platform." }, features: { id: ["Creator Identity (1 akun)","Donation Platform","Creator Panel access","Discord community"], en: ["Creator Identity (1 account)","Donation Platform","Creator Panel access","Discord community"] }, highlight: false, cta: { id: "Mulai Gratis", en: "Start Free" } },
+  { name: { id: "Creator", en: "Creator" }, price: "1.5jt", desc: { id: "Akses penuh untuk creator yang serius.", en: "Full access for creators who mean business." }, features: { id: ["Semua di Starter","Audio Forge (full access)","Asset Manager","License Manager","Creator Plans tools"], en: ["Everything in Starter","Audio Forge (full access)","Asset Manager","License Manager","Creator Plans tools"] }, highlight: true, cta: { id: "Mulai Creator", en: "Start Creator" } },
+  { name: { id: "Studio", en: "Studio" }, price: "Custom", desc: { id: "Untuk tim dan studio yang berkembang.", en: "For teams and growing studios." }, features: { id: ["Semua di Creator","Multi-user access","Kapasitas diperluas","Priority support","API access"], en: ["Everything in Creator","Multi-user access","Expanded capacity","Priority support","API access"] }, highlight: false, cta: { id: "Hubungi Kami", en: "Contact Us" } },
 ];
 
 const testimonials = [
@@ -253,12 +249,12 @@ function MobileMenu({ isOpen, active, onClose, nav }) {
             </a>
           );
         })}
-        <div style={{ display: "flex", gap: 10, marginTop: 20, transition: `all .5s cubic-bezier(.22,1,.36,1) 280ms`, transform: isOpen ? "translateY(0)" : "translateY(20px)", opacity: isOpen ? 1 : 0 }}>
-          <a href={DISCORD_URL} target="_blank" rel="noreferrer" onClick={onClose} style={{ display: "flex", alignItems: "center", gap: 8, padding: "13px 20px", borderRadius: 12, fontWeight: 800, fontSize: 14, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.4)" }}>
-            <Icon name="message" size={16} /> Discord
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20, width: "100%", maxWidth: 320, transition: `all .5s cubic-bezier(.22,1,.36,1) 280ms`, transform: isOpen ? "translateY(0)" : "translateY(20px)", opacity: isOpen ? 1 : 0 }}>
+          <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={onClose} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "16px 20px", borderRadius: 12, fontWeight: 800, fontSize: 15, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.4)" }}>
+            Open Creator Panel <Icon name="arrowRight" size={16} />
           </a>
-          <a href={EMAIL_URL} onClick={onClose} style={{ display: "flex", alignItems: "center", gap: 8, padding: "13px 20px", borderRadius: 12, fontWeight: 800, fontSize: 14, color: "white", textDecoration: "none", background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)" }}>
-            <Icon name="mail" size={16} /> Email
+          <a href={DISCORD_URL} target="_blank" rel="noreferrer" onClick={onClose} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 20px", borderRadius: 12, fontWeight: 800, fontSize: 14, color: "white", textDecoration: "none", background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)" }}>
+            <Icon name="message" size={16} /> Discord
           </a>
         </div>
       </nav>
@@ -332,7 +328,7 @@ export default function App() {
             <a href="#home" onClick={(e) => scrollTo(e, "#home")} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", transition: "opacity .2s" }}
               onMouseEnter={(e) => e.currentTarget.style.opacity = ".8"}
               onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
-              <span style={{ fontSize: 16, fontWeight: 900, letterSpacing: "-0.03em", background: "linear-gradient(120deg,#a855f7,#e879f9,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>HibobTheDev</span>
+              <span style={{ fontSize: 16, fontWeight: 900, letterSpacing: "-0.03em", background: "linear-gradient(120deg,#a855f7,#e879f9,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hibob Studio</span>
             </a>
             <div className="hide-mob" style={{ display: "flex", alignItems: "center", gap: 2, padding: 5, borderRadius: 999, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.07)" }}>
               {nav.map((item) => {
@@ -351,8 +347,8 @@ export default function App() {
                 style={{ display: "flex", alignItems: "center", gap: 5, padding: "7px 13px", borderRadius: 999, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.6)", fontSize: 12, fontWeight: 700, cursor: "pointer", transition: "all .2s", letterSpacing: ".06em" }}>
                 <Icon name="globe" size={13} /> {lang === "id" ? "EN" : "ID"}
               </button>
-              <Btn href={DISCORD_URL} primary className="hide-mob pulse" style={{ padding: "9px 20px", borderRadius: 999, fontSize: 13 }}>
-                Hire Me
+              <Btn href={PANEL_URL} primary className="hide-mob pulse" style={{ padding: "9px 20px", borderRadius: 999, fontSize: 13 }}>
+                Open Creator Panel
               </Btn>
               <button onClick={() => setMenuOpen((v) => !v)} className="show-mob"
                 style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 12, width: 42, height: 42, alignItems: "center", justifyContent: "center", color: "white", cursor: "pointer", transition: "all .2s" }}>
@@ -378,13 +374,10 @@ export default function App() {
             </div>
             <p data-reveal data-d="2" style={{ fontSize: 17, color: "rgba(255,255,255,.5)", lineHeight: 1.78, maxWidth: 500, fontWeight: 400 }}>{c.hero.sub}</p>
             <div data-reveal data-d="3" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Btn href="#contact" primary onClick={(e) => scrollTo(e, "#contact")} style={{ padding: "14px 28px" }}>
+              <Btn href={PANEL_URL} primary style={{ padding: "14px 28px" }}>
                 {c.hero.cta1} <Icon name="arrowRight" size={17} />
               </Btn>
-              <Btn href="#projects" onClick={(e) => scrollTo(e, "#projects")} style={{ padding: "14px 28px" }}>{c.hero.cta2}</Btn>
-              <Btn href={ROBLOX_URL} style={{ padding: "14px 18px", borderRadius: 12 }} title="Roblox Profile">
-                <Icon name="globe" size={17} />
-              </Btn>
+              <Btn href="#products" onClick={(e) => scrollTo(e, "#products")} style={{ padding: "14px 28px" }}>{c.hero.cta2}</Btn>
             </div>
           </div>
 
@@ -396,7 +389,7 @@ export default function App() {
             {/* character */}
             <img
               src={avatarImg}
-              alt="HibobTheDev"
+              alt="Hibob Studio"
               style={{
                 position: "absolute",
                 bottom: 1,
@@ -609,7 +602,7 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-                <a href={DISCORD_URL} target="_blank" rel="noreferrer"
+                <a href={PANEL_URL} target="_blank" rel="noreferrer"
                   style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 12, fontWeight: 800, fontSize: 13.5, color: "white", textDecoration: "none", width: "100%", transition: "all .2s", ...(p.highlight ? { background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)", boxShadow: "0 0 20px rgba(168,85,247,.25)" } : { background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)" }) }}
                   onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
                   onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
@@ -662,11 +655,11 @@ export default function App() {
               <h2 style={{ fontSize: "clamp(28px,4vw,54px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, margin: "12px 0 16px" }}>{c.contact.h2a}<br /><span className="gt">{c.contact.h2b}</span></h2>
               <p style={{ fontSize: 17, color: "rgba(255,255,255,.46)", maxWidth: 460, margin: "0 auto 36px", lineHeight: 1.78 }}>{c.contact.sub}</p>
               <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-                <Btn href={DISCORD_URL} primary style={{ padding: "16px 32px", borderRadius: 14, fontSize: 16 }} className="pulse">
-                  <Icon name="message" size={20} /> {c.contact.cta1}
+                <Btn href={PANEL_URL} primary style={{ padding: "16px 32px", borderRadius: 14, fontSize: 16 }} className="pulse">
+                  {c.contact.cta1} <Icon name="arrowRight" size={20} />
                 </Btn>
-                <Btn href={EMAIL_URL} style={{ padding: "16px 32px", borderRadius: 14, fontSize: 16 }}>
-                  <Icon name="mail" size={20} /> {c.contact.cta2}
+                <Btn href={DISCORD_URL} style={{ padding: "16px 32px", borderRadius: 14, fontSize: 16 }}>
+                  <Icon name="message" size={20} /> {c.contact.cta2}
                 </Btn>
               </div>
             </div>
@@ -677,11 +670,11 @@ export default function App() {
         <footer style={{ borderTop: "1px solid rgba(255,255,255,.06)", padding: "26px 24px" }}>
           <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: 14, fontWeight: 900, letterSpacing: "-0.03em", background: "linear-gradient(120deg,#a855f7,#e879f9,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>HibobTheDev</span>
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,.25)", fontWeight: 500 }}>© 2026 HibobTheDev</span>
+              <span style={{ fontSize: 14, fontWeight: 900, letterSpacing: "-0.03em", background: "linear-gradient(120deg,#a855f7,#e879f9,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hibob Studio</span>
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,.25)", fontWeight: 500 }}>© 2026 Hibob Studio</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-              {[{ label: "Discord", href: DISCORD_URL }, { label: "Roblox", href: ROBLOX_URL }, { label: "Email", href: EMAIL_URL }].map((l) => (
+              {[{ label: "Discord", href: DISCORD_URL }, { label: "Creator Panel", href: PANEL_URL }, { label: "Email", href: EMAIL_URL }].map((l) => (
                 <a key={l.label} href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer"
                   style={{ fontSize: 13, color: "rgba(255,255,255,.28)", textDecoration: "none", fontWeight: 500, transition: "color .2s" }}
                   onMouseEnter={(e) => e.currentTarget.style.color = "white"}
