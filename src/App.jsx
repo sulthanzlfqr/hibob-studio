@@ -490,7 +490,7 @@ export default function App() {
   const cartTotal = getTotal();
 
   return (
-    <div style={{ background: "#03010f", minHeight: "100vh", color: "white", overflowX: "hidden" }}>
+    <div style={{ background: "#010112", minHeight: "100vh", color: "white", overflowX: "hidden" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -523,14 +523,18 @@ export default function App() {
         }
         @media(min-width:769px){.show-mob{display:none!important}}
         @media(prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important} [data-reveal]{opacity:1!important;transform:none!important;filter:none!important} }
+        @keyframes bgBlob1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-4%,5%) scale(1.07)} 66%{transform:translate(5%,-4%) scale(0.93)} }
+        @keyframes bgBlob2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(5%,-7%) scale(1.1)} 66%{transform:translate(-5%,6%) scale(0.9)} }
+        @keyframes bgBlob3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-7%,7%) scale(1.13)} }
+        @keyframes bgBlob4 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(6%,-5%) scale(0.93)} 66%{transform:translate(-4%,7%) scale(1.07)} }
       `}</style>
 
       {/* Background */}
-      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 90% 70% at 8% 0%,rgba(110,35,190,.22) 0%,transparent 55%)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 65% 55% at 95% 15%,rgba(14,100,190,.12) 0%,transparent 55%)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 50% at 50% 100%,rgba(90,25,170,.12) 0%,transparent 65%)" }} />
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px)", backgroundSize: "40px 40px" }} />
+      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, background: "#010112", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: "-20%", right: "-10%", width: "70%", height: "80%", borderRadius: "50%", background: "#4a6cf7", filter: "blur(110px)", opacity: 0.6, animation: "bgBlob1 14s ease-in-out infinite", willChange: "transform" }} />
+        <div style={{ position: "absolute", top: "15%", right: "-15%", width: "62%", height: "72%", borderRadius: "50%", background: "#c828c0", filter: "blur(100px)", opacity: 0.65, animation: "bgBlob2 18s ease-in-out infinite", willChange: "transform" }} />
+        <div style={{ position: "absolute", top: "0%", right: "8%", width: "42%", height: "52%", borderRadius: "50%", background: "#8090ff", filter: "blur(80px)", opacity: 0.45, animation: "bgBlob3 11s ease-in-out infinite", willChange: "transform" }} />
+        <div style={{ position: "absolute", bottom: "-15%", left: "-5%", width: "48%", height: "58%", borderRadius: "50%", background: "#5518a8", filter: "blur(120px)", opacity: 0.35, animation: "bgBlob4 22s ease-in-out infinite", willChange: "transform" }} />
       </div>
 
       <MobileMenu isOpen={menuOpen} active={activeSection} onClose={() => setMenuOpen(false)} />
