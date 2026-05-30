@@ -1,26 +1,19 @@
-import { useEffect, useState, useCallback, useRef } from "react";
-import avatarImg from "./assets/avatar.png";
-import CheckoutPage from "./CheckoutPage";
+import { useEffect, useState, useCallback } from "react";
 
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
-const EMAIL_URL = "mailto:sulthan.zlfqr@gmail.com";
 const PANEL_URL = "https://panel.hibobstudio.com";
+const ROBLOX_PROFILE_URL = "https://www.roblox.com/users/8949415735/profile";
+const ROBLOX_AVATAR_URL = "https://thumbnails.roblox.com/v1/users/avatar?userIds=8949415735&size=420x420&format=Png&isCircular=false";
 
-const navItems = {
-  id: [
-    { label: "Home", href: "#home" },
-    { label: "Products", href: "#products" },
-    { label: "Plans", href: "#pricing" },
-    { label: "Contact", href: "#contact" },
-  ],
-  en: [
-    { label: "Home", href: "#home" },
-    { label: "Products", href: "#products" },
-    { label: "Plans", href: "#pricing" },
-    { label: "Contact", href: "#contact" },
-  ],
-};
+// ─── Navigation ───────────────────────────────────────────────────────────────
+const navItems = [
+  { label: "Beranda", href: "#home" },
+  { label: "Produk", href: "#products" },
+  { label: "Paket", href: "#pricing" },
+  { label: "Tentang", href: "#about" },
+];
 
+// ─── Icon paths ───────────────────────────────────────────────────────────────
 const iconPaths = {
   arrowRight: "M5 12h14M13 5l7 7-7 7",
   code: "M8 9l-4 3 4 3M16 9l4 3-4 3M14 5l-4 14",
@@ -43,50 +36,64 @@ const iconPaths = {
   play: "M5 3l14 9-14 9V3z",
   globe: "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z",
   externalLink: "M15 3h6v6M10 14L21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5",
-  quote: "M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1zm12 0c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z",
+  cart: "M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0",
+  trash: "M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2",
 };
 
-const content = {
-  id: {
-    hero: { badge: "Creator Infrastructure Platform", h1a: "Infrastruktur", h1b: "creator.", h1c: "Untuk creator Roblox", h1d: "yang serius.", sub: "Berhenti kelola audio, aset, identitas, dan lisensi secara manual. Hibob Studio adalah platform yang terhubung, dibangun untuk cara creator Roblox serius bekerja.", cta1: "Open Creator Panel", cta2: "Jelajahi Produk" },
-    why: { label: "Kenapa Gua?", h2a: "Bukan Sekadar", h2b: "Developer Biasa.", sub: "Gua gabungin craftsmanship, sistem yang solid, dan aftersales yang beneran ada — bukan cuma janji." },
-    services: { label: "Services", h2a: "Apa yang Gua", h2b: "Bisa Bikin.", sub: "Full-stack Roblox development — dari map sampai sistem, dari GUI sampai launch." },
-    projects: { label: "Projects", h2a: "Game yang", h2b: "Udah Gua Bikin.", sub: "Dikerjain bareng tim — gua, Anoj1ng, dan Naka. Dari map, sistem, sampai polish terakhir.", play: "Main Sekarang" },
-    products: { label: "Ecosystem", h2a: "Satu platform.", h2b: "Delapan alat terhubung.", sub: "Dari command center creator hingga audio pipeline, license management, dan sistem club — semua bagian dari satu ekosistem yang terhubung.", showcase: "Lihat Showcase", buy: "Beli Produk" },
-    pricing: { label: "Creator Plans", h2a: "Pilih level", h2b: "akses kamu.", sub: "Akses platform untuk setiap tahap perjalanan creator kamu. Mulai gratis, scale kapan pun siap.", note: "", startFrom: "mulai" },
-    testimonials: { label: "Testimonials", h2a: "Kata", h2b: "Klien Gua.", sub: "Bukan sekadar review — ini feedback nyata dari orang-orang yang udah kerja bareng gua." },
-    contact: { label: "Mulai Sekarang", h2a: "Infrastruktur creator", h2b: "kamu sudah siap.", sub: "Buka Creator Panel untuk akses Audio Forge, License Manager, Donation Platform, dan lainnya — semuanya dari satu ekosistem yang terhubung.", cta1: "Open Creator Panel", cta2: "Gabung Komunitas" },
-  },
-  en: {
-    hero: { badge: "Creator Infrastructure Platform", h1a: "Creator", h1b: "infrastructure.", h1c: "For serious Roblox", h1d: "creators.", sub: "Stop managing audio, assets, identity, and licensing manually. Hibob Studio is the connected platform built for how serious Roblox creators actually work.", cta1: "Open Creator Panel", cta2: "Explore Products" },
-    why: { label: "Why Me?", h2a: "More Than Just", h2b: "A Developer.", sub: "I combine craftsmanship, solid systems, and real aftersales — not just promises." },
-    services: { label: "Services", h2a: "What I", h2b: "Can Build.", sub: "Full-stack Roblox development — from maps and systems to GUI and launch polish." },
-    projects: { label: "Projects", h2a: "Games I've", h2b: "Built.", sub: "From solo projects to team collabs — building, scripting, GUI, all the way to launch.", play: "Play Now" },
-    products: { label: "The Ecosystem", h2a: "One platform.", h2b: "Eight connected tools.", sub: "From the creator command center to audio pipeline, license management, and club systems — all part of one connected ecosystem.", showcase: "View Showcase", buy: "Buy Product" },
-    pricing: { label: "Creator Plans", h2a: "Choose your", h2b: "level of access.", sub: "Platform access for every stage of your creator journey. Start free, scale when you're ready.", note: "", startFrom: "from" },
-    testimonials: { label: "Testimonials", h2a: "What Clients", h2b: "Say.", sub: "Not just reviews — real feedback from people who've worked with me." },
-    contact: { label: "Get Started", h2a: "Your creator", h2b: "infrastructure is ready.", sub: "Open Creator Panel to access Audio Forge, License Manager, Donation Platform, and more — all from one connected ecosystem.", cta1: "Open Creator Panel", cta2: "Join Community" },
-  },
-};
-
-const projects = [
-  { title: "Mount Aetheria", category: "Adventure / Mountain", roles: ["Scripting","GUI","Building"], desc: { id: "Premium mountain experience dengan atmospheric route design, smooth progression, dan polished journey dari spawn ke summit.", en: "Premium mountain experience with atmospheric route design, smooth progression, and a polished journey from spawn to summit." }, url: "https://www.roblox.com/games/114127426604041/MOUNT-AETHERIA-V3", badge: "MA", year: "2024" },
-  { title: "Mount Elythera", category: "Exploration", roles: ["Full Handle"], desc: { id: "Scenic climbing world dengan immersive terrain dari Blender dan clean exploration flow yang enak dimainin.", en: "Scenic climbing world with immersive Blender terrain and a clean exploration flow." }, url: "https://www.roblox.com/games/102754646900067/Mount-Elythera", badge: "ME", year: "2024" },
-  { title: "Mount Perseus", category: "Adventure Systems", roles: ["Full Handle"], desc: { id: "Mountain project dengan OOP architecture, gameplay systems terstruktur, dan interface yang polished.", en: "Mountain project with OOP architecture, structured gameplay systems, and a polished interface." }, url: "https://www.roblox.com/games/70976156417927/Mount-Perseus", badge: "MP", year: "2024" },
-  { title: "Mount Exodus", category: "Adventure / Mountain", roles: ["Full Handle"], desc: { id: "Mountain experience dengan full development dari building sampai sistem dan polish akhir.", en: "Mountain experience with full development from building to systems and final polish." }, url: "https://www.roblox.com/games/93648214389456/Mount-Exodus", badge: "MX", year: "2024" },
-  { title: "Pulau Cerdas Cermat", category: "Educational", roles: ["Scripting","Building"], desc: { id: "Educational experience dengan quiz interactions dan player-friendly pacing yang smooth.", en: "Educational experience with quiz interactions and smooth player-friendly pacing." }, url: "https://www.roblox.com/games/115372750478468/Pulau-Cerdas-Cermat", badge: "PCC", year: "2025" },
-  { title: "Mutual Space Club", category: "Social / Hangout", roles: ["Full Handle"], desc: { id: "Social space dengan custom assets eksklusif, visual identity kuat, dan atmosphere yang nyaman buat hangout.", en: "Social space with exclusive custom assets, strong visual identity, and a comfortable hangout atmosphere." }, url: "https://www.roblox.com/games/121781236784127/Mutual-Space-Club", badge: "MSC", year: "2025" },
-  { title: "Podblox ID", category: "Social / Hangout", roles: ["Building"], desc: { id: "Social experience dengan custom building yang detail dan environment yang immersive.", en: "Social experience with detailed custom building and an immersive environment." }, url: "https://www.roblox.com/games/127647754933864/PODBLOX-ID", badge: "PB", year: "2025" },
-  { title: "Frost Reaper Club", category: "Club / Social", roles: ["Scripting","GUI"], desc: { id: "Club map dengan sistem scripting yang solid dan GUI yang clean dan interaktif.", en: "Club map with solid scripting systems and a clean, interactive GUI." }, url: "https://www.roblox.com/games/116765847157533/NEW-FROST-REAPER-CLUB", badge: "FR", year: "2025" },
-  { title: "Escape from Robby", category: "Horror / Escape", roles: ["Full Handle"], desc: { id: "Horror escape experience dengan full development — building, scripting, dan GUI dari awal sampai launch.", en: "Horror escape experience with full development — building, scripting, and GUI from start to launch." }, url: "https://www.roblox.com/games/117308005555854/Escape-from-Robby", badge: "ER", year: "2025" },
+// ─── Games / Projects ─────────────────────────────────────────────────────────
+const games = [
+  { title: "Mount Aetheria", category: "Adventure / Mountain", roles: ["Scripting", "GUI", "Building"], desc: "Premium mountain experience dengan atmospheric route design, smooth progression, dan polished journey dari spawn ke summit.", url: "https://www.roblox.com/games/114127426604041/MOUNT-AETHERIA-V3", badge: "MA", year: "2024" },
+  { title: "Mount Elythera", category: "Exploration", roles: ["Full Handle"], desc: "Scenic climbing world dengan immersive terrain dari Blender dan clean exploration flow yang enak dimainkan.", url: "https://www.roblox.com/games/102754646900067/Mount-Elythera", badge: "ME", year: "2024" },
+  { title: "Mount Perseus", category: "Adventure Systems", roles: ["Full Handle"], desc: "Mountain project dengan OOP architecture, gameplay systems terstruktur, dan interface yang polished.", url: "https://www.roblox.com/games/70976156417927/Mount-Perseus", badge: "MP", year: "2024" },
+  { title: "Mount Exodus", category: "Adventure / Mountain", roles: ["Full Handle"], desc: "Mountain experience dengan full development dari building sampai sistem dan polish akhir.", url: "https://www.roblox.com/games/93648214389456/Mount-Exodus", badge: "MX", year: "2024" },
+  { title: "Pulau Cerdas Cermat", category: "Educational", roles: ["Scripting", "Building"], desc: "Educational experience dengan quiz interactions dan player-friendly pacing yang smooth.", url: "https://www.roblox.com/games/115372750478468/Pulau-Cerdas-Cermat", badge: "PCC", year: "2025" },
+  { title: "Mutual Space Club", category: "Social / Hangout", roles: ["Full Handle"], desc: "Social space dengan custom assets eksklusif, visual identity kuat, dan atmosphere yang nyaman untuk hangout.", url: "https://www.roblox.com/games/121781236784127/Mutual-Space-Club", badge: "MSC", year: "2025" },
+  { title: "Podblox ID", category: "Social / Hangout", roles: ["Building"], desc: "Social experience dengan custom building yang detail dan environment yang immersive.", url: "https://www.roblox.com/games/127647754933864/PODBLOX-ID", badge: "PB", year: "2025" },
+  { title: "Frost Reaper Club", category: "Club / Social", roles: ["Scripting", "GUI"], desc: "Club map dengan sistem scripting yang solid dan GUI yang clean dan interaktif.", url: "https://www.roblox.com/games/116765847157533/NEW-FROST-REAPER-CLUB", badge: "FR", year: "2025" },
+  { title: "Escape from Robby", category: "Horror / Escape", roles: ["Full Handle"], desc: "Horror escape experience dengan full development — building, scripting, dan GUI dari awal sampai launch.", url: "https://www.roblox.com/games/117308005555854/Escape-from-Robby", badge: "ER", year: "2025" },
 ];
 
-const products = [
-  { id: "club-kit", name: "Hibob Club Kit", tag: "Full System", icon: "box", price: { id: "Rp1.000.000 / R$20.000", en: "IDR 1,000,000 / R$20,000" }, update: { id: "Free updates selamanya!", en: "Free updates forever!" }, desc: { id: "Sistem manajemen club Roblox yang lengkap dan terintegrasi. Dirancang buat komunitas yang butuh operasional profesional, efisien, dan realtime.", en: "A complete, integrated club management system for Roblox. Designed for communities that need professional, efficient, and real-time operations." }, features: ["Centralized Admin Panel","Role & Permission System","NameTag & Title System","VIP / VVIP Shop Integration","Dance, Sync & Carry System","Donation System","Leaderboard System","Leveling & Progression","Realtime Sync System","Knit Framework Architecture"], showcase: "https://www.tiktok.com/@hibobbb67/video/7638638271001595143", highlight: true },
-  { id: "music-system", name: "Hibob Music System", tag: "Audio System", icon: "music", price: { id: "Rp300.000 / R$6.000", en: "IDR 300,000 / R$6,000" }, update: { id: "Launch price — harga naik sebentar lagi!", en: "Launch price — going up soon!" }, desc: { id: "Solusi audio management profesional buat Roblox Club Map lu. Dibangun untuk sinkronisasi sempurna, interaktivitas tinggi, dan sound processing yang advanced.", en: "A professional-grade audio management solution for your Roblox Club Map. Built for perfect sync, high interactivity, and advanced sound processing." }, features: ["Full Server Sync — realtime audio sync","Smart Playback — Auto Queue & Request System","Playlist grouping + Smart Search UI","Players can add songs via Asset ID","MusicZones — area-based sound","Crossfade, EQ, Reverb, Compressor","DJ Mode — authorized-only control","Script obfuscation for asset security","Whitelist via Roblox & Discord (Parcel)","Dedicated Discord support"], showcase: "https://www.tiktok.com/@hibobbb67/video/7629686621918498055", highlight: false },
-  { id: "visual-system", name: "Hibob Visual System", tag: "UI Effect Module", icon: "zap", price: { id: "Rp500.000", en: "IDR 500,000" }, update: { id: "Ada voucher spesial! Cek di Discord kami.", en: "Special voucher available! Check our Discord." }, desc: { id: "Modul profesional untuk animasi dan efek visual yang eye-catching pada UI game kamu. Bikin game terlihat lebih polished dan interaktif.", en: "Professional UI effect module for stunning animations and visual effects. Make your game look more polished and interactive." }, features: ["FADE, FLASH, PULSE, STROBE, HOLD, RANDOM effects","Smooth transitions — customizable duration & speed","Background, border, text & stroke color control","Hover & press effects untuk interactive feedback","Config-based system — setup sekali, pakai berkali-kali","Modular architecture — plug & play","Works dengan buttons, labels, topbar, screens","UIGridLayout & UIListLayout support","Haptic feedback support","Production-ready & performance optimized"], showcase: "https://discord.gg/qzCdpasNhG", highlight: false, voucherOnly: "SPESIAL IDUL ADHA" },
+// ─── Commercial Products (for cart) ───────────────────────────────────────────
+const commercialProducts = [
+  {
+    id: "club-kit",
+    name: "Hibob Club Kit",
+    tag: "Full System",
+    icon: "box",
+    price: "Rp1.000.000 / R$20.000",
+    priceNum: 1000000,
+    desc: "Sistem manajemen club Roblox yang lengkap dan terintegrasi. Dirancang untuk komunitas yang membutuhkan operasional profesional, efisien, dan realtime.",
+    features: ["Centralized Admin Panel", "Role & Permission System", "NameTag & Title System", "VIP / VVIP Shop Integration", "Dance, Sync & Carry System", "Donation System", "Leaderboard System", "Leveling & Progression", "Realtime Sync System", "Knit Framework Architecture"],
+    showcase: "https://www.tiktok.com/@hibobbb67/video/7638638271001595143",
+    highlight: true,
+  },
+  {
+    id: "music-system",
+    name: "Hibob Music System",
+    tag: "Audio System",
+    icon: "music",
+    price: "Rp300.000 / R$6.000",
+    priceNum: 300000,
+    desc: "Solusi audio management profesional untuk Roblox Club Map. Dibangun untuk sinkronisasi sempurna, interaktivitas tinggi, dan sound processing yang advanced.",
+    features: ["Full Server Sync — realtime audio sync", "Smart Playback — Auto Queue & Request", "Playlist grouping + Smart Search UI", "Players can add songs via Asset ID", "MusicZones — area-based sound", "Crossfade, EQ, Reverb, Compressor", "DJ Mode — authorized-only control", "Script obfuscation for security", "Whitelist via Roblox & Discord", "Dedicated Discord support"],
+    showcase: "https://www.tiktok.com/@hibobbb67/video/7629686621918498055",
+    highlight: false,
+  },
+  {
+    id: "visual-system",
+    name: "Hibob Visual System",
+    tag: "UI Effect Module",
+    icon: "zap",
+    price: "Rp500.000",
+    priceNum: 500000,
+    desc: "Modul profesional untuk animasi dan efek visual yang eye-catching pada UI game. Tampilan lebih polished dan interaktif.",
+    features: ["FADE, FLASH, PULSE, STROBE, HOLD effects", "Smooth transitions — customizable speed", "Background, border, text color control", "Hover & press effects", "Config-based system — setup sekali", "Modular architecture — plug & play", "Works dengan semua UI elements", "UIGridLayout & UIListLayout support", "Haptic feedback support", "Production-ready & optimized"],
+    showcase: "https://discord.gg/qzCdpasNhG",
+    highlight: false,
+  },
 ];
 
+// ─── Platform Products ────────────────────────────────────────────────────────
 const platformProducts = [
   {
     id: "creator-panel",
@@ -95,13 +102,10 @@ const platformProducts = [
     icon: "layers",
     status: "available",
     isHub: true,
-    desc: {
-      id: "Command center terpusat untuk mengelola lisensi, audio assets, donasi, identitas, dan semua creator tools dari satu dashboard.",
-      en: "Centralized command center for managing licenses, audio assets, donations, identities, and creator tools from a single dashboard.",
-    },
-    highlights: ["Discord Identity","Roblox Identity","License Management","Asset Management","Donation Tracking","Unified Creator Dashboard"],
-    ctaPrimary: { id: "Buka Panel", en: "Open Panel" },
-    ctaSecondary: { id: "Pelajari Lebih", en: "Learn More" },
+    desc: "Command center terpusat untuk mengelola lisensi, audio assets, donasi, identitas, dan semua creator tools dari satu dashboard.",
+    highlights: ["Discord Identity", "Roblox Identity", "License Management", "Asset Management", "Donation Tracking", "Unified Creator Dashboard"],
+    ctaPrimary: "Buka Panel",
+    ctaSecondary: "Pelajari Lebih",
   },
   {
     id: "audio-forge",
@@ -109,25 +113,19 @@ const platformProducts = [
     badge: "Audio Pipeline",
     icon: "music",
     status: "coming-soon",
-    desc: {
-      id: "Convert, proses, preview, publish, dan kelola Roblox audio assets lewat workflow creator yang profesional.",
-      en: "Convert, process, preview, publish, and manage Roblox audio assets through a professional creator workflow.",
-    },
-    highlights: ["Preview Engine","Roblox Upload Pipeline","Asset Library","Quota Management","Audio Processing"],
-    ctaPrimary: { id: "Coba Audio Forge", en: "Try Audio Forge" },
+    desc: "Convert, proses, preview, publish, dan kelola Roblox audio assets lewat workflow creator yang profesional.",
+    highlights: ["Preview Engine", "Roblox Upload Pipeline", "Asset Library", "Quota Management", "Audio Processing"],
+    ctaPrimary: "Coba Audio Forge",
   },
   {
     id: "donate-system",
-    name: "Hibob Donate System",
+    name: "Donation System",
     badge: "Donation Platform",
     icon: "zap",
     status: "available",
-    desc: {
-      id: "Hubungkan donasi Bagibagi langsung ke Roblox experience dengan realtime events, effects, dan creator analytics.",
-      en: "Connect Bagibagi donations directly to your Roblox experience with real-time events, effects, and creator analytics.",
-    },
-    highlights: ["Bagibagi Integration","Real-time Donation Events","Roblox Effects Trigger","Creator Analytics","Web Dashboard Control"],
-    ctaPrimary: { id: "Lihat Sistem", en: "View System" },
+    desc: "Hubungkan donasi Bagibagi langsung ke Roblox experience dengan realtime events, effects, dan creator analytics.",
+    highlights: ["Bagibagi Integration", "Real-time Donation Events", "Roblox Effects Trigger", "Creator Analytics", "Web Dashboard Control"],
+    ctaPrimary: "Lihat Sistem",
   },
   {
     id: "license-manager",
@@ -135,12 +133,9 @@ const platformProducts = [
     badge: "Creator Security",
     icon: "shield",
     status: "coming-soon",
-    desc: {
-      id: "Lindungi sistem Roblox premium dengan verifikasi kepemilikan berbasis Discord dan pengiriman lisensi otomatis.",
-      en: "Protect premium Roblox systems with Discord-based ownership verification and automated license delivery.",
-    },
-    highlights: ["Discord Verification","Ownership Tracking","Automatic Delivery","License Revocation","Universe Binding"],
-    ctaPrimary: { id: "Lihat Sistem", en: "View System" },
+    desc: "Lindungi sistem Roblox premium dengan verifikasi kepemilikan berbasis Discord dan pengiriman lisensi otomatis.",
+    highlights: ["Discord Verification", "Ownership Tracking", "Automatic Delivery", "License Revocation", "Universe Binding"],
+    ctaPrimary: "Lihat Sistem",
   },
   {
     id: "asset-manager",
@@ -148,48 +143,78 @@ const platformProducts = [
     badge: "Creator Assets",
     icon: "box",
     status: "coming-soon",
-    desc: {
-      id: "Kelola Roblox assets, ownership records, permissions, dan creator resources dari satu tempat.",
-      en: "Manage Roblox assets, ownership records, permissions, and creator resources from one place.",
-    },
-    highlights: ["Asset Library","Ownership Records","Version Tracking","Team Access","Resource Organization"],
-    ctaPrimary: { id: "Lihat Sistem", en: "View System" },
+    desc: "Kelola Roblox assets, ownership records, permissions, dan creator resources dari satu tempat.",
+    highlights: ["Asset Library", "Ownership Records", "Version Tracking", "Team Access", "Resource Organization"],
+    ctaPrimary: "Lihat Sistem",
   },
 ];
 
-const services = [
-  { icon: "hammer", title: { id: "World Building", en: "World Building" }, desc: { id: "Custom map dan environment dari basepart dan Blender — bukan aset instan. Tiap elemen dirancang untuk immersion dan optimasi.", en: "Custom maps and environments built from baseparts and Blender — no instant assets. Every element crafted for immersion and optimization." }, tag: "Eksklusif" },
-  { icon: "code", title: { id: "Luau Scripting", en: "Luau Scripting" }, desc: { id: "Sistem terstruktur pakai OOP dan Knit Framework. Clean, modular, dan scalable untuk game kecil hingga besar.", en: "Structured systems using OOP and Knit Framework. Clean, modular, and scalable for any game size." }, tag: "OOP + Framework" },
-  { icon: "paint", title: { id: "GUI & UI Design", en: "GUI & UI Design" }, desc: { id: "Responsive HUDs, menu, dan onboarding screens dengan visual hierarchy yang clean dan interaksi yang smooth.", en: "Responsive HUDs, menus, and onboarding screens with clean visual hierarchy and smooth interactions." }, tag: "Polished" },
+// ─── Why Creators Choose ──────────────────────────────────────────────────────
+const whyCreators = [
+  {
+    icon: "layers",
+    title: "Creator Infrastructure",
+    desc: "Bukan sekadar kumpulan tools. Hibob Studio adalah lapisan infrastruktur yang berdiri antara creator dan semua kerumitan operasional yang menghambat fokus membangun.",
+  },
+  {
+    icon: "globe",
+    title: "Roblox Native",
+    desc: "Setiap keputusan produk dibuat dengan pemahaman mendalam tentang cara creator Roblox bekerja — bukan adaptasi dari platform lain yang dipaksakan masuk ke ekosistem Roblox.",
+  },
+  {
+    icon: "cpu",
+    title: "Connected Ecosystem",
+    desc: "Semua produk dirancang bekerja bersama. Creator Identity menjadi fondasi, Creator Panel menjadi hub, dan setiap produk lain memiliki nilai lebih karena terhubung satu sama lain.",
+  },
+  {
+    icon: "shield",
+    title: "Professional Workflow",
+    desc: "Creator yang menggunakan Hibob Studio beroperasi dengan infrastruktur yang terasa profesional — kepada komunitas, kepada pembeli produk, dan kepada sesama creator.",
+  },
+  {
+    icon: "users",
+    title: "Dibangun Oleh Creator",
+    desc: "Hibob Studio dibangun oleh creator yang benar-benar aktif di ekosistem Roblox. Setiap masalah yang dipecahkan adalah masalah yang sudah dirasakan sendiri.",
+  },
+  {
+    icon: "zap",
+    title: "Terus Berkembang",
+    desc: "Ekosistem Hibob Studio terus diperluas. Dari Audio Forge hingga API Infrastructure — setiap produk baru menambah nilai ke seluruh ekosistem yang sudah ada.",
+  },
 ];
 
-const whyMe = [
-  { icon: "box", title: { id: "Assets Fleksibel", en: "Flexible Assets" }, desc: { id: "Asset disesuaikan sama scope dan budget lu — bisa custom Blender, basepart manual, atau marketplace. Yang penting hasilnya maksimal.", en: "Assets are tailored to your scope and budget — custom Blender, manual baseparts, or marketplace. What matters is the result." } },
-  { icon: "cpu", title: { id: "OOP + Knit Framework", en: "OOP + Knit Framework" }, desc: { id: "Scripting pakai OOP dan Knit Framework. Kode bersih, modular, dan gampang di-maintain jangka panjang.", en: "Scripting with OOP and Knit Framework. Clean, modular code that's easy to maintain long-term." } },
-  { icon: "shield", title: { id: "Aftersales Aktif", en: "Active Aftersales" }, desc: { id: "Puluhan klien udah tim gua handle, termasuk bug fix dan revisi minor post-launch yang masuk dalam setiap project.", en: "Dozens of clients handled by our team, including bug fixes and minor post-launch revisions included in every project." } },
-  { icon: "users", title: { id: "Tim yang Solid", en: "Solid Team" }, desc: { id: "Gua kerja bareng Anoj1ng dan Naka. Project besar/medium dikerjain bareng, project kecil bisa solo — fleksibel sesuai kebutuhan.", en: "I work alongside Anoj1ng and Naka. Medium/large projects are team efforts, smaller ones can go solo — flexible to your needs." } },
-  { icon: "zap", title: { id: "Harga Mid-Range, Hasil Premium", en: "Mid-Range Price, Premium Results" }, desc: { id: "Hasil setara developer profesional dengan harga yang masuk akal. Selalu ada ruang negosiasi.", en: "Professional-level results at a reasonable price. Negotiation is always welcome." } },
-  { icon: "layers", title: { id: "Full-Stack Delivery", en: "Full-Stack Delivery" }, desc: { id: "Dari konsep sampai launch — building, scripting, GUI, dan polish dikerjain bareng tim dalam satu workflow yang solid.", en: "From concept to launch — building, scripting, GUI, and polish handled by our team in one solid workflow." } },
+// ─── Pricing Plans ────────────────────────────────────────────────────────────
+const pricingPlans = [
+  {
+    name: "Free",
+    price: "0",
+    duration: null,
+    desc: "Akses dasar platform Hibob Studio. Mulai tanpa komitmen.",
+    features: ["Creator Panel Access", "2x Conversion", "2x Upload", "Akses komunitas Discord"],
+    cta: "Mulai Gratis",
+    highlight: false,
+  },
+  {
+    name: "Creator Basic",
+    price: "50.000",
+    duration: "7 Hari",
+    desc: "Untuk creator yang mulai aktif membangun dan membutuhkan kapasitas lebih.",
+    features: ["Creator Panel Access", "100x Conversion", "100x Upload", "Priority support Discord"],
+    cta: "Pilih Basic",
+    highlight: false,
+  },
+  {
+    name: "Creator Pro",
+    price: "100.000",
+    duration: "30 Hari",
+    desc: "Akses penuh untuk creator yang beroperasi secara profesional.",
+    features: ["Unlimited Conversion", "Unlimited Upload", "Asset Manager Access", "All future features"],
+    cta: "Upgrade ke Pro",
+    highlight: true,
+  },
 ];
 
-const pricing = [
-  { name: { id: "Starter", en: "Starter" }, price: "500rb", desc: { id: "Mulai explore platform Hibob Studio.", en: "Start exploring the Hibob Studio platform." }, features: { id: ["Creator Identity (1 akun)","Donation Platform","Creator Panel access","Discord community"], en: ["Creator Identity (1 account)","Donation Platform","Creator Panel access","Discord community"] }, highlight: false, cta: { id: "Mulai Gratis", en: "Start Free" } },
-  { name: { id: "Creator", en: "Creator" }, price: "1.5jt", desc: { id: "Akses penuh untuk creator yang serius.", en: "Full access for creators who mean business." }, features: { id: ["Semua di Starter","Audio Forge (full access)","Asset Manager","License Manager","Creator Plans tools"], en: ["Everything in Starter","Audio Forge (full access)","Asset Manager","License Manager","Creator Plans tools"] }, highlight: true, cta: { id: "Mulai Creator", en: "Start Creator" } },
-  { name: { id: "Studio", en: "Studio" }, price: "Custom", desc: { id: "Untuk tim dan studio yang berkembang.", en: "For teams and growing studios." }, features: { id: ["Semua di Creator","Multi-user access","Kapasitas diperluas","Priority support","API access"], en: ["Everything in Creator","Multi-user access","Expanded capacity","Priority support","API access"] }, highlight: false, cta: { id: "Hubungi Kami", en: "Contact Us" } },
-];
-
-const testimonials = [
-  { name: "Maxxx Salvatore", role: { id: "Roblox Creator — Indonesia", en: "Roblox Creator — Indonesia" }, quote: { id: "Kerjaan Hibob rapi dan sistematis. Build-nya eksklusif, kode-nya bersih, dan aftersales-nya aktif.", en: "Hibob's work is clean and systematic. Exclusive builds, clean code, and active aftersales." } },
-  { name: "Anonymous Client", role: { id: "Game Owner", en: "Game Owner" }, quote: { id: "Puas sama hasilnya. Komunikasi lancar dan deliver tepat waktu.", en: "Satisfied with the results. Smooth communication and on-time delivery." } },
-  { name: "Anonymous Client", role: { id: "Indie Developer", en: "Indie Developer" }, quote: { id: "GUI dan scripting-nya seamless. Gua rekomendasiin ke siapapun yang butuh developer Roblox yang serius.", en: "The GUI and scripting are seamless. I'd recommend Hibob to anyone looking for a serious Roblox developer." } },
-];
-
-const stats = [
-  { value: "30+", label: { id: "Klien Terlayani", en: "Clients Served" } },
-  { value: "2+", label: { id: "Tahun Experience", en: "Years Experience" } },
-  { value: "100%", label: { id: "Client Satisfied", en: "Client Satisfied" } },
-];
-
+// ─── Hooks ────────────────────────────────────────────────────────────────────
 function useScrollProgress() {
   const [p, setP] = useState(0);
   useEffect(() => {
@@ -231,31 +256,7 @@ function scrollTo(e, href) {
   window.history.replaceState(null, "", href);
 }
 
-function Counter({ value }) {
-  const [display, setDisplay] = useState("0");
-  const ref = useRef(null);
-  useEffect(() => {
-    const num = parseFloat(value);
-    const suffix = value.replace(/[\d.]/g, "");
-    if (isNaN(num)) { setDisplay(value); return; }
-    const obs = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
-      obs.disconnect();
-      const dur = 1400, start = performance.now();
-      const tick = (now) => {
-        const t = Math.min((now - start) / dur, 1);
-        const ease = 1 - Math.pow(1 - t, 3);
-        setDisplay(`${Math.round(ease * num)}${suffix}`);
-        if (t < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    }, { threshold: 0.5 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [value]);
-  return <span ref={ref}>{display}</span>;
-}
-
+// ─── Components ───────────────────────────────────────────────────────────────
 function Icon({ name, size = 20 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -281,9 +282,9 @@ function Label({ text, center = false }) {
   );
 }
 
-function Btn({ href, children, primary = false, onClick, style: extraStyle = {} }) {
+function Btn({ href, children, primary = false, onClick, style: extraStyle = {}, className = "" }) {
   return (
-    <a href={href} onClick={onClick} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer"
+    <a href={href} onClick={onClick} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className={className}
       style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "13px 26px", borderRadius: 12, fontWeight: 800, fontSize: 14, color: "white", textDecoration: "none", cursor: "pointer", transition: "all .22s cubic-bezier(.22,1,.36,1)", ...(primary ? { background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)", boxShadow: "0 0 24px rgba(168,85,247,.3)" } : { background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.12)" }), ...extraStyle }}
       onMouseEnter={(e) => { e.currentTarget.style.opacity = ".85"; e.currentTarget.style.transform = "translateY(-2px)"; }}
       onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = ""; }}>
@@ -302,28 +303,113 @@ function Card({ children, style: extraStyle = {}, highlight = false }) {
   );
 }
 
-function MobileMenu({ isOpen, active, onClose, nav }) {
+// ─── Ecosystem Visual (Hero right panel) ─────────────────────────────────────
+function EcosystemVisual() {
+  const tools = [
+    { name: "Audio Forge", badge: "Audio", color: "#38bdf8", status: "soon" },
+    { name: "License Manager", badge: "Security", color: "#34d399", status: "soon" },
+    { name: "Donation System", badge: "Community", color: "#f472b6", status: "live" },
+    { name: "Asset Manager", badge: "Assets", color: "#f59e0b", status: "soon" },
+  ];
+
+  return (
+    <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 10 }}>
+      {/* Panel mock header */}
+      <div style={{ background: "rgba(8,5,28,.92)", border: "1px solid rgba(168,85,247,.35)", borderRadius: 18, overflow: "hidden", boxShadow: "0 32px 80px rgba(0,0,0,.7), 0 0 60px rgba(120,60,250,.12)" }}>
+        {/* Top bar */}
+        <div style={{ background: "rgba(168,85,247,.08)", borderBottom: "1px solid rgba(168,85,247,.18)", padding: "12px 18px", display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ display: "flex", gap: 6 }}>
+            {["#f87171", "#fbbf24", "#34d399"].map((c, i) => (
+              <div key={i} style={{ width: 9, height: 9, borderRadius: "50%", background: c, opacity: .7 }} />
+            ))}
+          </div>
+          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ flex: 1, height: 22, background: "rgba(255,255,255,.05)", borderRadius: 6, display: "flex", alignItems: "center", paddingLeft: 10 }}>
+              <span style={{ fontSize: 10, color: "rgba(255,255,255,.3)", fontWeight: 500 }}>panel.hibobstudio.com</span>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 8, background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.22)" }}>
+            <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#34d399" }} />
+            <span style={{ fontSize: 10, fontWeight: 700, color: "#34d399" }}>Live</span>
+          </div>
+        </div>
+
+        {/* Panel content */}
+        <div style={{ padding: "18px" }}>
+          {/* Creator Panel hub */}
+          <div style={{ padding: "14px 16px", borderRadius: 12, background: "linear-gradient(135deg,rgba(120,50,250,.18),rgba(56,189,248,.06))", border: "1px solid rgba(168,85,247,.35)", marginBottom: 12 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+              <div style={{ width: 32, height: 32, borderRadius: 9, background: "rgba(168,85,247,.2)", border: "1px solid rgba(168,85,247,.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 12l10 5 10-5M2 17l10 5 10-5" /></svg>
+              </div>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 800, color: "white" }}>Creator Panel</p>
+                <p style={{ fontSize: 10, color: "rgba(168,85,247,.7)", fontWeight: 600 }}>Command Center · Hub Utama</p>
+              </div>
+              <div style={{ marginLeft: "auto", fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.25)", color: "#34d399" }}>● Available</div>
+            </div>
+            {/* Activity summary */}
+            <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7 }}>
+              {[{ label: "Lisensi Aktif", val: "—" }, { label: "Audio Diproses", val: "—" }, { label: "Donasi Diterima", val: "—" }].map((s, i) => (
+                <div key={i} style={{ padding: "8px 10px", borderRadius: 8, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.07)", textAlign: "center" }}>
+                  <p style={{ fontSize: 13, fontWeight: 900, color: "rgba(255,255,255,.5)", marginBottom: 2 }}>{s.val}</p>
+                  <p style={{ fontSize: 9, color: "rgba(255,255,255,.3)", fontWeight: 600, textTransform: "uppercase", letterSpacing: ".06em" }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Tool grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            {tools.map((t, i) => (
+              <div key={i} style={{ padding: "11px 13px", borderRadius: 10, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: t.color, textTransform: "uppercase", letterSpacing: ".08em" }}>{t.badge}</span>
+                  <span style={{ fontSize: 9, color: t.status === "live" ? "#34d399" : "rgba(255,255,255,.25)", fontWeight: 600 }}>{t.status === "live" ? "● Live" : "Soon"}</span>
+                </div>
+                <p style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.8)" }}>{t.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Float chips */}
+      <div style={{ position: "absolute", top: -16, right: -18, padding: "7px 13px", borderRadius: 999, background: "rgba(8,5,28,.9)", border: "1px solid rgba(52,211,153,.35)", display: "flex", alignItems: "center", gap: 7, boxShadow: "0 8px 32px rgba(0,0,0,.5)" }}>
+        <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#34d399" }} />
+        <span style={{ fontSize: 11, fontWeight: 700, color: "#34d399" }}>Creator Panel Live</span>
+      </div>
+      <div style={{ position: "absolute", bottom: -14, left: -16, padding: "7px 13px", borderRadius: 999, background: "rgba(8,5,28,.9)", border: "1px solid rgba(168,85,247,.35)", display: "flex", alignItems: "center", gap: 7, boxShadow: "0 8px 32px rgba(0,0,0,.5)" }}>
+        <Icon name="zap" size={11} />
+        <span style={{ fontSize: 11, fontWeight: 700, color: "#a855f7" }}>8 Produk Terhubung</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Mobile Menu ──────────────────────────────────────────────────────────────
+function MobileMenu({ isOpen, active, onClose }) {
   useEffect(() => { document.body.style.overflow = isOpen ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [isOpen]);
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 40, pointerEvents: isOpen ? "auto" : "none", opacity: isOpen ? 1 : 0, transition: "opacity .4s cubic-bezier(.22,1,.36,1)" }}>
       <div style={{ position: "absolute", inset: 0, backdropFilter: "blur(24px)", background: "rgba(7,3,22,.97)" }} />
-      <nav style={{ position: "relative", display: "flex", height: "100%", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 18 }}>
-        {nav.map((item, i) => {
+      <nav style={{ position: "relative", display: "flex", height: "100%", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }}>
+        {navItems.map((item, i) => {
           const id = item.href.replace("#", "");
           const isActive = active === id;
           return (
             <a key={item.href} href={item.href}
               onClick={(e) => { scrollTo(e, item.href); onClose(); }}
-              style={{ fontSize: 38, fontWeight: 900, letterSpacing: "-0.04em", textDecoration: "none", transition: `all .5s cubic-bezier(.22,1,.36,1) ${i * 50}ms`, transform: isOpen ? "translateY(0)" : "translateY(20px)", opacity: isOpen ? 1 : 0, ...(isActive ? { background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "rgba(255,255,255,.55)" }) }}>
+              style={{ fontSize: 36, fontWeight: 900, letterSpacing: "-0.04em", textDecoration: "none", transition: `all .5s cubic-bezier(.22,1,.36,1) ${i * 50}ms`, transform: isOpen ? "translateY(0)" : "translateY(20px)", opacity: isOpen ? 1 : 0, ...(isActive ? { background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "rgba(255,255,255,.55)" }) }}>
               {item.label}
             </a>
           );
         })}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20, width: "100%", maxWidth: 320, transition: `all .5s cubic-bezier(.22,1,.36,1) 280ms`, transform: isOpen ? "translateY(0)" : "translateY(20px)", opacity: isOpen ? 1 : 0 }}>
-          <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={onClose} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "16px 20px", borderRadius: 12, fontWeight: 800, fontSize: 15, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.4)" }}>
-            Open Creator Panel <Icon name="arrowRight" size={16} />
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 18, width: "100%", maxWidth: 320, transition: `all .5s cubic-bezier(.22,1,.36,1) 250ms`, transform: isOpen ? "translateY(0)" : "translateY(20px)", opacity: isOpen ? 1 : 0 }}>
+          <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={onClose} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "15px 20px", borderRadius: 12, fontWeight: 800, fontSize: 15, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.4)" }}>
+            Buka Creator Panel <Icon name="arrowRight" size={16} />
           </a>
-          <a href={DISCORD_URL} target="_blank" rel="noreferrer" onClick={onClose} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 20px", borderRadius: 12, fontWeight: 800, fontSize: 14, color: "white", textDecoration: "none", background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)" }}>
+          <a href={DISCORD_URL} target="_blank" rel="noreferrer" onClick={onClose} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 20px", borderRadius: 12, fontWeight: 700, fontSize: 14, color: "white", textDecoration: "none", background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)" }}>
             <Icon name="message" size={16} /> Discord
           </a>
         </div>
@@ -332,13 +418,136 @@ function MobileMenu({ isOpen, active, onClose, nav }) {
   );
 }
 
+// ─── Cart Drawer ──────────────────────────────────────────────────────────────
+function CartDrawer({ cart, onClose, onRemove, onCheckout }) {
+  const total = cart.reduce((s, p) => s + p.priceNum, 0);
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(0,0,0,.55)", backdropFilter: "blur(4px)", transition: "opacity .3s" }} />
+      <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 61, width: "min(100vw, 400px)", background: "#0d0920", borderLeft: "1px solid rgba(168,85,247,.2)", display: "flex", flexDirection: "column", boxShadow: "-32px 0 80px rgba(0,0,0,.7)" }}>
+        {/* Header */}
+        <div style={{ padding: "22px 24px", borderBottom: "1px solid rgba(255,255,255,.07)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <Icon name="cart" size={18} />
+            <span style={{ fontSize: 16, fontWeight: 800 }}>Keranjang Produk</span>
+            {cart.length > 0 && (
+              <span style={{ padding: "2px 8px", borderRadius: 999, background: "rgba(168,85,247,.2)", border: "1px solid rgba(168,85,247,.35)", fontSize: 11, fontWeight: 700, color: "#c084fc" }}>{cart.length}</span>
+            )}
+          </div>
+          <button onClick={onClose} style={{ background: "none", border: "none", color: "rgba(255,255,255,.5)", cursor: "pointer", padding: 4, borderRadius: 8, transition: "color .2s" }}
+            onMouseEnter={(e) => e.currentTarget.style.color = "white"}
+            onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.5)"}>
+            <Icon name="x" size={20} />
+          </button>
+        </div>
+
+        {/* Items */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px 24px" }}>
+          {cart.length === 0 ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: 12 }}>
+              <Icon name="cart" size={36} />
+              <p style={{ color: "rgba(255,255,255,.35)", fontSize: 14, textAlign: "center" }}>Keranjang kosong.<br />Tambahkan produk untuk checkout.</p>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {cart.map((item) => (
+                <div key={item.id} style={{ padding: "14px 16px", borderRadius: 12, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(168,85,247,.15)", border: "1px solid rgba(168,85,247,.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#a855f7" }}>
+                    <Icon name={item.icon} size={18} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{item.name}</p>
+                    <p style={{ fontSize: 12, color: "#a855f7", fontWeight: 600 }}>{item.price}</p>
+                  </div>
+                  <button onClick={() => onRemove(item.id)} style={{ background: "none", border: "none", color: "rgba(255,255,255,.3)", cursor: "pointer", padding: 6, borderRadius: 8, transition: "color .2s" }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#f87171"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.3)"}>
+                    <Icon name="trash" size={15} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        {cart.length > 0 && (
+          <div style={{ padding: "18px 24px", borderTop: "1px solid rgba(255,255,255,.07)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+              <span style={{ fontSize: 14, color: "rgba(255,255,255,.5)", fontWeight: 600 }}>Total</span>
+              <span style={{ fontSize: 18, fontWeight: 900, background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Rp{total.toLocaleString("id-ID")}</span>
+            </div>
+            <button onClick={onCheckout}
+              style={{ width: "100%", padding: "14px 0", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "white", fontSize: 14, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "inherit", transition: "opacity .2s" }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
+              Lanjut ke Checkout <Icon name="arrowRight" size={16} />
+            </button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ─── Checkout Modal ───────────────────────────────────────────────────────────
+function CheckoutModal({ cart, onClose }) {
+  const total = cart.reduce((s, p) => s + p.priceNum, 0);
+
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 70, background: "rgba(0,0,0,.65)", backdropFilter: "blur(6px)" }} />
+      <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 71, width: "min(92vw,480px)", background: "#0d0920", border: "1px solid rgba(168,85,247,.3)", borderRadius: 22, padding: "32px 28px", boxShadow: "0 32px 80px rgba(0,0,0,.8)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 22 }}>
+          <h3 style={{ fontSize: 20, fontWeight: 900 }}>Ringkasan Pembelian</h3>
+          <button onClick={onClose} style={{ background: "none", border: "none", color: "rgba(255,255,255,.5)", cursor: "pointer" }}>
+            <Icon name="x" size={20} />
+          </button>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
+          {cart.map((item) => (
+            <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", borderRadius: 10, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.07)" }}>
+              <span style={{ fontSize: 13, fontWeight: 600 }}>{item.name}</span>
+              <span style={{ fontSize: 13, color: "#a855f7", fontWeight: 700 }}>{item.price}</span>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 14px", borderRadius: 10, background: "rgba(168,85,247,.07)", border: "1px solid rgba(168,85,247,.2)", marginBottom: 22 }}>
+          <span style={{ fontSize: 14, fontWeight: 700 }}>Total</span>
+          <span style={{ fontSize: 18, fontWeight: 900, background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Rp{total.toLocaleString("id-ID")}</span>
+        </div>
+
+        <p style={{ fontSize: 13, color: "rgba(255,255,255,.45)", lineHeight: 1.7, marginBottom: 18 }}>
+          Untuk menyelesaikan pembelian, hubungi kami melalui Discord dengan detail pesanan di bawah. Tim kami akan memproses pesanan dan mengirimkan produk.
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <a href={DISCORD_URL} target="_blank" rel="noreferrer"
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 0", borderRadius: 12, fontWeight: 800, fontSize: 14, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)" }}>
+            <Icon name="message" size={16} /> Hubungi via Discord
+          </a>
+          <button onClick={onClose} style={{ padding: "12px 0", borderRadius: 12, fontWeight: 700, fontSize: 14, color: "rgba(255,255,255,.5)", background: "none", border: "1px solid rgba(255,255,255,.1)", cursor: "pointer", fontFamily: "inherit", transition: "all .2s" }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.25)"; e.currentTarget.style.color = "white"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.1)"; e.currentTarget.style.color = "rgba(255,255,255,.5)"; }}>
+            Kembali
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const progress = useScrollProgress();
   const activeSection = useActiveSection();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
-  const [lang, setLang] = useState("en");
-  const [checkoutProduct, setCheckoutProduct] = useState(null);
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   useReveal();
 
   useEffect(() => {
@@ -347,12 +556,14 @@ export default function App() {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  const c = content[lang];
-  const nav = navItems[lang];
+  const addToCart = useCallback((product) => {
+    setCart((prev) => prev.find((p) => p.id === product.id) ? prev : [...prev, product]);
+    setCartOpen(true);
+  }, []);
 
-  if (checkoutProduct) {
-    return <CheckoutPage product={checkoutProduct} onBack={() => setCheckoutProduct(null)} />;
-  }
+  const removeFromCart = useCallback((id) => {
+    setCart((prev) => prev.filter((p) => p.id !== id));
+  }, []);
 
   return (
     <div style={{ background: "#03010f", minHeight: "100vh", color: "white", overflowX: "hidden" }}>
@@ -368,18 +579,29 @@ export default function App() {
         .gborder::before { content:''; position:absolute; inset:0; border-radius:inherit; padding:1px; background:linear-gradient(135deg,rgba(168,85,247,.4),rgba(56,189,248,.2),rgba(168,85,247,.1)); -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
         .pulse { animation:pg 3s ease-in-out infinite; }
         @keyframes pg { 0%,100%{box-shadow:0 0 20px rgba(168,85,247,.35)} 50%{box-shadow:0 0 55px rgba(168,85,247,.7),0 0 90px rgba(168,85,247,.2)} }
-        @keyframes float { 0%,100%{transform:translateY(0) rotate(-.3deg)} 50%{transform:translateY(-18px) rotate(.3deg)} }
-        @keyframes glow-pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
         @keyframes fadeIn { from{opacity:0} to{opacity:1} }
         ::-webkit-scrollbar{width:5px} ::-webkit-scrollbar-track{background:#03010f} ::-webkit-scrollbar-thumb{background:linear-gradient(#a855f7,#38bdf8);border-radius:99px}
         ::selection{background:rgba(168,85,247,.35)}
         .nav-link:hover{color:white!important;background:rgba(255,255,255,.06)!important}
-        .lang-btn:hover{background:rgba(168,85,247,.2)!important;color:white!important}
-        @media(max-width:768px){ .hero-grid{grid-template-columns:1fr!important} .hero-right{display:none!important} .why-grid{grid-template-columns:1fr!important} .pricing-grid{grid-template-columns:1fr!important} .products-grid{grid-template-columns:1fr!important} .products-grid-item{grid-template-columns:1fr!important} .hide-mob{display:none!important} .show-mob{display:flex!important} .platform-grid{grid-template-columns:1fr 1fr!important} .hub-inner{grid-template-columns:1fr!important} .hub-features{display:none!important} }
+        @media(max-width:768px){
+          .hero-grid{grid-template-columns:1fr!important}
+          .hero-right{display:none!important}
+          .why-grid{grid-template-columns:1fr!important}
+          .pricing-grid{grid-template-columns:1fr!important}
+          .products-grid{grid-template-columns:1fr!important}
+          .platform-grid{grid-template-columns:1fr 1fr!important}
+          .hub-inner{grid-template-columns:1fr!important}
+          .hub-features{display:none!important}
+          .games-grid{grid-template-columns:1fr!important}
+          .hide-mob{display:none!important}
+          .show-mob{display:flex!important}
+          .founder-grid{grid-template-columns:1fr!important}
+        }
         @media(min-width:769px){.show-mob{display:none!important}}
         @media(prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important} [data-reveal]{opacity:1!important;transform:none!important;filter:none!important} }
       `}</style>
 
+      {/* Background */}
       <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 90% 70% at 8% 0%,rgba(110,35,190,.22) 0%,transparent 55%)" }} />
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 65% 55% at 95% 15%,rgba(14,100,190,.12) 0%,transparent 55%)" }} />
@@ -387,21 +609,23 @@ export default function App() {
         <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px)", backgroundSize: "40px 40px" }} />
       </div>
 
-      <MobileMenu isOpen={menuOpen} active={activeSection} onClose={() => setMenuOpen(false)} nav={nav} />
+      <MobileMenu isOpen={menuOpen} active={activeSection} onClose={() => setMenuOpen(false)} />
+      {cartOpen && <CartDrawer cart={cart} onClose={() => setCartOpen(false)} onRemove={removeFromCart} onCheckout={() => { setCartOpen(false); setCheckoutOpen(true); }} />}
+      {checkoutOpen && <CheckoutModal cart={cart} onClose={() => setCheckoutOpen(false)} />}
 
       <div style={{ position: "relative", zIndex: 1, animation: "fadeIn .6s ease both", paddingTop: 66 }}>
 
-        {/* HEADER — always visible */}
+        {/* ── HEADER ─────────────────────────────────────────────────────────── */}
         <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, borderBottom: "1px solid rgba(255,255,255,.06)", backdropFilter: "blur(20px)", background: "rgba(3,1,15,.55)" }}>
           <div style={{ position: "absolute", bottom: 0, left: 0, height: 2, width: `${progress * 100}%`, background: "linear-gradient(90deg,#a855f7,#e879f9,#38bdf8)", transition: "width .1s linear", borderRadius: "0 2px 2px 0" }} />
           <nav style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 66 }}>
-            <a href="#home" onClick={(e) => scrollTo(e, "#home")} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", transition: "opacity .2s" }}
+            <a href="#home" onClick={(e) => scrollTo(e, "#home")} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}
               onMouseEnter={(e) => e.currentTarget.style.opacity = ".8"}
               onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
               <span style={{ fontSize: 16, fontWeight: 900, letterSpacing: "-0.03em", background: "linear-gradient(120deg,#a855f7,#e879f9,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hibob Studio</span>
             </a>
             <div className="hide-mob" style={{ display: "flex", alignItems: "center", gap: 2, padding: 5, borderRadius: 999, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.07)" }}>
-              {nav.map((item) => {
+              {navItems.map((item) => {
                 const id = item.href.replace("#", "");
                 const isActive = activeSection === id;
                 return (
@@ -413,12 +637,18 @@ export default function App() {
               })}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <button onClick={() => setLang(l => l === "id" ? "en" : "id")} className="lang-btn"
-                style={{ display: "flex", alignItems: "center", gap: 5, padding: "7px 13px", borderRadius: 999, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.6)", fontSize: 12, fontWeight: 700, cursor: "pointer", transition: "all .2s", letterSpacing: ".06em" }}>
-                <Icon name="globe" size={13} /> {lang === "id" ? "EN" : "ID"}
+              {/* Cart button */}
+              <button onClick={() => setCartOpen(true)}
+                style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: 12, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.7)", cursor: "pointer", transition: "all .2s" }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(168,85,247,.4)"; e.currentTarget.style.color = "white"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.1)"; e.currentTarget.style.color = "rgba(255,255,255,.7)"; }}>
+                <Icon name="cart" size={17} />
+                {cart.length > 0 && (
+                  <span style={{ position: "absolute", top: -4, right: -4, width: 16, height: 16, borderRadius: "50%", background: "#a855f7", fontSize: 9, fontWeight: 900, color: "white", display: "flex", alignItems: "center", justifyContent: "center" }}>{cart.length}</span>
+                )}
               </button>
               <Btn href={PANEL_URL} primary className="hide-mob pulse" style={{ padding: "9px 20px", borderRadius: 999, fontSize: 13 }}>
-                Open Creator Panel
+                Buka Creator Panel
               </Btn>
               <button onClick={() => setMenuOpen((v) => !v)} className="show-mob"
                 style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 12, width: 42, height: 42, alignItems: "center", justifyContent: "center", color: "white", cursor: "pointer", transition: "all .2s" }}>
@@ -428,165 +658,55 @@ export default function App() {
           </nav>
         </header>
 
-        {/* HERO */}
-        <section id="home" className="hero-grid" style={{ maxWidth: 1280, margin: "0 auto", padding: "90px 24px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, alignItems: "stretch", minHeight: "calc(100vh - 66px)" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 28, padding: "90px 0 110px" }}>
+        {/* ── HERO ───────────────────────────────────────────────────────────── */}
+        <section id="home" className="hero-grid" style={{ maxWidth: 1280, margin: "0 auto", padding: "90px 24px 0", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 60, alignItems: "center", minHeight: "calc(100vh - 66px)" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 26, padding: "80px 0 100px" }}>
             <div data-reveal style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "7px 16px", borderRadius: 999, border: "1px solid rgba(168,85,247,.32)", background: "rgba(168,85,247,.09)", width: "fit-content" }}>
               <Icon name="star" size={12} />
-              <span style={{ fontSize: 12, fontWeight: 700, color: "#c084fc", letterSpacing: ".07em", textTransform: "uppercase" }}>{c.hero.badge}</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#c084fc", letterSpacing: ".07em", textTransform: "uppercase" }}>Creator Infrastructure Platform</span>
             </div>
             <div data-reveal data-d="1">
-              <h1 style={{ fontSize: "clamp(44px,6vw,82px)", fontWeight: 900, lineHeight: 1.02, letterSpacing: "-0.04em" }}>
-                {c.hero.h1a} <span className="gt">{c.hero.h1b}</span><br />
-                {c.hero.h1c}<br />
-                <span className="gt">{c.hero.h1d}</span>
+              <h1 style={{ fontSize: "clamp(40px,5.5vw,76px)", fontWeight: 900, lineHeight: 1.03, letterSpacing: "-0.04em" }}>
+                Infrastruktur untuk<br />creator Roblox <span className="gt">yang serius.</span>
               </h1>
             </div>
-            <p data-reveal data-d="2" style={{ fontSize: 17, color: "rgba(255,255,255,.5)", lineHeight: 1.78, maxWidth: 500, fontWeight: 400 }}>{c.hero.sub}</p>
+            <p data-reveal data-d="2" style={{ fontSize: 17, color: "rgba(255,255,255,.5)", lineHeight: 1.78, maxWidth: 480, fontWeight: 400 }}>
+              Berhenti mengelola audio, aset, identitas, dan lisensi secara manual. Hibob Studio adalah platform yang terhubung, dibangun untuk cara creator Roblox profesional bekerja.
+            </p>
             <div data-reveal data-d="3" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Btn href={PANEL_URL} primary style={{ padding: "14px 28px" }}>
-                {c.hero.cta1} <Icon name="arrowRight" size={17} />
+                Buka Creator Panel <Icon name="arrowRight" size={17} />
               </Btn>
-              <Btn href="#products" onClick={(e) => scrollTo(e, "#products")} style={{ padding: "14px 28px" }}>{c.hero.cta2}</Btn>
+              <Btn href="#products" onClick={(e) => scrollTo(e, "#products")} style={{ padding: "14px 28px" }}>
+                Jelajahi Produk
+              </Btn>
+            </div>
+            {/* Integration logos */}
+            <div data-reveal data-d="4" style={{ display: "flex", alignItems: "center", gap: 16, paddingTop: 8 }}>
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,.3)", fontWeight: 600, letterSpacing: ".06em", textTransform: "uppercase" }}>Terintegrasi dengan</span>
+              {[{ label: "Discord", color: "#5865f2" }, { label: "Roblox", color: "#e42b2b" }].map((i) => (
+                <span key={i.label} style={{ fontSize: 12, fontWeight: 700, color: i.color, padding: "4px 10px", borderRadius: 6, background: `${i.color}18`, border: `1px solid ${i.color}30` }}>{i.label}</span>
+              ))}
             </div>
           </div>
 
-          <div className="hero-right" data-reveal data-d="2" style={{ position: "relative", alignSelf: "stretch", minHeight: 560, overflow: "visible" }}>
-
-            {/* glow under character */}
-            <div style={{ position: "absolute", bottom: 60, left: "50%", transform: "translateX(-50%)", width: 480, height: 480, borderRadius: "50%", background: "radial-gradient(circle,rgba(140,60,255,.38) 0%,rgba(80,0,200,.15) 45%,transparent 70%)", filter: "blur(56px)", animation: "glow-pulse 4s ease-in-out infinite", zIndex: 0 }} />
-
-            {/* character */}
-            <img
-              src={avatarImg}
-              alt="Hibob Studio"
-              style={{
-                position: "absolute",
-                bottom: 1,
-                left: "18%",
-                transform: "translateX(-50%)",
-                height: "min(900px, calc(100% - 40px))",
-                width: "auto",
-                maxWidth: "none",
-                objectFit: "contain",
-                objectPosition: "bottom center",
-                zIndex: 2,
-                filter: "drop-shadow(0 0 50px rgba(168,85,247,.55)) drop-shadow(0 30px 50px rgba(0,0,0,.8))",
-                animation: "float 5.5s ease-in-out infinite",
-                imageRendering: "auto",
-              }}
-            />
-
-            {/* stats bar */}
-            <div style={{ position: "absolute", bottom: 250, left: "18%", right: 0, zIndex: 4, background: "rgba(8,5,28,.82)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 18, padding: "18px 0", backdropFilter: "blur(24px)", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", boxShadow: "0 8px 40px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06)" }}>
-              {stats.map((s, i) => (
-                <div key={i} style={{ textAlign: "center", borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,.08)" : "none", padding: "0 10px" }}>
-                  <div style={{ fontSize: 10, color: "rgba(255,255,255,.32)", fontWeight: 600, marginBottom: 5, letterSpacing: ".07em", textTransform: "uppercase" }}>{s.label[lang]}</div>
-                  <div className="gt" style={{ fontSize: 21, fontWeight: 900 }}><Counter value={s.value} /></div>
-                </div>
-              ))}
-            </div>
+          <div className="hero-right" data-reveal data-d="2" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", padding: "60px 0 80px" }}>
+            <EcosystemVisual />
           </div>
         </section>
 
         <div style={{ paddingTop: 96 }}><Divider /></div>
 
-        {/* WHY ME */}
-        <section id="about" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
-          <Label text={c.why.label} />
-          <div data-reveal style={{ marginBottom: 56 }}>
-            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>{c.why.h2a} <span className="gt">{c.why.h2b}</span></h2>
-            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 520, lineHeight: 1.78 }}>{c.why.sub}</p>
-          </div>
-          <div className="why-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
-            {whyMe.map((w, i) => (
-              <Card key={i} style={{ padding: 26 }}>
-                <div data-reveal data-d={`${(i % 3) + 1}`}>
-                  <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(168,85,247,.12)", border: "1px solid rgba(168,85,247,.2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16, color: "#a855f7" }}><Icon name={w.icon} size={20} /></div>
-                  <h3 style={{ fontSize: 16, fontWeight: 800, marginBottom: 8 }}>{w.title[lang]}</h3>
-                  <p style={{ fontSize: 13.5, color: "rgba(255,255,255,.46)", lineHeight: 1.75 }}>{w.desc[lang]}</p>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* SERVICES */}
-        <section id="services" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
-          <Label text={c.services.label} />
-          <div data-reveal style={{ marginBottom: 56 }}>
-            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>{c.services.h2a} <span className="gt">{c.services.h2b}</span></h2>
-            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 520, lineHeight: 1.78 }}>{c.services.sub}</p>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 14 }}>
-            {services.map((s, i) => (
-              <Card key={i} style={{ padding: 28 }}>
-                <div data-reveal data-d={`${i + 1}`}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(168,85,247,.12)", border: "1px solid rgba(168,85,247,.2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#a855f7" }}><Icon name={s.icon} size={20} /></div>
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 999, background: "rgba(56,189,248,.08)", border: "1px solid rgba(56,189,248,.18)", color: "#38bdf8", letterSpacing: ".06em" }}>{s.tag}</span>
-                  </div>
-                  <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 9 }}>{s.title[lang]}</h3>
-                  <p style={{ fontSize: 14, color: "rgba(255,255,255,.46)", lineHeight: 1.78 }}>{s.desc[lang]}</p>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* PROJECTS */}
-        <section id="projects" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
-          <Label text={c.projects.label} />
-          <div data-reveal style={{ marginBottom: 56 }}>
-            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>{c.projects.h2a} <span className="gt">{c.projects.h2b}</span></h2>
-            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 520, lineHeight: 1.78 }}>{c.projects.sub}</p>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14 }}>
-            {projects.map((p, i) => (
-              <Card key={i} style={{ overflow: "hidden" }}>
-                <div data-reveal data-d={`${(i % 4) + 1}`}>
-                  <div style={{ padding: "22px 22px 16px", borderBottom: "1px solid rgba(255,255,255,.06)", background: "rgba(168,85,247,.04)" }}>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                      <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".12em", color: "#a855f7", textTransform: "uppercase" }}>{p.category}</span>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <span style={{ fontSize: 11, color: "rgba(255,255,255,.3)", fontWeight: 500 }}>{p.year}</span>
-                        <span style={{ fontSize: 11, fontWeight: 800, padding: "3px 9px", borderRadius: 999, background: "rgba(168,85,247,.12)", border: "1px solid rgba(168,85,247,.25)", color: "#c084fc" }}>{p.badge}</span>
-                      </div>
-                    </div>
-                    <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 10 }}>{p.title}</h3>
-                    <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                      {p.roles.map((r, ri) => (
-                        <span key={ri} style={{ fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: r === "Full Handle" ? "rgba(56,189,248,.1)" : "rgba(168,85,247,.1)", border: r === "Full Handle" ? "1px solid rgba(56,189,248,.25)" : "1px solid rgba(168,85,247,.2)", color: r === "Full Handle" ? "#38bdf8" : "#c084fc", letterSpacing: ".05em", textTransform: "uppercase" }}>{r}</span>
-                      ))}
-                    </div>
-                  </div>
-                  <div style={{ padding: "16px 22px 22px" }}>
-                    <p style={{ fontSize: 13.5, color: "rgba(255,255,255,.46)", lineHeight: 1.78, marginBottom: 18 }}>{p.desc[lang]}</p>
-                    <a href={p.url} target="_blank" rel="noreferrer"
-                      style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 18px", borderRadius: 10, fontWeight: 700, fontSize: 13.5, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.4)", transition: "all .2s" }}
-                      onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 0 20px rgba(168,85,247,.4)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = ""; }}>
-                      {c.projects.play} <Icon name="arrowRight" size={14} />
-                    </a>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* PRODUCTS */}
+        {/* ── PRODUCTS ECOSYSTEM ─────────────────────────────────────────────── */}
         <section id="products" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
-          <Label text={c.products.label} />
+          <Label text="Ekosistem Produk" />
           <div data-reveal style={{ marginBottom: 56 }}>
-            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>{c.products.h2a} <span className="gt">{c.products.h2b}</span></h2>
-            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 520, lineHeight: 1.78 }}>{c.products.sub}</p>
+            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>
+              Satu platform. <span className="gt">Delapan alat terhubung.</span>
+            </h2>
+            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 560, lineHeight: 1.78 }}>
+              Dari command center creator hingga audio pipeline, license management, dan sistem club — semua bagian dari satu ekosistem yang dirancang bekerja bersama.
+            </p>
           </div>
 
           {/* Creator Panel — Hub Card */}
@@ -601,17 +721,19 @@ export default function App() {
                   </div>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                     <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 11px", borderRadius: 999, background: "rgba(168,85,247,.18)", border: "1px solid rgba(168,85,247,.4)", color: "#c084fc", letterSpacing: ".08em", textTransform: "uppercase" }}>Core Platform</span>
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 11px", borderRadius: 999, background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.25)", color: "#34d399" }}>● Live Now</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 11px", borderRadius: 999, background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.25)", color: "#34d399" }}>● Tersedia</span>
                   </div>
                 </div>
-                <h3 style={{ fontSize: "clamp(26px,3vw,38px)", fontWeight: 900, letterSpacing: "-0.035em", marginBottom: 12 }}>Creator Panel</h3>
-                <p style={{ fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.8, maxWidth: 540, marginBottom: 26 }}>{platformProducts[0].desc[lang]}</p>
+                <h3 style={{ fontSize: "clamp(24px,3vw,36px)", fontWeight: 900, letterSpacing: "-0.035em", marginBottom: 12 }}>Creator Panel</h3>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.8, maxWidth: 540, marginBottom: 26 }}>
+                  Command center terpusat untuk mengelola lisensi, audio assets, donasi, identitas, dan semua creator tools dari satu dashboard.
+                </p>
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                   <Btn href={PANEL_URL} primary style={{ padding: "12px 24px" }}>
-                    {platformProducts[0].ctaPrimary[lang]} <Icon name="arrowRight" size={16} />
+                    Buka Panel <Icon name="arrowRight" size={16} />
                   </Btn>
                   <Btn href={PANEL_URL} style={{ padding: "12px 24px" }}>
-                    {platformProducts[0].ctaSecondary[lang]} <Icon name="externalLink" size={14} />
+                    Pelajari Lebih <Icon name="externalLink" size={14} />
                   </Btn>
                 </div>
               </div>
@@ -627,8 +749,8 @@ export default function App() {
           </div>
 
           {/* Platform Tools — 4 columns */}
-          <div className="platform-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 14 }}>
-            {platformProducts.filter(p => !p.isHub).map((prod, i) => {
+          <div className="platform-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 28 }}>
+            {platformProducts.filter((p) => !p.isHub).map((prod, i) => {
               const isAvail = prod.status === "available";
               return (
                 <div key={prod.id} data-reveal data-d={`${i + 1}`}
@@ -639,15 +761,13 @@ export default function App() {
                     <div style={{ width: 40, height: 40, borderRadius: 11, background: "rgba(168,85,247,.12)", border: "1px solid rgba(168,85,247,.2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#a855f7" }}>
                       <Icon name={prod.icon} size={18} />
                     </div>
-                    <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 999, letterSpacing: ".05em",
-                      ...(isAvail ? { background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.22)", color: "#34d399" } : { background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.35)" })
-                    }}>
-                      {isAvail ? "● Available" : "Coming Soon"}
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 999, letterSpacing: ".05em", ...(isAvail ? { background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.22)", color: "#34d399" } : { background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.35)" }) }}>
+                      {isAvail ? "● Tersedia" : "Segera Hadir"}
                     </span>
                   </div>
                   <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".1em", color: "#38bdf8", textTransform: "uppercase", marginBottom: 5, display: "block" }}>{prod.badge}</span>
                   <h3 style={{ fontSize: 16, fontWeight: 800, marginBottom: 7, letterSpacing: "-0.02em" }}>{prod.name}</h3>
-                  <p style={{ fontSize: 12.5, color: "rgba(255,255,255,.42)", lineHeight: 1.72, marginBottom: 14 }}>{prod.desc[lang]}</p>
+                  <p style={{ fontSize: 12.5, color: "rgba(255,255,255,.42)", lineHeight: 1.72, marginBottom: 14 }}>{prod.desc}</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 5, marginBottom: 16 }}>
                     {prod.highlights.slice(0, 3).map((h, hi) => (
                       <div key={hi} style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -660,137 +780,212 @@ export default function App() {
                   </div>
                   <a href={isAvail ? PANEL_URL : undefined}
                     onClick={!isAvail ? (e) => e.preventDefault() : undefined}
-                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "9px 0", borderRadius: 10, fontWeight: 700, fontSize: 12.5, textDecoration: "none", transition: "all .2s",
-                      ...(isAvail ? { background: "rgba(168,85,247,.14)", border: "1px solid rgba(168,85,247,.28)", color: "white", cursor: "pointer" } : { background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", color: "rgba(255,255,255,.28)", cursor: "default" })
-                    }}
+                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "9px 0", borderRadius: 10, fontWeight: 700, fontSize: 12.5, textDecoration: "none", transition: "all .2s", ...(isAvail ? { background: "rgba(168,85,247,.14)", border: "1px solid rgba(168,85,247,.28)", color: "white", cursor: "pointer" } : { background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", color: "rgba(255,255,255,.28)", cursor: "default" }) }}
                     onMouseEnter={(e) => { if (isAvail) e.currentTarget.style.background = "rgba(168,85,247,.24)"; }}
                     onMouseLeave={(e) => { if (isAvail) e.currentTarget.style.background = "rgba(168,85,247,.14)"; }}>
-                    {isAvail ? (<><Icon name="arrowRight" size={13} /> {prod.ctaPrimary[lang]}</>) : prod.ctaPrimary[lang]}
+                    {isAvail ? (<><Icon name="arrowRight" size={13} /> {prod.ctaPrimary}</>) : prod.ctaPrimary}
                   </a>
                 </div>
               );
             })}
           </div>
 
+          {/* Divider label */}
+          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 18 }}>
+            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.07)" }} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.3)", letterSpacing: ".1em", textTransform: "uppercase" }}>Produk Komersial</span>
+            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.07)" }} />
+          </div>
+
           {/* Commercial Products — 3 columns */}
           <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 18 }}>
-            {products.map((prod, i) => (
-              <div key={prod.id} data-reveal data-d={`${i + 1}`}
-                style={{ position: "relative", background: prod.highlight ? "rgba(168,85,247,.07)" : "rgba(255,255,255,.03)", border: prod.highlight ? "1px solid rgba(168,85,247,.4)" : "1px solid rgba(255,255,255,.07)", borderRadius: 22, overflow: "hidden", transition: "transform .3s cubic-bezier(.22,1,.36,1), border-color .3s" }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; if (!prod.highlight) e.currentTarget.style.borderColor = "rgba(168,85,247,.3)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = ""; if (!prod.highlight) e.currentTarget.style.borderColor = "rgba(255,255,255,.07)"; }}>
-                {prod.highlight && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg,#7c3aed,#a855f7,#38bdf8)" }} />}
-                <div style={{ padding: "28px 28px 0" }}>
-                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
-                    <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                        <div style={{ width: 40, height: 40, borderRadius: 11, background: "rgba(168,85,247,.15)", border: "1px solid rgba(168,85,247,.25)", display: "flex", alignItems: "center", justifyContent: "center", color: "#a855f7" }}><Icon name={prod.icon} size={19} /></div>
-                        <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 999, background: "rgba(56,189,248,.08)", border: "1px solid rgba(56,189,248,.18)", color: "#38bdf8", letterSpacing: ".06em" }}>{prod.tag}</span>
+            {commercialProducts.map((prod, i) => {
+              const inCart = cart.find((p) => p.id === prod.id);
+              return (
+                <div key={prod.id} data-reveal data-d={`${i + 1}`}
+                  style={{ position: "relative", background: prod.highlight ? "rgba(168,85,247,.07)" : "rgba(255,255,255,.03)", border: prod.highlight ? "1px solid rgba(168,85,247,.4)" : "1px solid rgba(255,255,255,.07)", borderRadius: 22, overflow: "hidden", transition: "transform .3s cubic-bezier(.22,1,.36,1), border-color .3s" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; if (!prod.highlight) e.currentTarget.style.borderColor = "rgba(168,85,247,.3)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = ""; if (!prod.highlight) e.currentTarget.style.borderColor = "rgba(255,255,255,.07)"; }}>
+                  {prod.highlight && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg,#7c3aed,#a855f7,#38bdf8)" }} />}
+                  <div style={{ padding: "28px 28px 0" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
+                      <div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                          <div style={{ width: 40, height: 40, borderRadius: 11, background: "rgba(168,85,247,.15)", border: "1px solid rgba(168,85,247,.25)", display: "flex", alignItems: "center", justifyContent: "center", color: "#a855f7" }}><Icon name={prod.icon} size={19} /></div>
+                          <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 999, background: "rgba(56,189,248,.08)", border: "1px solid rgba(56,189,248,.18)", color: "#38bdf8", letterSpacing: ".06em" }}>{prod.tag}</span>
+                        </div>
+                        <h3 style={{ fontSize: 21, fontWeight: 900, letterSpacing: "-0.02em" }}>{prod.name}</h3>
                       </div>
-                      <h3 style={{ fontSize: 22, fontWeight: 900, letterSpacing: "-0.02em" }}>{prod.name}</h3>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ fontSize: 15, fontWeight: 900, ...(prod.highlight ? { background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "white" }) }}>{prod.price}</div>
+                      </div>
                     </div>
-                    <div style={{ textAlign: "right" }}>
-                      <div style={{ fontSize: 18, fontWeight: 900, ...(prod.highlight ? { background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "white" }) }}>{prod.price[lang]}</div>
-                      <div style={{ fontSize: 11, color: prod.highlight ? "#a855f7" : "rgba(255,255,255,.4)", fontWeight: 600, marginTop: 4 }}>{prod.update[lang]}</div>
+                    <p style={{ fontSize: 14, color: "rgba(255,255,255,.48)", lineHeight: 1.78, marginBottom: 20 }}>{prod.desc}</p>
+                  </div>
+                  <div style={{ padding: "0 28px 24px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "7px 12px", marginBottom: 24 }}>
+                      {prod.features.map((f, fi) => (
+                        <div key={fi} style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
+                          <div style={{ width: 16, height: 16, borderRadius: 5, background: "rgba(168,85,247,.18)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#a855f7", marginTop: 2 }}><Icon name="check" size={10} /></div>
+                          <span style={{ fontSize: 12.5, color: "rgba(255,255,255,.58)", fontWeight: 500, lineHeight: 1.5 }}>{f}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <a href={prod.showcase} target="_blank" rel="noreferrer"
+                        style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13, color: "white", textDecoration: "none", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", transition: "all .2s" }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,.1)"}
+                        onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,.06)"}>
+                        <Icon name="play" size={13} /> Lihat Showcase
+                      </a>
+                      <button
+                        onClick={() => inCart ? setCartOpen(true) : addToCart(prod)}
+                        style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13, color: "white", background: inCart ? "rgba(52,211,153,.15)" : (prod.highlight ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(168,85,247,.15)"), border: inCart ? "1px solid rgba(52,211,153,.3)" : (prod.highlight ? "1px solid rgba(168,85,247,.5)" : "1px solid rgba(168,85,247,.3)"), transition: "all .2s", cursor: "pointer", fontFamily: "inherit" }}
+                        onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
+                        onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
+                        <Icon name={inCart ? "check" : "cart"} size={13} />
+                        {inCart ? "Ditambahkan" : "Tambah ke Keranjang"}
+                      </button>
                     </div>
                   </div>
-                  <p style={{ fontSize: 14, color: "rgba(255,255,255,.48)", lineHeight: 1.78, marginBottom: 20 }}>{prod.desc[lang]}</p>
                 </div>
-                <div style={{ padding: "0 28px 24px" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "7px 12px", marginBottom: 24 }}>
-                    {prod.features.map((f, fi) => (
-                      <div key={fi} style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
-                        <div style={{ width: 16, height: 16, borderRadius: 5, background: "rgba(168,85,247,.18)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#a855f7", marginTop: 2 }}><Icon name="check" size={10} /></div>
-                        <span style={{ fontSize: 12.5, color: "rgba(255,255,255,.58)", fontWeight: 500, lineHeight: 1.5 }}>{f}</span>
-                      </div>
-                    ))}
+              );
+            })}
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── WHY CREATORS CHOOSE ─────────────────────────────────────────────── */}
+        <section id="why" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
+          <Label text="Mengapa Hibob Studio" />
+          <div data-reveal style={{ marginBottom: 56 }}>
+            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>
+              Mengapa creator memilih <span className="gt">Hibob Studio.</span>
+            </h2>
+            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 540, lineHeight: 1.78 }}>
+              Platform infrastruktur yang dibangun dengan pemahaman mendalam tentang ekosistem Roblox — bukan adaptasi dari platform lain.
+            </p>
+          </div>
+          <div className="why-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+            {whyCreators.map((w, i) => (
+              <Card key={i} style={{ padding: 28 }}>
+                <div data-reveal data-d={`${(i % 3) + 1}`}>
+                  <div style={{ width: 46, height: 46, borderRadius: 13, background: "rgba(168,85,247,.12)", border: "1px solid rgba(168,85,247,.2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18, color: "#a855f7" }}>
+                    <Icon name={w.icon} size={21} />
                   </div>
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <a href={prod.showcase} target="_blank" rel="noreferrer"
-                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13.5, color: "white", textDecoration: "none", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", transition: "all .2s" }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,.1)"}
-                      onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,.06)"}>
-                      <Icon name="play" size={14} /> {c.products.showcase}
+                  <h3 style={{ fontSize: 17, fontWeight: 800, marginBottom: 10 }}>{w.title}</h3>
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,.46)", lineHeight: 1.78 }}>{w.desc}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── ABOUT FOUNDER ──────────────────────────────────────────────────── */}
+        <section id="about" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
+          <Label text="Tentang Founder" />
+          <div className="founder-grid" style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: 60, alignItems: "center" }}>
+            {/* Avatar */}
+            <div data-reveal style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+              <div style={{ position: "relative" }}>
+                <div style={{ width: 200, height: 200, borderRadius: 24, overflow: "hidden", border: "2px solid rgba(168,85,247,.35)", boxShadow: "0 0 60px rgba(168,85,247,.2)" }}>
+                  <img
+                    src={ROBLOX_AVATAR_URL}
+                    alt="Hibob — Founder Hibob Studio"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                      e.currentTarget.parentElement.style.background = "linear-gradient(135deg,rgba(120,50,250,.3),rgba(56,189,248,.15))";
+                      e.currentTarget.parentElement.innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:900;color:rgba(168,85,247,.7);">H</div>`;
+                    }}
+                  />
+                </div>
+                <div style={{ position: "absolute", bottom: -8, right: -8, padding: "5px 12px", borderRadius: 999, background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.3)", display: "flex", alignItems: "center", gap: 5 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399" }} />
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#34d399" }}>Active Creator</span>
+                </div>
+              </div>
+              <a href={ROBLOX_PROFILE_URL} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: "rgba(255,255,255,.4)", fontWeight: 600, textDecoration: "none", transition: "color .2s" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "#a855f7"}
+                onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.4)"}>
+                Lihat Profil Roblox →
+              </a>
+            </div>
+
+            {/* Content */}
+            <div data-reveal data-d="2">
+              <h2 style={{ fontSize: "clamp(28px,3.5vw,48px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.08, marginBottom: 20 }}>
+                Dibangun oleh creator,<br />untuk <span className="gt">creator.</span>
+              </h2>
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,.55)", lineHeight: 1.85 }}>
+                  Hibob adalah Roblox developer yang aktif membangun experience dan komunitas di platform Roblox. Setelah bertahun-tahun menghadapi hambatan operasional yang sama — upload audio satu per satu, whitelist pembeli secara manual, mengelola identitas lintas Discord dan Roblox tanpa sistem — keputusan diambil untuk membangun infrastruktur yang menyelesaikan masalah ini satu kali untuk semua creator.
+                </p>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,.55)", lineHeight: 1.85 }}>
+                  Hibob Studio lahir dari pengalaman nyata sebagai creator, bukan dari riset pasar. Setiap produk yang dibangun adalah solusi untuk masalah yang sudah dirasakan sendiri — dan sekarang tersedia untuk semua creator Roblox yang menghadapi masalah yang sama.
+                </p>
+              </div>
+
+              {/* Stats */}
+              <div style={{ display: "flex", gap: 20, marginTop: 28, flexWrap: "wrap" }}>
+                {[
+                  { val: "2+", label: "Tahun di Roblox" },
+                  { val: "9+", label: "Experience Dibangun" },
+                  { val: "8", label: "Produk Platform" },
+                ].map((s, i) => (
+                  <div key={i} style={{ padding: "14px 20px", borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.08)" }}>
+                    <div style={{ fontSize: 26, fontWeight: 900, background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", marginBottom: 4 }}>{s.val}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,.4)", fontWeight: 600 }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── GAMES BUILT ─────────────────────────────────────────────────────── */}
+        <section id="games" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
+          <Label text="Proof of Experience" />
+          <div data-reveal style={{ marginBottom: 56 }}>
+            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>
+              Experience yang <span className="gt">sudah dibangun.</span>
+            </h2>
+            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 560, lineHeight: 1.78 }}>
+              Produk Hibob Studio dibangun oleh creator yang benar-benar aktif membangun experience Roblox — bukan teori, tapi pengalaman nyata dari lapangan.
+            </p>
+          </div>
+          <div className="games-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 14 }}>
+            {games.map((g, i) => (
+              <Card key={i} style={{ overflow: "hidden" }}>
+                <div data-reveal data-d={`${(i % 4) + 1}`}>
+                  <div style={{ padding: "20px 22px 14px", borderBottom: "1px solid rgba(255,255,255,.06)", background: "rgba(168,85,247,.04)" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".1em", color: "#a855f7", textTransform: "uppercase" }}>{g.category}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 11, color: "rgba(255,255,255,.3)", fontWeight: 500 }}>{g.year}</span>
+                        <span style={{ fontSize: 11, fontWeight: 800, padding: "3px 9px", borderRadius: 999, background: "rgba(168,85,247,.12)", border: "1px solid rgba(168,85,247,.25)", color: "#c084fc" }}>{g.badge}</span>
+                      </div>
+                    </div>
+                    <h3 style={{ fontSize: 19, fontWeight: 800, marginBottom: 8 }}>{g.title}</h3>
+                    <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                      {g.roles.map((r, ri) => (
+                        <span key={ri} style={{ fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: r === "Full Handle" ? "rgba(56,189,248,.1)" : "rgba(168,85,247,.1)", border: r === "Full Handle" ? "1px solid rgba(56,189,248,.25)" : "1px solid rgba(168,85,247,.2)", color: r === "Full Handle" ? "#38bdf8" : "#c084fc", letterSpacing: ".05em", textTransform: "uppercase" }}>{r}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ padding: "14px 22px 20px" }}>
+                    <p style={{ fontSize: 13.5, color: "rgba(255,255,255,.46)", lineHeight: 1.78, marginBottom: 16 }}>{g.desc}</p>
+                    <a href={g.url} target="_blank" rel="noreferrer"
+                      style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 18px", borderRadius: 10, fontWeight: 700, fontSize: 13, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.4)", transition: "all .2s" }}
+                      onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 0 20px rgba(168,85,247,.4)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = ""; }}>
+                      Main Sekarang <Icon name="arrowRight" size={13} />
                     </a>
-                    <button onClick={() => setCheckoutProduct({ name: prod.name, price: prod.price[lang], hasRobux: true, voucherOnly: prod.voucherOnly || null })}
-                      style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13.5, color: "white", textDecoration: "none", background: prod.highlight ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(168,85,247,.15)", border: prod.highlight ? "1px solid rgba(168,85,247,.5)" : "1px solid rgba(168,85,247,.3)", transition: "all .2s", cursor: "pointer", fontFamily: "inherit" }}
-                      onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
-                      onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
-                      <Icon name="message" size={14} /> {c.products.buy}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* PRICING */}
-        <section id="pricing" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
-          <Label text={c.pricing.label} />
-          <div data-reveal style={{ marginBottom: 56 }}>
-            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>{c.pricing.h2a} <span className="gt">{c.pricing.h2b}</span></h2>
-            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 520, lineHeight: 1.78 }}>{c.pricing.sub}</p>
-          </div>
-          <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16, alignItems: "start" }}>
-            {pricing.map((p, i) => (
-              <div key={i} data-reveal data-d={`${i + 1}`}
-                style={{ position: "relative", background: p.highlight ? "rgba(168,85,247,.08)" : "rgba(255,255,255,.03)", border: p.highlight ? "1px solid rgba(168,85,247,.45)" : "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "28px 24px", transition: "transform .3s cubic-bezier(.22,1,.36,1)" }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
-                onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}>
-                {p.highlight && <div style={{ position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)", padding: "5px 16px", borderRadius: 999, background: "linear-gradient(135deg,#7c3aed,#a855f7)", fontSize: 10, fontWeight: 800, color: "white", letterSpacing: ".08em", whiteSpace: "nowrap" }}>MOST POPULAR</div>}
-                <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.4)", marginBottom: 8 }}>{p.name[lang]}</p>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 6 }}>
-                  <span style={{ fontSize: "clamp(26px,3.5vw,38px)", fontWeight: 900, ...(p.highlight ? { background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "white" }) }}>
-                    {p.price === "Custom" ? "Custom" : `Rp${p.price}`}
-                  </span>
-                  {p.price !== "Custom" && <span style={{ fontSize: 12, color: "rgba(255,255,255,.3)", fontWeight: 600 }}>{c.pricing.startFrom}</span>}
-                </div>
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,.4)", lineHeight: 1.7, marginBottom: 20, minHeight: 40 }}>{p.desc[lang]}</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 24 }}>
-                  {p.features[lang].map((f, fi) => (
-                    <div key={fi} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <div style={{ width: 17, height: 17, borderRadius: 6, background: "rgba(168,85,247,.18)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#a855f7" }}><Icon name="check" size={10} /></div>
-                      <span style={{ fontSize: 13, color: "rgba(255,255,255,.6)", fontWeight: 500 }}>{f}</span>
-                    </div>
-                  ))}
-                </div>
-                <a href={PANEL_URL} target="_blank" rel="noreferrer"
-                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 12, fontWeight: 800, fontSize: 13.5, color: "white", textDecoration: "none", width: "100%", transition: "all .2s", ...(p.highlight ? { background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)", boxShadow: "0 0 20px rgba(168,85,247,.25)" } : { background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)" }) }}
-                  onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
-                  onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
-                >
-                  {p.cta[lang]} <Icon name="arrowRight" size={14} />
-                </a>
-              </div>
-            ))}
-          </div>
-          <p data-reveal style={{ textAlign: "center", marginTop: 20, fontSize: 13, color: "rgba(255,255,255,.3)", fontWeight: 500 }}>{c.pricing.note}</p>
-        </section>
-
-        <Divider />
-
-        {/* TESTIMONIALS */}
-        <section id="testimonials" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
-          <Label text={c.testimonials.label} />
-          <div data-reveal style={{ marginBottom: 56 }}>
-            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>{c.testimonials.h2a} <span className="gt">{c.testimonials.h2b}</span></h2>
-            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 520, lineHeight: 1.78 }}>{c.testimonials.sub}</p>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14 }}>
-            {testimonials.map((t, i) => (
-              <Card key={i} style={{ padding: 26 }}>
-                <div data-reveal data-d={`${i + 1}`}>
-                  <div style={{ color: "rgba(168,85,247,.45)", marginBottom: 14 }}><Icon name="quote" size={26} /></div>
-                  <p style={{ fontSize: 15, color: "rgba(255,255,255,.65)", lineHeight: 1.8, marginBottom: 20, fontStyle: "italic" }}>"{t.quote[lang]}"</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,#a855f7,#38bdf8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 900, color: "white", flexShrink: 0 }}>{t.name[0]}</div>
-                    <div>
-                      <p style={{ fontSize: 14, fontWeight: 800 }}>{t.name}</p>
-                      <p style={{ fontSize: 12, color: "rgba(255,255,255,.36)", fontWeight: 500, marginTop: 2 }}>{t.role[lang]}</p>
-                    </div>
                   </div>
                 </div>
               </Card>
@@ -800,49 +995,154 @@ export default function App() {
 
         <Divider />
 
-        {/* CONTACT */}
+        {/* ── CREATOR PANEL PLANS ─────────────────────────────────────────────── */}
+        <section id="pricing" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
+          <Label text="Paket Creator Panel" />
+          <div data-reveal style={{ marginBottom: 56 }}>
+            <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>
+              Pilih level <span className="gt">akses kamu.</span>
+            </h2>
+            <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 520, lineHeight: 1.78 }}>
+              Akses platform untuk setiap tahap perjalanan creator. Mulai gratis, tingkatkan kapasitas saat siap.
+            </p>
+          </div>
+          <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16, alignItems: "start" }}>
+            {pricingPlans.map((p, i) => (
+              <div key={i} data-reveal data-d={`${i + 1}`}
+                style={{ position: "relative", background: p.highlight ? "rgba(168,85,247,.08)" : "rgba(255,255,255,.03)", border: p.highlight ? "1px solid rgba(168,85,247,.45)" : "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "28px 24px", transition: "transform .3s cubic-bezier(.22,1,.36,1)" }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
+                onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}>
+                {p.highlight && <div style={{ position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)", padding: "5px 16px", borderRadius: 999, background: "linear-gradient(135deg,#7c3aed,#a855f7)", fontSize: 10, fontWeight: 800, color: "white", letterSpacing: ".08em", whiteSpace: "nowrap" }}>PALING POPULER</div>}
+                <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.4)", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".08em" }}>{p.name}</p>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
+                  <span style={{ fontSize: "clamp(26px,3.5vw,36px)", fontWeight: 900, ...(p.highlight ? { background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "white" }) }}>
+                    {p.price === "0" ? "Gratis" : `Rp${p.price}`}
+                  </span>
+                  {p.duration && <span style={{ fontSize: 12, color: "rgba(255,255,255,.3)", fontWeight: 600 }}>/ {p.duration}</span>}
+                </div>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,.4)", lineHeight: 1.7, marginBottom: 20, minHeight: 44 }}>{p.desc}</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 24 }}>
+                  {p.features.map((f, fi) => (
+                    <div key={fi} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ width: 17, height: 17, borderRadius: 6, background: "rgba(168,85,247,.18)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#a855f7" }}><Icon name="check" size={10} /></div>
+                      <span style={{ fontSize: 13, color: "rgba(255,255,255,.6)", fontWeight: 500 }}>{f}</span>
+                    </div>
+                  ))}
+                </div>
+                <a href={PANEL_URL} target="_blank" rel="noreferrer"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 12, fontWeight: 800, fontSize: 13.5, color: "white", textDecoration: "none", width: "100%", transition: "all .2s", ...(p.highlight ? { background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)", boxShadow: "0 0 20px rgba(168,85,247,.25)" } : { background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)" }) }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
+                  {p.cta} <Icon name="arrowRight" size={14} />
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ── FINAL CTA ───────────────────────────────────────────────────────── */}
         <section id="contact" style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px 112px" }}>
           <div data-reveal className="gborder" style={{ textAlign: "center", padding: "88px 40px", background: "rgba(168,85,247,.05)", borderRadius: 28, position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: -100, left: -100, width: 340, height: 340, borderRadius: "50%", background: "radial-gradient(circle,rgba(168,85,247,.18) 0%,transparent 70%)" }} />
             <div style={{ position: "absolute", bottom: -100, right: -100, width: 340, height: 340, borderRadius: "50%", background: "radial-gradient(circle,rgba(56,189,248,.12) 0%,transparent 70%)" }} />
             <div style={{ position: "relative" }}>
-              <Label text={c.contact.label} center />
-              <h2 style={{ fontSize: "clamp(28px,4vw,54px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, margin: "12px 0 16px" }}>{c.contact.h2a}<br /><span className="gt">{c.contact.h2b}</span></h2>
-              <p style={{ fontSize: 17, color: "rgba(255,255,255,.46)", maxWidth: 460, margin: "0 auto 36px", lineHeight: 1.78 }}>{c.contact.sub}</p>
+              <Label text="Mulai Sekarang" center />
+              <h2 style={{ fontSize: "clamp(28px,4vw,54px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, margin: "12px 0 16px" }}>
+                Infrastruktur creator<br /><span className="gt">kamu sudah siap.</span>
+              </h2>
+              <p style={{ fontSize: 17, color: "rgba(255,255,255,.46)", maxWidth: 460, margin: "0 auto 36px", lineHeight: 1.78 }}>
+                Buka Creator Panel untuk mengakses Audio Forge, License Manager, Donation System, dan lebih banyak lagi — semuanya dari satu ekosistem yang terhubung.
+              </p>
               <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
                 <Btn href={PANEL_URL} primary style={{ padding: "16px 32px", borderRadius: 14, fontSize: 16 }} className="pulse">
-                  {c.contact.cta1} <Icon name="arrowRight" size={20} />
+                  Buka Creator Panel <Icon name="arrowRight" size={20} />
                 </Btn>
                 <Btn href={DISCORD_URL} style={{ padding: "16px 32px", borderRadius: 14, fontSize: 16 }}>
-                  <Icon name="message" size={20} /> {c.contact.cta2}
+                  <Icon name="message" size={20} /> Gabung Komunitas
                 </Btn>
               </div>
             </div>
           </div>
         </section>
 
-        {/* FOOTER */}
-        <footer style={{ borderTop: "1px solid rgba(255,255,255,.06)", padding: "26px 24px" }}>
-          <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: 14, fontWeight: 900, letterSpacing: "-0.03em", background: "linear-gradient(120deg,#a855f7,#e879f9,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hibob Studio</span>
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,.25)", fontWeight: 500 }}>© 2026 Hibob Studio</span>
+        {/* ── FOOTER ─────────────────────────────────────────────────────────── */}
+        <footer style={{ borderTop: "1px solid rgba(255,255,255,.06)", padding: "48px 24px 28px" }}>
+          <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+            {/* Top footer */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 40, marginBottom: 40 }}>
+
+              {/* Brand */}
+              <div>
+                <span style={{ fontSize: 18, fontWeight: 900, letterSpacing: "-0.03em", background: "linear-gradient(120deg,#a855f7,#e879f9,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", display: "block", marginBottom: 10 }}>Hibob Studio</span>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,.35)", lineHeight: 1.7, maxWidth: 220 }}>Creator Infrastructure Platform untuk Roblox creator yang serius.</p>
+                <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+                  <a href={DISCORD_URL} target="_blank" rel="noreferrer" style={{ padding: "6px 12px", borderRadius: 8, background: "rgba(88,101,242,.1)", border: "1px solid rgba(88,101,242,.25)", fontSize: 12, fontWeight: 700, color: "#5865f2", textDecoration: "none", transition: "all .2s" }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "rgba(88,101,242,.2)"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "rgba(88,101,242,.1)"}>Discord</a>
+                  <a href={PANEL_URL} target="_blank" rel="noreferrer" style={{ padding: "6px 12px", borderRadius: 8, background: "rgba(168,85,247,.1)", border: "1px solid rgba(168,85,247,.25)", fontSize: 12, fontWeight: 700, color: "#a855f7", textDecoration: "none", transition: "all .2s" }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "rgba(168,85,247,.2)"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "rgba(168,85,247,.1)"}>Creator Panel</a>
+                </div>
+              </div>
+
+              {/* Products */}
+              <div>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.35)", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 14 }}>Produk</p>
+                {["Creator Panel", "Audio Forge", "License Manager", "Asset Manager", "Donation System"].map((item) => (
+                  <a key={item} href={PANEL_URL} target="_blank" rel="noreferrer" style={{ display: "block", fontSize: 13, color: "rgba(255,255,255,.45)", textDecoration: "none", marginBottom: 9, fontWeight: 500, transition: "color .2s" }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "white"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.45)"}>
+                    {item}
+                  </a>
+                ))}
+              </div>
+
+              {/* Resources */}
+              <div>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.35)", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 14 }}>Komunitas</p>
+                {[
+                  { label: "Discord Server", href: DISCORD_URL },
+                  { label: "Creator Panel", href: PANEL_URL },
+                  { label: "Profil Roblox", href: ROBLOX_PROFILE_URL },
+                ].map((item) => (
+                  <a key={item.label} href={item.href} target="_blank" rel="noreferrer" style={{ display: "block", fontSize: 13, color: "rgba(255,255,255,.45)", textDecoration: "none", marginBottom: 9, fontWeight: 500, transition: "color .2s" }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "white"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.45)"}>
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+
+              {/* Legal */}
+              <div>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.35)", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 14 }}>Legal</p>
+                {[
+                  { label: "Kebijakan Privasi", href: "#/privacy" },
+                  { label: "Syarat Layanan", href: "#/terms" },
+                  { label: "Kepatuhan Roblox", href: "#/roblox-compliance" },
+                ].map((item) => (
+                  <a key={item.label} href={item.href} style={{ display: "block", fontSize: 13, color: "rgba(255,255,255,.45)", textDecoration: "none", marginBottom: 9, fontWeight: 500, transition: "color .2s" }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "white"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.45)"}>
+                    {item.label}
+                  </a>
+                ))}
+              </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-              {[{ label: "Discord", href: DISCORD_URL }, { label: "Creator Panel", href: PANEL_URL }, { label: "Email", href: EMAIL_URL }].map((l) => (
-                <a key={l.label} href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer"
-                  style={{ fontSize: 13, color: "rgba(255,255,255,.28)", textDecoration: "none", fontWeight: 500, transition: "color .2s" }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = "white"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.28)"}>
-                  {l.label}
-                </a>
-              ))}
+
+            {/* Bottom footer */}
+            <div style={{ borderTop: "1px solid rgba(255,255,255,.06)", paddingTop: 22, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+              <span style={{ fontSize: 12, color: "rgba(255,255,255,.22)", fontWeight: 500 }}>© 2026 Hibob Studio. Seluruh hak cipta dilindungi.</span>
+              <span style={{ fontSize: 12, color: "rgba(255,255,255,.18)", fontWeight: 500 }}>Tidak berafiliasi dengan Roblox Corporation.</span>
             </div>
           </div>
         </footer>
       </div>
 
-      <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Back to top"
+      {/* Back to top */}
+      <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Kembali ke atas"
         style={{ position: "fixed", bottom: 28, right: 28, zIndex: 99, width: 44, height: 44, borderRadius: 12, background: "rgba(168,85,247,.18)", border: "1px solid rgba(168,85,247,.35)", color: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(12px)", transition: "all .3s cubic-bezier(.22,1,.36,1)", opacity: showTop ? 1 : 0, transform: showTop ? "translateY(0) scale(1)" : "translateY(12px) scale(.8)", pointerEvents: showTop ? "auto" : "none" }}
         onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(168,85,247,.35)"; }}
         onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(168,85,247,.18)"; }}>
