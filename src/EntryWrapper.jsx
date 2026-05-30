@@ -32,8 +32,7 @@ function LoadingScreen({ onDone }) {
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 9999, background: "transparent", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", opacity: fadeOut ? 0 : 1, transition: "opacity 0.5s cubic-bezier(0.22,1,0.36,1)" }}>
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(120,40,220,.22) 0%, transparent 65%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px)", backgroundSize: "40px 40px", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(120,40,220,.18) 0%, transparent 65%)", pointerEvents: "none" }} />
 
       <img src={logoImg} alt="Hibob Studio" style={{ height: "clamp(36px,5vw,52px)", width: "auto", objectFit: "contain", marginBottom: 12, animation: "shimmer 3s ease infinite", filter: "drop-shadow(0 0 20px rgba(168,85,247,.4))" }} />
       <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", color: "rgba(168,85,247,.45)", fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 40, textTransform: "uppercase" }}>
@@ -69,13 +68,6 @@ function EntryPage({ onContinue }) {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 9998, background: "transparent", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px", overflowY: "auto" }}>
 
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 90% 70% at 15% 0%, rgba(110,35,190,.35) 0%, transparent 50%)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 60% at 90% 100%, rgba(14,100,190,.2) 0%, transparent 50%)" }} />
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px)", backgroundSize: "40px 40px" }} />
-        <div style={{ position: "absolute", top: "8%", right: "6%", width: 200, height: 200, borderRadius: "50%", background: "radial-gradient(circle,rgba(168,85,247,.15) 0%,transparent 70%)", filter: "blur(35px)", animation: "orbFloat1 7s ease-in-out infinite" }} />
-        <div style={{ position: "absolute", bottom: "10%", left: "5%", width: 160, height: 160, borderRadius: "50%", background: "radial-gradient(circle,rgba(56,189,248,.12) 0%,transparent 70%)", filter: "blur(28px)", animation: "orbFloat2 9s ease-in-out infinite" }} />
-      </div>
 
       <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: 600, paddingTop: 20, paddingBottom: 40 }}>
 
@@ -97,20 +89,25 @@ function EntryPage({ onContinue }) {
 
         {/* CTA */}
         <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 340, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.3s" }}>
+
+          {/* Primary — Liquid Glass Purple */}
           <button onClick={() => { sfxStart(); onContinue(); }}
-            style={{ width: "100%", padding: "15px 24px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "white", fontSize: 15, fontWeight: 800, fontFamily: "'Plus Jakarta Sans',sans-serif", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)", boxShadow: "0 4px 28px rgba(168,85,247,.4)", letterSpacing: "-0.01em" }}
-            onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.boxShadow = "0 8px 50px rgba(168,85,247,.65)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 4px 28px rgba(168,85,247,.4)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
-            Let's Get Started
+            style={{ position: "relative", width: "100%", padding: "16px 24px", borderRadius: 20, border: "1px solid rgba(200,140,255,.35)", background: "linear-gradient(180deg,rgba(160,80,255,.28) 0%,rgba(100,40,200,.14) 100%)", backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)", color: "white", fontSize: 15, fontWeight: 800, fontFamily: "'Plus Jakarta Sans',sans-serif", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)", boxShadow: "inset 0 1px 0 rgba(255,255,255,.45), 0 8px 32px rgba(100,40,200,.3)", letterSpacing: "-0.01em", overflow: "hidden" }}
+            onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.5), 0 16px 48px rgba(120,50,240,.45)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.45), 0 8px 32px rgba(100,40,200,.3)"; }}>
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(255,255,255,.12) 0%,transparent 55%)", borderRadius: 20, pointerEvents: "none" }} />
+            <svg style={{ position: "relative" }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
+            <span style={{ position: "relative" }}>Let's Get Started</span>
           </button>
 
+          {/* Secondary — Liquid Glass Neutral */}
           <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={sfxClick}
-            style={{ width: "100%", padding: "13px 24px", borderRadius: 12, border: "1px solid rgba(168,85,247,.25)", background: "rgba(168,85,247,.06)", color: "rgba(255,255,255,.65)", fontSize: 14, fontWeight: 700, fontFamily: "'Plus Jakarta Sans',sans-serif", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)", letterSpacing: "-0.01em", boxSizing: "border-box" }}
-            onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.borderColor = "rgba(168,85,247,.5)"; e.currentTarget.style.color = "white"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(168,85,247,.25)"; e.currentTarget.style.color = "rgba(255,255,255,.65)"; }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 12l10 5 10-5M2 17l10 5 10-5" /></svg>
-            Buka Creator Panel
+            style={{ position: "relative", width: "100%", padding: "15px 24px", borderRadius: 20, border: "1px solid rgba(255,255,255,.22)", background: "linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.06) 100%)", backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)", color: "rgba(255,255,255,.9)", fontSize: 14, fontWeight: 700, fontFamily: "'Plus Jakarta Sans',sans-serif", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)", letterSpacing: "-0.01em", boxSizing: "border-box", boxShadow: "inset 0 1px 0 rgba(255,255,255,.35), 0 4px 20px rgba(0,0,0,.2)", overflow: "hidden" }}
+            onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.45), 0 12px 36px rgba(0,0,0,.3)"; e.currentTarget.style.color = "white"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.35), 0 4px 20px rgba(0,0,0,.2)"; e.currentTarget.style.color = "rgba(255,255,255,.9)"; }}>
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(255,255,255,.1) 0%,transparent 55%)", borderRadius: 20, pointerEvents: "none" }} />
+            <svg style={{ position: "relative" }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 12l10 5 10-5M2 17l10 5 10-5" /></svg>
+            <span style={{ position: "relative" }}>Buka Creator Panel</span>
           </a>
         </div>
 
@@ -121,8 +118,6 @@ function EntryPage({ onContinue }) {
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
-        @keyframes orbFloat1 { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-20px) scale(1.08)} }
-        @keyframes orbFloat2 { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(18px) scale(0.94)} }
       `}</style>
     </div>
   );
