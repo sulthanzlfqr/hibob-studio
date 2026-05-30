@@ -126,22 +126,44 @@ export default async function handler(req) {
   const orderId = generateOrderId();
   const order = { orderId, customerName, customerDiscord, customerEmail, items, total };
 
-  // Send to Discord — text embed only (no file attachment to avoid memory issues)
+  // ── Step 1: Kirim embed teks (order details) ─────────────────────────────
   try {
-    const discordRes = await fetch(webhookUrl, {
+    const ctrl1 = new AbortController();
+    const t1 = setTimeout(() => ctrl1.abort(), 8000);
+    const res1 = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(buildEmbed(order)),
+      signal: ctrl1.signal,
     });
-
-    if (!discordRes.ok) {
-      const errText = await discordRes.text();
-      console.error("Discord rejected:", discordRes.status, errText);
+    clearTimeout(t1);
+    if (!res1.ok) {
+      const errText = await res1.text();
+      console.error("Discord embed rejected:", res1.status, errText);
       return json({ error: "Gagal mengirim ke Discord. Coba beberapa saat lagi." }, 502);
     }
   } catch (err) {
-    console.error("Discord fetch error:", err?.message);
+    console.error("Discord embed error:", err?.message);
     return json({ error: "Terjadi kesalahan server. Coba lagi." }, 500);
+  }
+
+  // ── Step 2: Kirim gambar bukti transfer (best-effort, request terpisah) ──
+  try {
+    const fileBuffer = await proofFile.arrayBuffer();
+    const blob = new Blob([fileBuffer], { type: proofFile.type });
+    const ext = (proofFile.name || "jpg").split(".").pop();
+
+    const fileForm = new FormData();
+    fileForm.append("content", `📎 **Bukti Transfer** — \`${orderId}\``);
+    fileForm.append("files[0]", blob, `bukti-${orderId}.${ext}`);
+
+    const ctrl2 = new AbortController();
+    const t2 = setTimeout(() => ctrl2.abort(), 10000);
+    await fetch(webhookUrl, { method: "POST", body: fileForm, signal: ctrl2.signal });
+    clearTimeout(t2);
+  } catch (err) {
+    // Best-effort: order tetap sukses meski gambar gagal terkirim
+    console.warn("Proof image upload failed (non-critical):", err?.message);
   }
 
   return json({ success: true, orderId });
