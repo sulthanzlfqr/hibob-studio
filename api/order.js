@@ -2,8 +2,8 @@
  * Vercel Edge Function — Order Webhook Proxy
  * Route: POST /api/order
  *
- * Set di Vercel Dashboard → Project → Settings → Environment Variables:
- *   DISCORD_ORDER_WEBHOOK  = Discord webhook URL (tidak pernah ke browser)
+ * Set di Vercel Dashboard → Settings → Environment Variables:
+ *   DISCORD_ORDER_WEBHOOK = Discord webhook URL
  */
 
 export const config = { runtime: "edge" };
@@ -35,11 +35,11 @@ function buildEmbed(order) {
   const itemList = order.items.map((i) => `• **${i.name}** — ${i.price}`).join("\n");
   return {
     embeds: [{
-      title: "🛒 ORDER BARU",
+      title: "🛒 ORDER BARU — Hibob Studio",
       color: 0xa855f7,
       fields: [
         { name: "Order ID", value: `\`${order.orderId}\``, inline: true },
-        { name: "Status", value: `\`${order.status}\``, inline: true },
+        { name: "Status", value: "`WAITING_VERIFICATION`", inline: true },
         { name: "Nama", value: order.customerName, inline: false },
         { name: "Discord", value: order.customerDiscord, inline: true },
         { name: "Email", value: order.customerEmail || "—", inline: true },
@@ -54,7 +54,8 @@ function buildEmbed(order) {
 }
 
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const MAX_FILE_BYTES = 5 * 1024 * 1024;
+
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -67,25 +68,22 @@ function json(data, status = 200) {
 }
 
 export default async function handler(req) {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: cors });
-  }
-  if (req.method !== "POST") {
-    return json({ error: "Method not allowed" }, 405);
-  }
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+  if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
   const webhookUrl = process.env.DISCORD_ORDER_WEBHOOK;
   if (!webhookUrl) return json({ error: "Service tidak tersedia." }, 503);
 
+  // Rate limit
   const ip =
     req.headers.get("x-real-ip") ||
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     "unknown";
-
   if (!checkRateLimit(ip)) {
     return json({ error: "Terlalu banyak permintaan. Coba lagi dalam 10 menit." }, 429);
   }
 
+  // Parse form
   let formData;
   try { formData = await req.formData(); }
   catch { return json({ error: "Format request tidak valid." }, 400); }
@@ -98,10 +96,11 @@ export default async function handler(req) {
   const customerName    = (formData.get("customerName") || "").trim();
   const customerDiscord = (formData.get("customerDiscord") || "").trim();
   const customerEmail   = (formData.get("customerEmail") || "").trim();
-  const itemsRaw        = formData.get("items");
-  const totalRaw        = formData.get("total");
+  const itemsRaw        = formData.get("items") || "";
+  const totalRaw        = formData.get("total") || "0";
   const proofFile       = formData.get("proofImage");
 
+  // Validate
   const errors = [];
   if (!customerName) errors.push("Nama wajib diisi.");
   if (!customerDiscord) errors.push("Discord username wajib diisi.");
@@ -120,27 +119,30 @@ export default async function handler(req) {
   if (!ALLOWED_TYPES.includes(proofFile.type)) {
     return json({ error: "Format file tidak didukung. Gunakan JPG, PNG, atau WEBP." }, 422);
   }
-  if (proofFile.size > MAX_FILE_SIZE) {
+  if (proofFile.size > MAX_FILE_BYTES) {
     return json({ error: "Ukuran file maksimal 5 MB." }, 422);
   }
 
   const orderId = generateOrderId();
-  const order = {
-    orderId, customerName, customerDiscord, customerEmail, items, total,
-    paymentMethod: "QRIS", merchantName: "Mutual Space Store",
-    status: "WAITING_VERIFICATION",
-  };
+  const order = { orderId, customerName, customerDiscord, customerEmail, items, total };
 
+  // Send to Discord
   try {
     const discordForm = new FormData();
     discordForm.append("payload_json", JSON.stringify(buildEmbed(order)));
-    const ext = proofFile.name.split(".").pop() || "jpg";
+    const ext = (proofFile.name || "jpg").split(".").pop();
     discordForm.append("files[0]", proofFile, `bukti-${orderId}.${ext}`);
 
-    const res = await fetch(webhookUrl, { method: "POST", body: discordForm });
-    if (!res.ok) return json({ error: "Gagal mengirim notifikasi. Coba beberapa saat lagi." }, 502);
-  } catch {
-    return json({ error: "Terjadi kesalahan jaringan. Coba lagi." }, 500);
+    const discordRes = await fetch(webhookUrl, { method: "POST", body: discordForm });
+
+    if (!discordRes.ok) {
+      const errText = await discordRes.text();
+      console.error("Discord rejected:", discordRes.status, errText);
+      return json({ error: "Gagal mengirim ke Discord. Coba beberapa saat lagi." }, 502);
+    }
+  } catch (err) {
+    console.error("Discord fetch error:", err?.message);
+    return json({ error: "Terjadi kesalahan server. Coba lagi." }, 500);
   }
 
   return json({ success: true, orderId });
