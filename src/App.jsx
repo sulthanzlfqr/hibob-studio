@@ -1,5 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import founderAvatar from "./assets/founder-avatar.png";
+import logoImg from "./assets/HibobStudio-Logo.png";
+import { useCart } from "./hooks/useCart";
+import { COMMERCIAL_PRODUCTS, CREATOR_PLANS } from "./data/products";
 
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const PANEL_URL = "https://panel.hibobstudio.com";
@@ -55,57 +58,7 @@ const games = [
   { title: "Escape from Robby", category: "Horror / Escape", roles: ["Full Handle"], desc: "Horror escape experience dengan full development — building, scripting, dan GUI dari awal sampai launch.", url: "https://www.roblox.com/games/117308005555854/Escape-from-Robby", badge: "ER", year: "2025" },
 ];
 
-// ─── Commercial Products (for cart) ───────────────────────────────────────────
-const commercialProducts = [
-  {
-    id: "club-kit",
-    name: "Hibob Club Kit",
-    tag: "Full System",
-    icon: "box",
-    price: "Rp1.000.000 / R$20.000",
-    priceNum: 1000000,
-    desc: "Sistem manajemen club Roblox yang lengkap dan terintegrasi. Dirancang untuk komunitas yang membutuhkan operasional profesional, efisien, dan realtime.",
-    features: ["Centralized Admin Panel", "Role & Permission System", "NameTag & Title System", "VIP / VVIP Shop Integration", "Dance, Sync & Carry System", "Donation System", "Leaderboard System", "Leveling & Progression", "Realtime Sync System", "Knit Framework Architecture"],
-    showcase: "https://www.tiktok.com/@hibobbb67/video/7638638271001595143",
-    highlight: true,
-  },
-  {
-    id: "music-system",
-    name: "Hibob Music System",
-    tag: "Audio System",
-    icon: "music",
-    price: "Rp300.000 / R$6.000",
-    priceNum: 300000,
-    desc: "Solusi audio management profesional untuk Roblox Club Map. Dibangun untuk sinkronisasi sempurna, interaktivitas tinggi, dan sound processing yang advanced.",
-    features: ["Full Server Sync — realtime audio sync", "Smart Playback — Auto Queue & Request", "Playlist grouping + Smart Search UI", "Players can add songs via Asset ID", "MusicZones — area-based sound", "Crossfade, EQ, Reverb, Compressor", "DJ Mode — authorized-only control", "Script obfuscation for security", "Whitelist via Roblox & Discord", "Dedicated Discord support"],
-    showcase: "https://www.tiktok.com/@hibobbb67/video/7629686621918498055",
-    highlight: false,
-  },
-  {
-    id: "visual-system",
-    name: "Hibob Visual System",
-    tag: "Stage Visual",
-    icon: "zap",
-    price: "Rp300.000 / R$6.000",
-    priceNum: 300000,
-    desc: "Video tron untuk stage Roblox. GIF dikonversi menjadi spritesheet lalu diputar frame-by-frame sehingga terlihat seperti video nyata di dalam experience Roblox.",
-    features: ["GIF to Spritesheet Pipeline", "Frame-by-frame Playback", "Stage / Screen Ready", "Custom Resolution Support", "Loop & Autoplay Control", "Multi-screen Sync", "Plug & Play Setup", "Performance Optimized", "Roblox Surface GUI Ready", "Dedicated Discord support"],
-    showcase: "https://discord.gg/qzCdpasNhG",
-    highlight: false,
-  },
-  {
-    id: "donation-system",
-    name: "Hibob Donation System",
-    tag: "Donation Platform",
-    icon: "heart",
-    price: "Rp350.000 / R$6.500",
-    priceNum: 350000,
-    desc: "Hubungkan donasi Bagibagi langsung ke experience Roblox dengan realtime events, visual effects, analytics, dan creator tracking.",
-    features: ["Bagibagi Integration", "Realtime Donation Events", "Roblox Effects Trigger", "Creator Analytics", "Donation History", "Plug & Play Setup", "Web Dashboard Control", "Discord Notification", "Custom Reward System", "Dedicated Discord support"],
-    showcase: "https://discord.gg/qzCdpasNhG",
-    highlight: false,
-  },
-];
+// commercialProducts dan pricingPlans dipindah ke src/data/products.js
 
 // ─── Platform Products ────────────────────────────────────────────────────────
 const platformProducts = [
@@ -187,36 +140,7 @@ const whyCreators = [
   },
 ];
 
-// ─── Pricing Plans ────────────────────────────────────────────────────────────
-const pricingPlans = [
-  {
-    name: "Free",
-    price: "0",
-    duration: null,
-    desc: "Akses dasar platform Hibob Studio. Mulai tanpa komitmen.",
-    features: ["Creator Panel Access", "2x Conversion", "2x Upload", "Akses komunitas Discord"],
-    cta: "Mulai Gratis",
-    highlight: false,
-  },
-  {
-    name: "Creator Basic",
-    price: "50.000",
-    duration: "7 Hari",
-    desc: "Untuk creator yang mulai aktif membangun dan membutuhkan kapasitas lebih.",
-    features: ["Creator Panel Access", "100x Conversion", "100x Upload", "Priority support Discord"],
-    cta: "Pilih Basic",
-    highlight: false,
-  },
-  {
-    name: "Creator Pro",
-    price: "100.000",
-    duration: "30 Hari",
-    desc: "Akses penuh untuk creator yang beroperasi secara profesional.",
-    features: ["Unlimited Conversion", "Unlimited Upload", "Asset Manager Access", "All future features"],
-    cta: "Upgrade ke Pro",
-    highlight: true,
-  },
-];
+// pricingPlans dipindah ke src/data/products.js sebagai CREATOR_PLANS
 
 // ─── Hooks ────────────────────────────────────────────────────────────────────
 function useScrollProgress() {
@@ -456,19 +380,18 @@ function MobileMenu({ isOpen, active, onClose }) {
 }
 
 // ─── Cart Drawer ──────────────────────────────────────────────────────────────
-function CartDrawer({ cart, onClose, onRemove, onCheckout }) {
-  const total = cart.reduce((s, p) => s + p.priceNum, 0);
+function CartDrawer({ items, total, onClose, onRemove, onCheckout }) {
   return (
     <>
-      <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(0,0,0,.55)", backdropFilter: "blur(4px)", transition: "opacity .3s" }} />
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(0,0,0,.55)", backdropFilter: "blur(4px)" }} />
       <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 61, width: "min(100vw, 400px)", background: "#0d0920", borderLeft: "1px solid rgba(168,85,247,.2)", display: "flex", flexDirection: "column", boxShadow: "-32px 0 80px rgba(0,0,0,.7)" }}>
         {/* Header */}
         <div style={{ padding: "22px 24px", borderBottom: "1px solid rgba(255,255,255,.07)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <Icon name="cart" size={18} />
             <span style={{ fontSize: 16, fontWeight: 800 }}>Keranjang Produk</span>
-            {cart.length > 0 && (
-              <span style={{ padding: "2px 8px", borderRadius: 999, background: "rgba(168,85,247,.2)", border: "1px solid rgba(168,85,247,.35)", fontSize: 11, fontWeight: 700, color: "#c084fc" }}>{cart.length}</span>
+            {items.length > 0 && (
+              <span style={{ padding: "2px 8px", borderRadius: 999, background: "rgba(168,85,247,.2)", border: "1px solid rgba(168,85,247,.35)", fontSize: 11, fontWeight: 700, color: "#c084fc" }}>{items.length}</span>
             )}
           </div>
           <button onClick={onClose} style={{ background: "none", border: "none", color: "rgba(255,255,255,.5)", cursor: "pointer", padding: 4, borderRadius: 8, transition: "color .2s" }}
@@ -480,23 +403,23 @@ function CartDrawer({ cart, onClose, onRemove, onCheckout }) {
 
         {/* Items */}
         <div style={{ flex: 1, overflowY: "auto", padding: "16px 24px" }}>
-          {cart.length === 0 ? (
+          {items.length === 0 ? (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: 12 }}>
               <Icon name="cart" size={36} />
               <p style={{ color: "rgba(255,255,255,.35)", fontSize: 14, textAlign: "center" }}>Keranjang kosong.<br />Tambahkan produk untuk checkout.</p>
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {cart.map((item) => (
-                <div key={item.id} style={{ padding: "14px 16px", borderRadius: 12, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", display: "flex", alignItems: "center", gap: 12 }}>
+              {items.map((item) => (
+                <div key={item.productId} style={{ padding: "14px 16px", borderRadius: 12, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(168,85,247,.15)", border: "1px solid rgba(168,85,247,.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#a855f7" }}>
-                    <Icon name={item.icon} size={18} />
+                    <Icon name={item.product.icon} size={18} />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{item.name}</p>
-                    <p style={{ fontSize: 12, color: "#a855f7", fontWeight: 600 }}>{item.price}</p>
+                    <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{item.product.name}</p>
+                    <p style={{ fontSize: 12, color: "#a855f7", fontWeight: 600 }}>{item.product.price}</p>
                   </div>
-                  <button onClick={() => onRemove(item.id)} style={{ background: "none", border: "none", color: "rgba(255,255,255,.3)", cursor: "pointer", padding: 6, borderRadius: 8, transition: "color .2s" }}
+                  <button onClick={() => onRemove(item.productId)} style={{ background: "none", border: "none", color: "rgba(255,255,255,.3)", cursor: "pointer", padding: 6, borderRadius: 8, transition: "color .2s" }}
                     onMouseEnter={(e) => e.currentTarget.style.color = "#f87171"}
                     onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.3)"}>
                     <Icon name="trash" size={15} />
@@ -508,7 +431,7 @@ function CartDrawer({ cart, onClose, onRemove, onCheckout }) {
         </div>
 
         {/* Footer */}
-        {cart.length > 0 && (
+        {items.length > 0 && (
           <div style={{ padding: "18px 24px", borderTop: "1px solid rgba(255,255,255,.07)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
               <span style={{ fontSize: 14, color: "rgba(255,255,255,.5)", fontWeight: 600 }}>Total</span>
@@ -527,64 +450,14 @@ function CartDrawer({ cart, onClose, onRemove, onCheckout }) {
   );
 }
 
-// ─── Checkout Modal ───────────────────────────────────────────────────────────
-function CheckoutModal({ cart, onClose }) {
-  const total = cart.reduce((s, p) => s + p.priceNum, 0);
-
-  return (
-    <>
-      <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 70, background: "rgba(0,0,0,.65)", backdropFilter: "blur(6px)" }} />
-      <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 71, width: "min(92vw,480px)", background: "#0d0920", border: "1px solid rgba(168,85,247,.3)", borderRadius: 22, padding: "32px 28px", boxShadow: "0 32px 80px rgba(0,0,0,.8)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 22 }}>
-          <h3 style={{ fontSize: 20, fontWeight: 900 }}>Ringkasan Pembelian</h3>
-          <button onClick={onClose} style={{ background: "none", border: "none", color: "rgba(255,255,255,.5)", cursor: "pointer" }}>
-            <Icon name="x" size={20} />
-          </button>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
-          {cart.map((item) => (
-            <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", borderRadius: 10, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.07)" }}>
-              <span style={{ fontSize: 13, fontWeight: 600 }}>{item.name}</span>
-              <span style={{ fontSize: 13, color: "#a855f7", fontWeight: 700 }}>{item.price}</span>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 14px", borderRadius: 10, background: "rgba(168,85,247,.07)", border: "1px solid rgba(168,85,247,.2)", marginBottom: 22 }}>
-          <span style={{ fontSize: 14, fontWeight: 700 }}>Total</span>
-          <span style={{ fontSize: 18, fontWeight: 900, background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Rp{total.toLocaleString("id-ID")}</span>
-        </div>
-
-        <p style={{ fontSize: 13, color: "rgba(255,255,255,.45)", lineHeight: 1.7, marginBottom: 18 }}>
-          Untuk menyelesaikan pembelian, hubungi kami melalui Discord dengan detail pesanan di bawah. Tim kami akan memproses pesanan dan mengirimkan produk.
-        </p>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <a href={DISCORD_URL} target="_blank" rel="noreferrer"
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 0", borderRadius: 12, fontWeight: 800, fontSize: 14, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)" }}>
-            <Icon name="message" size={16} /> Hubungi via Discord
-          </a>
-          <button onClick={onClose} style={{ padding: "12px 0", borderRadius: 12, fontWeight: 700, fontSize: 14, color: "rgba(255,255,255,.5)", background: "none", border: "1px solid rgba(255,255,255,.1)", cursor: "pointer", fontFamily: "inherit", transition: "all .2s" }}
-            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.25)"; e.currentTarget.style.color = "white"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.1)"; e.currentTarget.style.color = "rgba(255,255,255,.5)"; }}>
-            Kembali
-          </button>
-        </div>
-      </div>
-    </>
-  );
-}
-
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const progress = useScrollProgress();
   const activeSection = useActiveSection();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
-  const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const { enrichedItems, addItem, removeItem, getTotal, getItemCount, isInCart } = useCart();
   useReveal();
 
   useEffect(() => {
@@ -593,14 +466,8 @@ export default function App() {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  const addToCart = useCallback((product) => {
-    setCart((prev) => prev.find((p) => p.id === product.id) ? prev : [...prev, product]);
-    setCartOpen(true);
-  }, []);
-
-  const removeFromCart = useCallback((id) => {
-    setCart((prev) => prev.filter((p) => p.id !== id));
-  }, []);
+  const itemCount = getItemCount();
+  const cartTotal = getTotal();
 
   return (
     <div style={{ background: "#03010f", minHeight: "100vh", color: "white", overflowX: "hidden" }}>
@@ -647,8 +514,7 @@ export default function App() {
       </div>
 
       <MobileMenu isOpen={menuOpen} active={activeSection} onClose={() => setMenuOpen(false)} />
-      {cartOpen && <CartDrawer cart={cart} onClose={() => setCartOpen(false)} onRemove={removeFromCart} onCheckout={() => { setCartOpen(false); setCheckoutOpen(true); }} />}
-      {checkoutOpen && <CheckoutModal cart={cart} onClose={() => setCheckoutOpen(false)} />}
+      {cartOpen && <CartDrawer items={enrichedItems} total={cartTotal} onClose={() => setCartOpen(false)} onRemove={removeItem} onCheckout={() => { setCartOpen(false); window.location.hash = "/checkout"; }} />}
 
       <div style={{ position: "relative", zIndex: 1, animation: "fadeIn .6s ease both", paddingTop: 66 }}>
 
@@ -659,7 +525,7 @@ export default function App() {
             <a href="#home" onClick={(e) => scrollTo(e, "#home")} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}
               onMouseEnter={(e) => e.currentTarget.style.opacity = ".8"}
               onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
-              <span style={{ fontSize: 16, fontWeight: 900, letterSpacing: "-0.03em", background: "linear-gradient(120deg,#a855f7,#e879f9,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Hibob Studio</span>
+              <img src={logoImg} alt="Hibob Studio" style={{ height: 30, width: "auto", objectFit: "contain", display: "block" }} />
             </a>
             <div className="hide-mob" style={{ display: "flex", alignItems: "center", gap: 2, padding: 5, borderRadius: 999, background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.07)" }}>
               {navItems.map((item) => {
@@ -680,8 +546,8 @@ export default function App() {
                 onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(168,85,247,.4)"; e.currentTarget.style.color = "white"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.1)"; e.currentTarget.style.color = "rgba(255,255,255,.7)"; }}>
                 <Icon name="cart" size={17} />
-                {cart.length > 0 && (
-                  <span style={{ position: "absolute", top: -4, right: -4, width: 16, height: 16, borderRadius: "50%", background: "#a855f7", fontSize: 9, fontWeight: 900, color: "white", display: "flex", alignItems: "center", justifyContent: "center" }}>{cart.length}</span>
+                {itemCount > 0 && (
+                  <span style={{ position: "absolute", top: -4, right: -4, width: 16, height: 16, borderRadius: "50%", background: "#a855f7", fontSize: 9, fontWeight: 900, color: "white", display: "flex", alignItems: "center", justifyContent: "center" }}>{itemCount}</span>
                 )}
               </button>
               <Btn href={PANEL_URL} primary className="hide-mob pulse" style={{ padding: "9px 20px", borderRadius: 999, fontSize: 13 }}>
@@ -836,8 +702,8 @@ export default function App() {
 
           {/* Commercial Products — 2×2 grid */}
           <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-            {commercialProducts.map((prod, i) => {
-              const inCart = cart.find((p) => p.id === prod.id);
+            {COMMERCIAL_PRODUCTS.map((prod, i) => {
+              const inCart = isInCart(prod.id);
               return (
                 <div key={prod.id} data-reveal data-d={`${i + 1}`}
                   style={{ position: "relative", background: prod.highlight ? "rgba(168,85,247,.07)" : "rgba(255,255,255,.03)", border: prod.highlight ? "1px solid rgba(168,85,247,.4)" : "1px solid rgba(255,255,255,.07)", borderRadius: 22, overflow: "hidden", transition: "transform .3s cubic-bezier(.22,1,.36,1), border-color .3s" }}
@@ -876,7 +742,7 @@ export default function App() {
                         <Icon name="play" size={13} /> Lihat Showcase
                       </a>
                       <button
-                        onClick={() => inCart ? setCartOpen(true) : addToCart(prod)}
+                        onClick={() => { if (inCart) { setCartOpen(true); } else { addItem(prod.id); setCartOpen(true); } }}
                         style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13, color: "white", background: inCart ? "rgba(52,211,153,.15)" : (prod.highlight ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(168,85,247,.15)"), border: inCart ? "1px solid rgba(52,211,153,.3)" : (prod.highlight ? "1px solid rgba(168,85,247,.5)" : "1px solid rgba(168,85,247,.3)"), transition: "all .2s", cursor: "pointer", fontFamily: "inherit" }}
                         onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
                         onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
@@ -1034,36 +900,50 @@ export default function App() {
             </p>
           </div>
           <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16, alignItems: "start" }}>
-            {pricingPlans.map((p, i) => (
-              <div key={i} data-reveal data-d={`${i + 1}`}
-                style={{ position: "relative", background: p.highlight ? "rgba(168,85,247,.08)" : "rgba(255,255,255,.03)", border: p.highlight ? "1px solid rgba(168,85,247,.45)" : "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "28px 24px", transition: "transform .3s cubic-bezier(.22,1,.36,1)" }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
-                onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}>
-                {p.highlight && <div style={{ position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)", padding: "5px 16px", borderRadius: 999, background: "linear-gradient(135deg,#7c3aed,#a855f7)", fontSize: 10, fontWeight: 800, color: "white", letterSpacing: ".08em", whiteSpace: "nowrap" }}>PALING POPULER</div>}
-                <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.4)", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".08em" }}>{p.name}</p>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-                  <span style={{ fontSize: "clamp(26px,3.5vw,36px)", fontWeight: 900, ...(p.highlight ? { background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "white" }) }}>
-                    {p.price === "0" ? "Gratis" : `Rp${p.price}`}
-                  </span>
-                  {p.duration && <span style={{ fontSize: 12, color: "rgba(255,255,255,.3)", fontWeight: 600 }}>/ {p.duration}</span>}
+            {CREATOR_PLANS.map((p, i) => {
+              const inPlanCart = isInCart(p.id);
+              return (
+                <div key={p.id} data-reveal data-d={`${i + 1}`}
+                  style={{ position: "relative", background: p.highlight ? "rgba(168,85,247,.08)" : "rgba(255,255,255,.03)", border: p.highlight ? "1px solid rgba(168,85,247,.45)" : "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "28px 24px", transition: "transform .3s cubic-bezier(.22,1,.36,1)" }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-5px)"}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}>
+                  {p.highlight && <div style={{ position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)", padding: "5px 16px", borderRadius: 999, background: "linear-gradient(135deg,#7c3aed,#a855f7)", fontSize: 10, fontWeight: 800, color: "white", letterSpacing: ".08em", whiteSpace: "nowrap" }}>PALING POPULER</div>}
+                  <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.4)", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".08em" }}>{p.name}</p>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
+                    <span style={{ fontSize: "clamp(26px,3.5vw,36px)", fontWeight: 900, ...(p.highlight ? { background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "white" }) }}>
+                      {p.price}
+                    </span>
+                    {p.duration && <span style={{ fontSize: 12, color: "rgba(255,255,255,.3)", fontWeight: 600 }}>/ {p.duration}</span>}
+                  </div>
+                  <p style={{ fontSize: 13, color: "rgba(255,255,255,.4)", lineHeight: 1.7, marginBottom: 20, minHeight: 44 }}>{p.description}</p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 24 }}>
+                    {p.features.map((f, fi) => (
+                      <div key={fi} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div style={{ width: 17, height: 17, borderRadius: 6, background: "rgba(168,85,247,.18)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#a855f7" }}><Icon name="check" size={10} /></div>
+                        <span style={{ fontSize: 13, color: "rgba(255,255,255,.6)", fontWeight: 500 }}>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {p.priceIDR === 0 ? (
+                    <a href={PANEL_URL} target="_blank" rel="noreferrer"
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 12, fontWeight: 800, fontSize: 13.5, color: "white", textDecoration: "none", width: "100%", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)", transition: "all .2s" }}
+                      onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
+                      onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
+                      {p.cta} <Icon name="arrowRight" size={14} />
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => { if (inPlanCart) { setCartOpen(true); } else { addItem(p.id); setCartOpen(true); } }}
+                      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 12, fontWeight: 800, fontSize: 13.5, color: "white", width: "100%", border: "none", cursor: "pointer", fontFamily: "inherit", transition: "all .2s", ...(inPlanCart ? { background: "rgba(52,211,153,.15)", border: "1px solid rgba(52,211,153,.3)" } : p.highlight ? { background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)", boxShadow: "0 0 20px rgba(168,85,247,.25)" } : { background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)" }) }}
+                      onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
+                      onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
+                      <Icon name={inPlanCart ? "check" : "cart"} size={14} />
+                      {inPlanCart ? "Ditambahkan" : p.cta}
+                    </button>
+                  )}
                 </div>
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,.4)", lineHeight: 1.7, marginBottom: 20, minHeight: 44 }}>{p.desc}</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 24 }}>
-                  {p.features.map((f, fi) => (
-                    <div key={fi} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <div style={{ width: 17, height: 17, borderRadius: 6, background: "rgba(168,85,247,.18)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#a855f7" }}><Icon name="check" size={10} /></div>
-                      <span style={{ fontSize: 13, color: "rgba(255,255,255,.6)", fontWeight: 500 }}>{f}</span>
-                    </div>
-                  ))}
-                </div>
-                <a href={PANEL_URL} target="_blank" rel="noreferrer"
-                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 12, fontWeight: 800, fontSize: 13.5, color: "white", textDecoration: "none", width: "100%", transition: "all .2s", ...(p.highlight ? { background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)", boxShadow: "0 0 20px rgba(168,85,247,.25)" } : { background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)" }) }}
-                  onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
-                  onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
-                  {p.cta} <Icon name="arrowRight" size={14} />
-                </a>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 

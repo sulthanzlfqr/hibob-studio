@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import App from "./App";
+import logoImg from "./assets/HibobStudio-Logo.png";
 
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const PANEL_URL = "https://panel.hibobstudio.com";
@@ -32,9 +33,7 @@ function LoadingScreen({ onDone }) {
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(120,40,220,.22) 0%, transparent 65%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px)", backgroundSize: "40px 40px", pointerEvents: "none" }} />
 
-      <h1 style={{ fontSize: "clamp(24px,4vw,40px)", fontWeight: 900, letterSpacing: "-0.04em", fontFamily: "'Plus Jakarta Sans',sans-serif", background: "linear-gradient(120deg,#a855f7 0%,#e879f9 50%,#38bdf8 100%)", backgroundSize: "200% auto", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", animation: "shimmer 3s ease infinite", marginBottom: 8 }}>
-        Hibob Studio
-      </h1>
+      <img src={logoImg} alt="Hibob Studio" style={{ height: "clamp(36px,5vw,52px)", width: "auto", objectFit: "contain", marginBottom: 12, animation: "shimmer 3s ease infinite", filter: "drop-shadow(0 0 20px rgba(168,85,247,.4))" }} />
       <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", color: "rgba(168,85,247,.45)", fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 40, textTransform: "uppercase" }}>
         Creator Infrastructure Platform
       </p>
@@ -95,11 +94,7 @@ function EntryPage({ onContinue }) {
 
         {/* Headline */}
         <div style={{ textAlign: "center", marginBottom: 14, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.08s" }}>
-          <h1 style={{ fontSize: "clamp(40px,7vw,64px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, fontFamily: "'Plus Jakarta Sans',sans-serif", color: "white", margin: 0 }}>
-            <span style={{ background: "linear-gradient(120deg,#a855f7 0%,#e879f9 45%,#38bdf8 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              Hibob Studio
-            </span>
-          </h1>
+          <img src={logoImg} aria-label="Hibob Studio" alt="Hibob Studio" style={{ height: "clamp(44px,8vw,72px)", width: "auto", objectFit: "contain", display: "block", margin: "0 auto", filter: "drop-shadow(0 0 28px rgba(168,85,247,.35))" }} />
         </div>
 
         {/* Subtext */}
