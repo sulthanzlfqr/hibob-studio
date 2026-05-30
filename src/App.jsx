@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
+import founderAvatar from "./assets/founder-avatar.png";
 
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const PANEL_URL = "https://panel.hibobstudio.com";
 const ROBLOX_PROFILE_URL = "https://www.roblox.com/users/8949415735/profile";
-const ROBLOX_HEADSHOT_API = "https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=8949415735&size=420x420&format=Png&isCircular=false";
-const ROBLOX_USERNAME = "Vermisst0";
+const ROBLOX_USERNAME = "HibobTheDev";
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
 const navItems = [
@@ -393,19 +393,7 @@ function EcosystemVisual() {
 
 // ─── Roblox Avatar ───────────────────────────────────────────────────────────
 function RobloxAvatar() {
-  const [imgUrl, setImgUrl] = useState(null);
   const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    fetch(ROBLOX_HEADSHOT_API)
-      .then((r) => r.json())
-      .then((data) => {
-        const url = data?.data?.[0]?.imageUrl;
-        if (url) setImgUrl(url);
-        else setFailed(true);
-      })
-      .catch(() => setFailed(true));
-  }, []);
 
   const containerStyle = {
     width: 200, height: 200, borderRadius: 24, overflow: "hidden",
@@ -424,19 +412,10 @@ function RobloxAvatar() {
     );
   }
 
-  if (!imgUrl) {
-    return (
-      <div style={{ ...containerStyle, background: "rgba(168,85,247,.06)" }}>
-        <div style={{ width: 32, height: 32, borderRadius: "50%", border: "2px solid rgba(168,85,247,.3)", borderTopColor: "#a855f7", animation: "spin 0.8s linear infinite" }} />
-        <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-      </div>
-    );
-  }
-
   return (
     <div style={containerStyle}>
       <img
-        src={imgUrl}
+        src={founderAvatar}
         alt={`${ROBLOX_USERNAME} — Founder Hibob Studio`}
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
         onError={() => setFailed(true)}
@@ -981,7 +960,7 @@ export default function App() {
               <div style={{ display: "flex", gap: 20, marginTop: 28, flexWrap: "wrap" }}>
                 {[
                   { val: "2+", label: "Tahun di Roblox" },
-                  { val: "9+", label: "Experience Dibangun" },
+                  { val: "20+", label: "Experience Dibangun" },
                   { val: "8", label: "Produk Platform" },
                 ].map((s, i) => (
                   <div key={i} style={{ padding: "14px 20px", borderRadius: 14, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.08)" }}>
