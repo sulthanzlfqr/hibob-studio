@@ -3,7 +3,8 @@ import { useEffect, useState, useCallback } from "react";
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const PANEL_URL = "https://panel.hibobstudio.com";
 const ROBLOX_PROFILE_URL = "https://www.roblox.com/users/8949415735/profile";
-const ROBLOX_AVATAR_URL = "https://thumbnails.roblox.com/v1/users/avatar?userIds=8949415735&size=420x420&format=Png&isCircular=false";
+const ROBLOX_HEADSHOT_API = "https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=8949415735&size=420x420&format=Png&isCircular=false";
+const ROBLOX_USERNAME = "Vermisst0";
 
 // ─── Navigation ───────────────────────────────────────────────────────────────
 const navItems = [
@@ -37,6 +38,7 @@ const iconPaths = {
   globe: "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z",
   externalLink: "M15 3h6v6M10 14L21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5",
   cart: "M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0",
+  heart: "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z",
   trash: "M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2",
 };
 
@@ -91,6 +93,18 @@ const commercialProducts = [
     showcase: "https://discord.gg/qzCdpasNhG",
     highlight: false,
   },
+  {
+    id: "donation-system",
+    name: "Hibob Donation System",
+    tag: "Donation Platform",
+    icon: "heart",
+    price: "Rp500.000",
+    priceNum: 500000,
+    desc: "Hubungkan donasi Bagibagi langsung ke experience Roblox dengan realtime events, visual effects, analytics, dan creator tracking.",
+    features: ["Bagibagi Integration", "Realtime Donation Events", "Roblox Effects Trigger", "Creator Analytics", "Donation History", "Plug & Play Setup", "Web Dashboard Control", "Discord Notification", "Custom Reward System", "Dedicated Discord support"],
+    showcase: "https://discord.gg/qzCdpasNhG",
+    highlight: false,
+  },
 ];
 
 // ─── Platform Products ────────────────────────────────────────────────────────
@@ -116,16 +130,6 @@ const platformProducts = [
     desc: "Convert, proses, preview, publish, dan kelola Roblox audio assets lewat workflow creator yang profesional.",
     highlights: ["Preview Engine", "Roblox Upload Pipeline", "Asset Library", "Quota Management", "Audio Processing"],
     ctaPrimary: "Coba Audio Forge",
-  },
-  {
-    id: "donate-system",
-    name: "Donation System",
-    badge: "Donation Platform",
-    icon: "zap",
-    status: "available",
-    desc: "Hubungkan donasi Bagibagi langsung ke Roblox experience dengan realtime events, effects, dan creator analytics.",
-    highlights: ["Bagibagi Integration", "Real-time Donation Events", "Roblox Effects Trigger", "Creator Analytics", "Web Dashboard Control"],
-    ctaPrimary: "Lihat Sistem",
   },
   {
     id: "license-manager",
@@ -308,8 +312,8 @@ function EcosystemVisual() {
   const tools = [
     { name: "Audio Forge", badge: "Audio", color: "#38bdf8", status: "soon" },
     { name: "License Manager", badge: "Security", color: "#34d399", status: "soon" },
-    { name: "Donation System", badge: "Community", color: "#f472b6", status: "live" },
     { name: "Asset Manager", badge: "Assets", color: "#f59e0b", status: "soon" },
+    { name: "Creator Identity", badge: "Identity", color: "#f472b6", status: "soon" },
   ];
 
   return (
@@ -383,6 +387,60 @@ function EcosystemVisual() {
         <Icon name="zap" size={11} />
         <span style={{ fontSize: 11, fontWeight: 700, color: "#a855f7" }}>8 Produk Terhubung</span>
       </div>
+    </div>
+  );
+}
+
+// ─── Roblox Avatar ───────────────────────────────────────────────────────────
+function RobloxAvatar() {
+  const [imgUrl, setImgUrl] = useState(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    fetch(ROBLOX_HEADSHOT_API)
+      .then((r) => r.json())
+      .then((data) => {
+        const url = data?.data?.[0]?.imageUrl;
+        if (url) setImgUrl(url);
+        else setFailed(true);
+      })
+      .catch(() => setFailed(true));
+  }, []);
+
+  const containerStyle = {
+    width: 200, height: 200, borderRadius: 24, overflow: "hidden",
+    border: "2px solid rgba(168,85,247,.35)", boxShadow: "0 0 60px rgba(168,85,247,.2)",
+    background: "rgba(168,85,247,.08)", display: "flex", alignItems: "center", justifyContent: "center",
+  };
+
+  if (failed) {
+    return (
+      <div style={containerStyle}>
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="rgba(168,85,247,.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </div>
+    );
+  }
+
+  if (!imgUrl) {
+    return (
+      <div style={{ ...containerStyle, background: "rgba(168,85,247,.06)" }}>
+        <div style={{ width: 32, height: 32, borderRadius: "50%", border: "2px solid rgba(168,85,247,.3)", borderTopColor: "#a855f7", animation: "spin 0.8s linear infinite" }} />
+        <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+      </div>
+    );
+  }
+
+  return (
+    <div style={containerStyle}>
+      <img
+        src={imgUrl}
+        alt={`${ROBLOX_USERNAME} — Founder Hibob Studio`}
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        onError={() => setFailed(true)}
+      />
     </div>
   );
 }
@@ -889,25 +947,15 @@ export default function App() {
           <Label text="Tentang Founder" />
           <div className="founder-grid" style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: 60, alignItems: "center" }}>
             {/* Avatar */}
-            <div data-reveal style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+            <div data-reveal style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
               <div style={{ position: "relative" }}>
-                <div style={{ width: 200, height: 200, borderRadius: 24, overflow: "hidden", border: "2px solid rgba(168,85,247,.35)", boxShadow: "0 0 60px rgba(168,85,247,.2)" }}>
-                  <img
-                    src={ROBLOX_AVATAR_URL}
-                    alt="Hibob — Founder Hibob Studio"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                      e.currentTarget.parentElement.style.background = "linear-gradient(135deg,rgba(120,50,250,.3),rgba(56,189,248,.15))";
-                      e.currentTarget.parentElement.innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:900;color:rgba(168,85,247,.7);">H</div>`;
-                    }}
-                  />
-                </div>
+                <RobloxAvatar />
                 <div style={{ position: "absolute", bottom: -8, right: -8, padding: "5px 12px", borderRadius: 999, background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.3)", display: "flex", alignItems: "center", gap: 5 }}>
                   <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399" }} />
                   <span style={{ fontSize: 11, fontWeight: 700, color: "#34d399" }}>Active Creator</span>
                 </div>
               </div>
+              <p style={{ fontSize: 15, fontWeight: 800, color: "white", letterSpacing: "-0.02em" }}>{ROBLOX_USERNAME}</p>
               <a href={ROBLOX_PROFILE_URL} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: "rgba(255,255,255,.4)", fontWeight: 600, textDecoration: "none", transition: "color .2s" }}
                 onMouseEnter={(e) => e.currentTarget.style.color = "#a855f7"}
                 onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.4)"}>
