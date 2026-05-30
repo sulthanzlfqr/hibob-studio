@@ -147,24 +147,24 @@ export default async function handler(req) {
     return json({ error: "Terjadi kesalahan server. Coba lagi." }, 500);
   }
 
-  // ── Step 2: Kirim gambar bukti transfer (best-effort, request terpisah) ──
-  try {
-    const fileBuffer = await proofFile.arrayBuffer();
-    const blob = new Blob([fileBuffer], { type: proofFile.type });
-    const ext = (proofFile.name || "jpg").split(".").pop();
-
-    const fileForm = new FormData();
-    fileForm.append("content", `📎 **Bukti Transfer** — \`${orderId}\``);
-    fileForm.append("files[0]", blob, `bukti-${orderId}.${ext}`);
-
-    const ctrl2 = new AbortController();
-    const t2 = setTimeout(() => ctrl2.abort(), 10000);
-    await fetch(webhookUrl, { method: "POST", body: fileForm, signal: ctrl2.signal });
-    clearTimeout(t2);
-  } catch (err) {
-    // Best-effort: order tetap sukses meski gambar gagal terkirim
-    console.warn("Proof image upload failed (non-critical):", err?.message);
-  }
+  // ── Step 2: Kirim gambar bukti transfer (best-effort, max 7 detik) ────────
+  // Promise.race memastikan fungsi selalu lanjut meski upload lambat/hang.
+  await Promise.race([
+    (async () => {
+      try {
+        const fileBuffer = await proofFile.arrayBuffer();
+        const blob = new Blob([fileBuffer], { type: proofFile.type });
+        const ext = (proofFile.name || "jpg").split(".").pop();
+        const fileForm = new FormData();
+        fileForm.append("content", `📎 **Bukti Transfer** — \`${orderId}\``);
+        fileForm.append("files[0]", blob, `bukti-${orderId}.${ext}`);
+        await fetch(webhookUrl, { method: "POST", body: fileForm });
+      } catch (err) {
+        console.warn("Image upload error:", err?.message);
+      }
+    })(),
+    new Promise(resolve => setTimeout(resolve, 7000)),
+  ]);
 
   return json({ success: true, orderId });
 }
