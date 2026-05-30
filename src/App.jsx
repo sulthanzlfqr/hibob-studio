@@ -647,7 +647,7 @@ export default function App() {
           .why-grid{grid-template-columns:1fr!important}
           .pricing-grid{grid-template-columns:1fr!important}
           .products-grid{grid-template-columns:1fr!important}
-          .platform-grid{grid-template-columns:1fr 1fr!important}
+          .platform-grid{grid-template-columns:1fr!important}
           .hub-inner{grid-template-columns:1fr!important}
           .hub-features{display:none!important}
           .games-grid{grid-template-columns:1fr!important}
@@ -807,7 +807,7 @@ export default function App() {
           </div>
 
           {/* Platform Tools — 4 columns */}
-          <div className="platform-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 28 }}>
+          <div className="platform-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginBottom: 28 }}>
             {platformProducts.filter((p) => !p.isHub).map((prod, i) => {
               const isAvail = prod.status === "available";
               return (
@@ -855,8 +855,8 @@ export default function App() {
             <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.07)" }} />
           </div>
 
-          {/* Commercial Products — 3 columns */}
-          <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 18 }}>
+          {/* Commercial Products — 2×2 grid */}
+          <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
             {commercialProducts.map((prod, i) => {
               const inCart = cart.find((p) => p.id === prod.id);
               return (
