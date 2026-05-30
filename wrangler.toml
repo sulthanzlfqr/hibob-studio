@@ -1,9 +1,0 @@
-# Cloudflare Pages — wrangler config
-# Deploy: npx wrangler pages deploy dist --project-name=hibob-studio
-#
-# Environment variable DISCORD_ORDER_WEBHOOK wajib diset di:
-# Cloudflare Dashboard → Pages → hibob-studio → Settings → Environment Variables
-
-name = "hibob-studio"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "dist"
