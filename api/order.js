@@ -31,31 +31,37 @@ function generateOrderId() {
   return id;
 }
 
-function buildEmbed(order) {
-  const itemList = order.items.map((i) => `• **${i.name}** — ${i.price}`).join("\n");
+function buildPayload(order) {
+  const itemList = order.items
+    .map((i) => `• **${i.name}** — ${i.price}`)
+    .join("\n") || "—";
+
+  // content = plain text fallback, embeds = rich format
   return {
-    embeds: [{
-      title: "🛒 ORDER BARU — Hibob Studio",
-      color: 0xa855f7,
-      fields: [
-        { name: "Order ID", value: `\`${order.orderId}\``, inline: true },
-        { name: "Status", value: "`WAITING_VERIFICATION`", inline: true },
-        { name: "Nama", value: order.customerName, inline: false },
-        { name: "Discord", value: order.customerDiscord, inline: true },
-        { name: "Email", value: order.customerEmail || "—", inline: true },
-        { name: "Produk", value: itemList || "—", inline: false },
-        { name: "Total", value: `**Rp${Number(order.total).toLocaleString("id-ID")}**`, inline: true },
-        { name: "Pembayaran", value: "QRIS — Mutual Space Store", inline: true },
-      ],
-      footer: { text: "Hibob Studio Commerce" },
-      timestamp: new Date().toISOString(),
-    }],
+    content: `🛒 **ORDER BARU** — \`${order.orderId}\`\n👤 ${order.customerName} | 💬 ${order.customerDiscord}\n📦 ${itemList}\n💰 **Rp${Number(order.total).toLocaleString("id-ID")}** — QRIS Mutual Space Store`,
+    embeds: [
+      {
+        title: "🛒 ORDER BARU — Hibob Studio",
+        color: 11031031,
+        fields: [
+          { name: "Order ID", value: `\`${order.orderId}\``, inline: true },
+          { name: "Status", value: "`WAITING_VERIFICATION`", inline: true },
+          { name: "Nama", value: order.customerName || "—", inline: false },
+          { name: "Discord", value: order.customerDiscord || "—", inline: true },
+          { name: "Email", value: order.customerEmail || "—", inline: true },
+          { name: "Produk", value: itemList, inline: false },
+          { name: "Total", value: `Rp${Number(order.total).toLocaleString("id-ID")}`, inline: true },
+          { name: "Pembayaran", value: "QRIS — Mutual Space Store", inline: true },
+        ],
+        footer: { text: "Hibob Studio Commerce" },
+        timestamp: new Date().toISOString(),
+      },
+    ],
   };
 }
 
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
-
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -72,9 +78,14 @@ export default async function handler(req) {
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
   const webhookUrl = process.env.DISCORD_ORDER_WEBHOOK;
-  if (!webhookUrl) return json({ error: "Service tidak tersedia." }, 503);
+  if (!webhookUrl) {
+    console.error("DISCORD_ORDER_WEBHOOK is not set");
+    return json({ error: "Service tidak tersedia." }, 503);
+  }
 
-  // Rate limit
+  // Log URL prefix for debugging (never log full token)
+  console.log("Webhook URL prefix:", webhookUrl.slice(0, 50));
+
   const ip =
     req.headers.get("x-real-ip") ||
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -83,7 +94,6 @@ export default async function handler(req) {
     return json({ error: "Terlalu banyak permintaan. Coba lagi dalam 10 menit." }, 429);
   }
 
-  // Parse form
   let formData;
   try { formData = await req.formData(); }
   catch { return json({ error: "Format request tidak valid." }, 400); }
@@ -100,9 +110,8 @@ export default async function handler(req) {
   const totalRaw        = formData.get("total") || "0";
   const proofFile       = formData.get("proofImage");
 
-  // Validate
   const errors = [];
-  if (!customerName) errors.push("Nama wajib diisi.");
+  if (!customerName)    errors.push("Nama wajib diisi.");
   if (!customerDiscord) errors.push("Discord username wajib diisi.");
   if (!proofFile || proofFile.size === 0) errors.push("Bukti transfer wajib diunggah.");
 
@@ -116,58 +125,61 @@ export default async function handler(req) {
   if (isNaN(total) || total <= 0) errors.push("Total tidak valid.");
   if (errors.length > 0) return json({ error: errors.join(" ") }, 422);
 
-  if (!ALLOWED_TYPES.includes(proofFile.type)) {
+  if (!ALLOWED_TYPES.includes(proofFile.type))
     return json({ error: "Format file tidak didukung. Gunakan JPG, PNG, atau WEBP." }, 422);
-  }
-  if (proofFile.size > MAX_FILE_BYTES) {
+  if (proofFile.size > MAX_FILE_BYTES)
     return json({ error: "Ukuran file maksimal 5 MB." }, 422);
-  }
 
   const orderId = generateOrderId();
-  const order = { orderId, customerName, customerDiscord, customerEmail, items, total };
+  const order   = { orderId, customerName, customerDiscord, customerEmail, items, total };
 
-  // ── Step 1: Kirim embed teks (order details) ─────────────────────────────
-  console.log(`[${orderId}] Sending embed to Discord...`);
+  // ── Step 1: Kirim content + embed ke Discord ───────────────────────────────
+  console.log(`[${orderId}] POSTing to Discord...`);
   try {
-    const ctrl1 = new AbortController();
-    const t1 = setTimeout(() => ctrl1.abort(), 8000);
-    const embedBody = JSON.stringify(buildEmbed(order));
+    const payload = buildPayload(order);
+    const body    = JSON.stringify(payload);
+    console.log(`[${orderId}] Payload size: ${body.length} bytes`);
+
     const res1 = await fetch(webhookUrl, {
-      method: "POST",
+      method:  "POST",
       headers: { "Content-Type": "application/json" },
-      body: embedBody,
-      signal: ctrl1.signal,
+      body,
     });
-    clearTimeout(t1);
-    const res1Text = await res1.text();
-    console.log(`[${orderId}] Discord embed response: ${res1.status} | ${res1Text}`);
+
+    const responseText = await res1.text();
+    console.log(`[${orderId}] Discord response: ${res1.status} | ${responseText.slice(0, 200)}`);
+
     if (!res1.ok) {
+      console.error(`[${orderId}] Discord rejected the message`);
       return json({ error: "Gagal mengirim ke Discord. Coba beberapa saat lagi." }, 502);
     }
+
+    console.log(`[${orderId}] Discord message sent OK`);
   } catch (err) {
-    console.error(`[${orderId}] Discord embed error:`, err?.message);
+    console.error(`[${orderId}] Discord fetch error:`, err?.message);
     return json({ error: "Terjadi kesalahan server. Coba lagi." }, 500);
   }
 
-  console.log(`[${orderId}] Embed sent. Sending proof image...`);
-  // ── Step 2: Kirim gambar bukti transfer (best-effort, max 7 detik) ────────
-  // Promise.race memastikan fungsi selalu lanjut meski upload lambat/hang.
+  // ── Step 2: Kirim gambar bukti (best-effort, max 7 detik) ─────────────────
+  console.log(`[${orderId}] Sending proof image...`);
   await Promise.race([
     (async () => {
       try {
         const fileBuffer = await proofFile.arrayBuffer();
         const blob = new Blob([fileBuffer], { type: proofFile.type });
-        const ext = (proofFile.name || "jpg").split(".").pop();
-        const fileForm = new FormData();
-        fileForm.append("content", `📎 **Bukti Transfer** — \`${orderId}\``);
-        fileForm.append("files[0]", blob, `bukti-${orderId}.${ext}`);
-        await fetch(webhookUrl, { method: "POST", body: fileForm });
+        const ext  = (proofFile.name || "img").split(".").pop();
+        const form = new FormData();
+        form.append("content",  `📎 Bukti Transfer — \`${orderId}\``);
+        form.append("files[0]", blob, `bukti-${orderId}.${ext}`);
+        const res2 = await fetch(webhookUrl, { method: "POST", body: form });
+        console.log(`[${orderId}] Image response: ${res2.status}`);
       } catch (err) {
-        console.warn("Image upload error:", err?.message);
+        console.warn(`[${orderId}] Image upload failed:`, err?.message);
       }
     })(),
     new Promise(resolve => setTimeout(resolve, 7000)),
   ]);
 
+  console.log(`[${orderId}] Done. Returning success.`);
   return json({ success: true, orderId });
 }
