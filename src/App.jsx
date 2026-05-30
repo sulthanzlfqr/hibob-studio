@@ -3,6 +3,7 @@ import founderAvatar from "./assets/founder-avatar.png";
 import logoImg from "./assets/HibobStudio-Logo.png";
 import { useCart } from "./hooks/useCart";
 import { COMMERCIAL_PRODUCTS, CREATOR_PLANS } from "./data/products";
+import { sfxClick, sfxHover } from "./sfx";
 
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const PANEL_URL = "https://panel.hibobstudio.com";
@@ -212,9 +213,9 @@ function Label({ text, center = false }) {
 
 function Btn({ href, children, primary = false, onClick, style: extraStyle = {}, className = "" }) {
   return (
-    <a href={href} onClick={onClick} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className={className}
+    <a href={href} onClick={(e) => { sfxClick(); onClick?.(e); }} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className={className}
       style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "13px 26px", borderRadius: 12, fontWeight: 800, fontSize: 14, color: "white", textDecoration: "none", cursor: "pointer", transition: "all .22s cubic-bezier(.22,1,.36,1)", ...(primary ? { background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)", boxShadow: "0 0 24px rgba(168,85,247,.3)" } : { background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.12)" }), ...extraStyle }}
-      onMouseEnter={(e) => { e.currentTarget.style.opacity = ".85"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+      onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.opacity = ".85"; e.currentTarget.style.transform = "translateY(-2px)"; }}
       onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = ""; }}>
       {children}
     </a>
@@ -360,17 +361,17 @@ function MobileMenu({ isOpen, active, onClose }) {
           const isActive = active === id;
           return (
             <a key={item.href} href={item.href}
-              onClick={(e) => { scrollTo(e, item.href); onClose(); }}
+              onClick={(e) => { sfxClick(); scrollTo(e, item.href); onClose(); }}
               style={{ fontSize: 36, fontWeight: 900, letterSpacing: "-0.04em", textDecoration: "none", transition: `all .5s cubic-bezier(.22,1,.36,1) ${i * 50}ms`, transform: isOpen ? "translateY(0)" : "translateY(20px)", opacity: isOpen ? 1 : 0, ...(isActive ? { background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "rgba(255,255,255,.55)" }) }}>
               {item.label}
             </a>
           );
         })}
         <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 18, width: "100%", maxWidth: 320, transition: `all .5s cubic-bezier(.22,1,.36,1) 250ms`, transform: isOpen ? "translateY(0)" : "translateY(20px)", opacity: isOpen ? 1 : 0 }}>
-          <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={onClose} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "15px 20px", borderRadius: 12, fontWeight: 800, fontSize: 15, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.4)" }}>
+          <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={() => { sfxClick(); onClose(); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "15px 20px", borderRadius: 12, fontWeight: 800, fontSize: 15, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.4)" }}>
             Buka Creator Panel <Icon name="arrowRight" size={16} />
           </a>
-          <a href={DISCORD_URL} target="_blank" rel="noreferrer" onClick={onClose} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 20px", borderRadius: 12, fontWeight: 700, fontSize: 14, color: "white", textDecoration: "none", background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)" }}>
+          <a href={DISCORD_URL} target="_blank" rel="noreferrer" onClick={() => { sfxClick(); onClose(); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 20px", borderRadius: 12, fontWeight: 700, fontSize: 14, color: "white", textDecoration: "none", background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)" }}>
             <Icon name="message" size={16} /> Discord
           </a>
         </div>
@@ -394,7 +395,7 @@ function CartDrawer({ items, total, onClose, onRemove, onCheckout }) {
               <span style={{ padding: "2px 8px", borderRadius: 999, background: "rgba(168,85,247,.2)", border: "1px solid rgba(168,85,247,.35)", fontSize: 11, fontWeight: 700, color: "#c084fc" }}>{items.length}</span>
             )}
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", color: "rgba(255,255,255,.5)", cursor: "pointer", padding: 4, borderRadius: 8, transition: "color .2s" }}
+          <button onClick={() => { sfxClick(); onClose(); }} style={{ background: "none", border: "none", color: "rgba(255,255,255,.5)", cursor: "pointer", padding: 4, borderRadius: 8, transition: "color .2s" }}
             onMouseEnter={(e) => e.currentTarget.style.color = "white"}
             onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.5)"}>
             <Icon name="x" size={20} />
@@ -419,7 +420,7 @@ function CartDrawer({ items, total, onClose, onRemove, onCheckout }) {
                     <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{item.product.name}</p>
                     <p style={{ fontSize: 12, color: "#a855f7", fontWeight: 600 }}>{item.product.price}</p>
                   </div>
-                  <button onClick={() => onRemove(item.productId)} style={{ background: "none", border: "none", color: "rgba(255,255,255,.3)", cursor: "pointer", padding: 6, borderRadius: 8, transition: "color .2s" }}
+                  <button onClick={() => { sfxClick(); onRemove(item.productId); }} style={{ background: "none", border: "none", color: "rgba(255,255,255,.3)", cursor: "pointer", padding: 6, borderRadius: 8, transition: "color .2s" }}
                     onMouseEnter={(e) => e.currentTarget.style.color = "#f87171"}
                     onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.3)"}>
                     <Icon name="trash" size={15} />
@@ -437,9 +438,9 @@ function CartDrawer({ items, total, onClose, onRemove, onCheckout }) {
               <span style={{ fontSize: 14, color: "rgba(255,255,255,.5)", fontWeight: 600 }}>Total</span>
               <span style={{ fontSize: 18, fontWeight: 900, background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Rp{total.toLocaleString("id-ID")}</span>
             </div>
-            <button onClick={onCheckout}
+            <button onClick={() => { sfxClick(); onCheckout(); }}
               style={{ width: "100%", padding: "14px 0", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "white", fontSize: 14, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "inherit", transition: "opacity .2s" }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
+              onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.opacity = ".85"; }}
               onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
               Lanjut ke Checkout <Icon name="arrowRight" size={16} />
             </button>
@@ -541,9 +542,9 @@ export default function App() {
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               {/* Cart button */}
-              <button onClick={() => setCartOpen(true)}
+              <button onClick={() => { sfxClick(); setCartOpen(true); }}
                 style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: 12, background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.7)", cursor: "pointer", transition: "all .2s" }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(168,85,247,.4)"; e.currentTarget.style.color = "white"; }}
+                onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.borderColor = "rgba(168,85,247,.4)"; e.currentTarget.style.color = "white"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,.1)"; e.currentTarget.style.color = "rgba(255,255,255,.7)"; }}>
                 <Icon name="cart" size={17} />
                 {itemCount > 0 && (
@@ -553,7 +554,7 @@ export default function App() {
               <Btn href={DISCORD_URL} primary className="hide-mob pulse" style={{ padding: "9px 20px", borderRadius: 999, fontSize: 13 }}>
                 Join Discord
               </Btn>
-              <button onClick={() => setMenuOpen((v) => !v)} className="show-mob"
+              <button onClick={() => { sfxClick(); setMenuOpen((v) => !v); }} className="show-mob"
                 style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 12, width: 42, height: 42, alignItems: "center", justifyContent: "center", color: "white", cursor: "pointer", transition: "all .2s" }}>
                 <Icon name={menuOpen ? "x" : "menu"} size={20} />
               </button>
@@ -735,16 +736,16 @@ export default function App() {
                       ))}
                     </div>
                     <div style={{ display: "flex", gap: 10 }}>
-                      <a href={prod.showcase} target="_blank" rel="noreferrer"
+                      <a href={prod.showcase} target="_blank" rel="noreferrer" onClick={sfxClick}
                         style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13, color: "white", textDecoration: "none", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", transition: "all .2s" }}
-                        onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,.1)"}
+                        onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.background = "rgba(255,255,255,.1)"; }}
                         onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,.06)"}>
                         <Icon name="play" size={13} /> Lihat Showcase
                       </a>
                       <button
-                        onClick={() => { if (inCart) { setCartOpen(true); } else { addItem(prod.id); setCartOpen(true); } }}
+                        onClick={() => { sfxClick(); if (inCart) { setCartOpen(true); } else { addItem(prod.id); setCartOpen(true); } }}
                         style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "11px 0", borderRadius: 11, fontWeight: 700, fontSize: 13, color: "white", background: inCart ? "rgba(52,211,153,.15)" : (prod.highlight ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(168,85,247,.15)"), border: inCart ? "1px solid rgba(52,211,153,.3)" : (prod.highlight ? "1px solid rgba(168,85,247,.5)" : "1px solid rgba(168,85,247,.3)"), transition: "all .2s", cursor: "pointer", fontFamily: "inherit" }}
-                        onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
+                        onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.opacity = ".85"; }}
                         onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
                         <Icon name={inCart ? "check" : "cart"} size={13} />
                         {inCart ? "Ditambahkan" : "Tambah ke Keranjang"}
@@ -873,9 +874,9 @@ export default function App() {
                   </div>
                   <div style={{ padding: "14px 22px 20px" }}>
                     <p style={{ fontSize: 13.5, color: "rgba(255,255,255,.46)", lineHeight: 1.78, marginBottom: 16 }}>{g.desc}</p>
-                    <a href={g.url} target="_blank" rel="noreferrer"
+                    <a href={g.url} target="_blank" rel="noreferrer" onClick={sfxClick}
                       style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 18px", borderRadius: 10, fontWeight: 700, fontSize: 13, color: "white", textDecoration: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.4)", transition: "all .2s" }}
-                      onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 0 20px rgba(168,85,247,.4)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                      onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.boxShadow = "0 0 20px rgba(168,85,247,.4)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
                       onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = ""; }}>
                       Main Sekarang <Icon name="arrowRight" size={13} />
                     </a>
@@ -925,17 +926,17 @@ export default function App() {
                     ))}
                   </div>
                   {p.priceIDR === 0 ? (
-                    <a href={PANEL_URL} target="_blank" rel="noreferrer"
+                    <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={sfxClick}
                       style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 12, fontWeight: 800, fontSize: 13.5, color: "white", textDecoration: "none", width: "100%", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)", transition: "all .2s" }}
-                      onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
+                      onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.opacity = ".85"; }}
                       onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
                       {p.cta} <Icon name="arrowRight" size={14} />
                     </a>
                   ) : (
                     <button
-                      onClick={() => { if (inPlanCart) { setCartOpen(true); } else { addItem(p.id); setCartOpen(true); } }}
+                      onClick={() => { sfxClick(); if (inPlanCart) { setCartOpen(true); } else { addItem(p.id); setCartOpen(true); } }}
                       style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "12px 0", borderRadius: 12, fontWeight: 800, fontSize: 13.5, color: "white", width: "100%", border: "none", cursor: "pointer", fontFamily: "inherit", transition: "all .2s", ...(inPlanCart ? { background: "rgba(52,211,153,.15)", border: "1px solid rgba(52,211,153,.3)" } : p.highlight ? { background: "linear-gradient(135deg,#7c3aed,#a855f7)", border: "1px solid rgba(168,85,247,.5)", boxShadow: "0 0 20px rgba(168,85,247,.25)" } : { background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.12)" }) }}
-                      onMouseEnter={(e) => e.currentTarget.style.opacity = ".85"}
+                      onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.opacity = ".85"; }}
                       onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
                       <Icon name={inPlanCart ? "check" : "cart"} size={14} />
                       {inPlanCart ? "Ditambahkan" : p.cta}
@@ -1049,9 +1050,9 @@ export default function App() {
       </div>
 
       {/* Back to top */}
-      <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Kembali ke atas"
+      <button onClick={() => { sfxClick(); window.scrollTo({ top: 0, behavior: "smooth" }); }} aria-label="Kembali ke atas"
         style={{ position: "fixed", bottom: 28, right: 28, zIndex: 99, width: 44, height: 44, borderRadius: 12, background: "rgba(168,85,247,.18)", border: "1px solid rgba(168,85,247,.35)", color: "white", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(12px)", transition: "all .3s cubic-bezier(.22,1,.36,1)", opacity: showTop ? 1 : 0, transform: showTop ? "translateY(0) scale(1)" : "translateY(12px) scale(.8)", pointerEvents: showTop ? "auto" : "none" }}
-        onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(168,85,247,.35)"; }}
+        onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.background = "rgba(168,85,247,.35)"; }}
         onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(168,85,247,.18)"; }}>
         <Icon name="arrowUp" size={18} />
       </button>
