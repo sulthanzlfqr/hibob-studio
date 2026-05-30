@@ -52,7 +52,7 @@ const content = {
     why: { label: "Kenapa Gua?", h2a: "Bukan Sekadar", h2b: "Developer Biasa.", sub: "Gua gabungin craftsmanship, sistem yang solid, dan aftersales yang beneran ada — bukan cuma janji." },
     services: { label: "Services", h2a: "Apa yang Gua", h2b: "Bisa Bikin.", sub: "Full-stack Roblox development — dari map sampai sistem, dari GUI sampai launch." },
     projects: { label: "Projects", h2a: "Game yang", h2b: "Udah Gua Bikin.", sub: "Dikerjain bareng tim — gua, Anoj1ng, dan Naka. Dari map, sistem, sampai polish terakhir.", play: "Main Sekarang" },
-    products: { label: "Products", h2a: "Ready-to-Use", h2b: "Roblox Systems.", sub: "Sistem siap pakai yang bisa langsung lu integrasi ke game lu. Dibeli sekali, update selamanya.", showcase: "Lihat Showcase", buy: "Beli Produk" },
+    products: { label: "Ecosystem", h2a: "Satu platform.", h2b: "Delapan alat terhubung.", sub: "Dari command center creator hingga audio pipeline, license management, dan sistem club — semua bagian dari satu ekosistem yang terhubung.", showcase: "Lihat Showcase", buy: "Beli Produk" },
     pricing: { label: "Creator Plans", h2a: "Pilih level", h2b: "akses kamu.", sub: "Akses platform untuk setiap tahap perjalanan creator kamu. Mulai gratis, scale kapan pun siap.", note: "", startFrom: "mulai" },
     testimonials: { label: "Testimonials", h2a: "Kata", h2b: "Klien Gua.", sub: "Bukan sekadar review — ini feedback nyata dari orang-orang yang udah kerja bareng gua." },
     contact: { label: "Mulai Sekarang", h2a: "Infrastruktur creator", h2b: "kamu sudah siap.", sub: "Buka Creator Panel untuk akses Audio Forge, License Manager, Donation Platform, dan lainnya — semuanya dari satu ekosistem yang terhubung.", cta1: "Open Creator Panel", cta2: "Gabung Komunitas" },
@@ -62,7 +62,7 @@ const content = {
     why: { label: "Why Me?", h2a: "More Than Just", h2b: "A Developer.", sub: "I combine craftsmanship, solid systems, and real aftersales — not just promises." },
     services: { label: "Services", h2a: "What I", h2b: "Can Build.", sub: "Full-stack Roblox development — from maps and systems to GUI and launch polish." },
     projects: { label: "Projects", h2a: "Games I've", h2b: "Built.", sub: "From solo projects to team collabs — building, scripting, GUI, all the way to launch.", play: "Play Now" },
-    products: { label: "Products", h2a: "Ready-to-Use", h2b: "Roblox Systems.", sub: "Plug-and-play systems you can integrate directly into your game. Buy once, update forever.", showcase: "View Showcase", buy: "Buy Product" },
+    products: { label: "The Ecosystem", h2a: "One platform.", h2b: "Eight connected tools.", sub: "From the creator command center to audio pipeline, license management, and club systems — all part of one connected ecosystem.", showcase: "View Showcase", buy: "Buy Product" },
     pricing: { label: "Creator Plans", h2a: "Choose your", h2b: "level of access.", sub: "Platform access for every stage of your creator journey. Start free, scale when you're ready.", note: "", startFrom: "from" },
     testimonials: { label: "Testimonials", h2a: "What Clients", h2b: "Say.", sub: "Not just reviews — real feedback from people who've worked with me." },
     contact: { label: "Get Started", h2a: "Your creator", h2b: "infrastructure is ready.", sub: "Open Creator Panel to access Audio Forge, License Manager, Donation Platform, and more — all from one connected ecosystem.", cta1: "Open Creator Panel", cta2: "Join Community" },
@@ -85,6 +85,76 @@ const products = [
   { id: "club-kit", name: "Hibob Club Kit", tag: "Full System", icon: "box", price: { id: "Rp1.000.000 / R$20.000", en: "IDR 1,000,000 / R$20,000" }, update: { id: "Free updates selamanya!", en: "Free updates forever!" }, desc: { id: "Sistem manajemen club Roblox yang lengkap dan terintegrasi. Dirancang buat komunitas yang butuh operasional profesional, efisien, dan realtime.", en: "A complete, integrated club management system for Roblox. Designed for communities that need professional, efficient, and real-time operations." }, features: ["Centralized Admin Panel","Role & Permission System","NameTag & Title System","VIP / VVIP Shop Integration","Dance, Sync & Carry System","Donation System","Leaderboard System","Leveling & Progression","Realtime Sync System","Knit Framework Architecture"], showcase: "https://www.tiktok.com/@hibobbb67/video/7638638271001595143", highlight: true },
   { id: "music-system", name: "Hibob Music System", tag: "Audio System", icon: "music", price: { id: "Rp300.000 / R$6.000", en: "IDR 300,000 / R$6,000" }, update: { id: "Launch price — harga naik sebentar lagi!", en: "Launch price — going up soon!" }, desc: { id: "Solusi audio management profesional buat Roblox Club Map lu. Dibangun untuk sinkronisasi sempurna, interaktivitas tinggi, dan sound processing yang advanced.", en: "A professional-grade audio management solution for your Roblox Club Map. Built for perfect sync, high interactivity, and advanced sound processing." }, features: ["Full Server Sync — realtime audio sync","Smart Playback — Auto Queue & Request System","Playlist grouping + Smart Search UI","Players can add songs via Asset ID","MusicZones — area-based sound","Crossfade, EQ, Reverb, Compressor","DJ Mode — authorized-only control","Script obfuscation for asset security","Whitelist via Roblox & Discord (Parcel)","Dedicated Discord support"], showcase: "https://www.tiktok.com/@hibobbb67/video/7629686621918498055", highlight: false },
   { id: "visual-system", name: "Hibob Visual System", tag: "UI Effect Module", icon: "zap", price: { id: "Rp500.000", en: "IDR 500,000" }, update: { id: "Ada voucher spesial! Cek di Discord kami.", en: "Special voucher available! Check our Discord." }, desc: { id: "Modul profesional untuk animasi dan efek visual yang eye-catching pada UI game kamu. Bikin game terlihat lebih polished dan interaktif.", en: "Professional UI effect module for stunning animations and visual effects. Make your game look more polished and interactive." }, features: ["FADE, FLASH, PULSE, STROBE, HOLD, RANDOM effects","Smooth transitions — customizable duration & speed","Background, border, text & stroke color control","Hover & press effects untuk interactive feedback","Config-based system — setup sekali, pakai berkali-kali","Modular architecture — plug & play","Works dengan buttons, labels, topbar, screens","UIGridLayout & UIListLayout support","Haptic feedback support","Production-ready & performance optimized"], showcase: "https://discord.gg/qzCdpasNhG", highlight: false, voucherOnly: "SPESIAL IDUL ADHA" },
+];
+
+const platformProducts = [
+  {
+    id: "creator-panel",
+    name: "Creator Panel",
+    badge: "Core Platform",
+    icon: "layers",
+    status: "available",
+    isHub: true,
+    desc: {
+      id: "Command center terpusat untuk mengelola lisensi, audio assets, donasi, identitas, dan semua creator tools dari satu dashboard.",
+      en: "Centralized command center for managing licenses, audio assets, donations, identities, and creator tools from a single dashboard.",
+    },
+    highlights: ["Discord Identity","Roblox Identity","License Management","Asset Management","Donation Tracking","Unified Creator Dashboard"],
+    ctaPrimary: { id: "Buka Panel", en: "Open Panel" },
+    ctaSecondary: { id: "Pelajari Lebih", en: "Learn More" },
+  },
+  {
+    id: "audio-forge",
+    name: "Audio Forge",
+    badge: "Audio Pipeline",
+    icon: "music",
+    status: "coming-soon",
+    desc: {
+      id: "Convert, proses, preview, publish, dan kelola Roblox audio assets lewat workflow creator yang profesional.",
+      en: "Convert, process, preview, publish, and manage Roblox audio assets through a professional creator workflow.",
+    },
+    highlights: ["Preview Engine","Roblox Upload Pipeline","Asset Library","Quota Management","Audio Processing"],
+    ctaPrimary: { id: "Coba Audio Forge", en: "Try Audio Forge" },
+  },
+  {
+    id: "donate-system",
+    name: "Hibob Donate System",
+    badge: "Donation Platform",
+    icon: "zap",
+    status: "available",
+    desc: {
+      id: "Hubungkan donasi Bagibagi langsung ke Roblox experience dengan realtime events, effects, dan creator analytics.",
+      en: "Connect Bagibagi donations directly to your Roblox experience with real-time events, effects, and creator analytics.",
+    },
+    highlights: ["Bagibagi Integration","Real-time Donation Events","Roblox Effects Trigger","Creator Analytics","Web Dashboard Control"],
+    ctaPrimary: { id: "Lihat Sistem", en: "View System" },
+  },
+  {
+    id: "license-manager",
+    name: "License Manager",
+    badge: "Creator Security",
+    icon: "shield",
+    status: "coming-soon",
+    desc: {
+      id: "Lindungi sistem Roblox premium dengan verifikasi kepemilikan berbasis Discord dan pengiriman lisensi otomatis.",
+      en: "Protect premium Roblox systems with Discord-based ownership verification and automated license delivery.",
+    },
+    highlights: ["Discord Verification","Ownership Tracking","Automatic Delivery","License Revocation","Universe Binding"],
+    ctaPrimary: { id: "Lihat Sistem", en: "View System" },
+  },
+  {
+    id: "asset-manager",
+    name: "Asset Manager",
+    badge: "Creator Assets",
+    icon: "box",
+    status: "coming-soon",
+    desc: {
+      id: "Kelola Roblox assets, ownership records, permissions, dan creator resources dari satu tempat.",
+      en: "Manage Roblox assets, ownership records, permissions, and creator resources from one place.",
+    },
+    highlights: ["Asset Library","Ownership Records","Version Tracking","Team Access","Resource Organization"],
+    ctaPrimary: { id: "Lihat Sistem", en: "View System" },
+  },
 ];
 
 const services = [
@@ -305,7 +375,7 @@ export default function App() {
         ::selection{background:rgba(168,85,247,.35)}
         .nav-link:hover{color:white!important;background:rgba(255,255,255,.06)!important}
         .lang-btn:hover{background:rgba(168,85,247,.2)!important;color:white!important}
-        @media(max-width:768px){ .hero-grid{grid-template-columns:1fr!important} .hero-right{display:none!important} .why-grid{grid-template-columns:1fr!important} .pricing-grid{grid-template-columns:1fr!important} .products-grid{grid-template-columns:1fr!important} .products-grid-item{grid-template-columns:1fr!important} .hide-mob{display:none!important} .show-mob{display:flex!important} }
+        @media(max-width:768px){ .hero-grid{grid-template-columns:1fr!important} .hero-right{display:none!important} .why-grid{grid-template-columns:1fr!important} .pricing-grid{grid-template-columns:1fr!important} .products-grid{grid-template-columns:1fr!important} .products-grid-item{grid-template-columns:1fr!important} .hide-mob{display:none!important} .show-mob{display:flex!important} .platform-grid{grid-template-columns:1fr 1fr!important} .hub-inner{grid-template-columns:1fr!important} .hub-features{display:none!important} }
         @media(min-width:769px){.show-mob{display:none!important}}
         @media(prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important} [data-reveal]{opacity:1!important;transform:none!important;filter:none!important} }
       `}</style>
@@ -518,6 +588,91 @@ export default function App() {
             <h2 style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05 }}>{c.products.h2a} <span className="gt">{c.products.h2b}</span></h2>
             <p style={{ marginTop: 14, fontSize: 16, color: "rgba(255,255,255,.48)", maxWidth: 520, lineHeight: 1.78 }}>{c.products.sub}</p>
           </div>
+
+          {/* Creator Panel — Hub Card */}
+          <div data-reveal style={{ marginBottom: 14, position: "relative", background: "rgba(120,50,250,.07)", border: "1px solid rgba(168,85,247,.45)", borderRadius: 24, overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg,#7c3aed,#a855f7,#e879f9,#38bdf8)" }} />
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 90% at 85% 50%,rgba(168,85,247,.1) 0%,transparent 65%)", pointerEvents: "none" }} />
+            <div className="hub-inner" style={{ position: "relative", padding: "40px 44px", display: "grid", gridTemplateColumns: "1fr 240px", gap: 48, alignItems: "center" }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg,rgba(120,50,250,.3),rgba(56,189,248,.15))", border: "1px solid rgba(168,85,247,.4)", display: "flex", alignItems: "center", justifyContent: "center", color: "#a855f7" }}>
+                    <Icon name="layers" size={22} />
+                  </div>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 11px", borderRadius: 999, background: "rgba(168,85,247,.18)", border: "1px solid rgba(168,85,247,.4)", color: "#c084fc", letterSpacing: ".08em", textTransform: "uppercase" }}>Core Platform</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, padding: "4px 11px", borderRadius: 999, background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.25)", color: "#34d399" }}>● Live Now</span>
+                  </div>
+                </div>
+                <h3 style={{ fontSize: "clamp(26px,3vw,38px)", fontWeight: 900, letterSpacing: "-0.035em", marginBottom: 12 }}>Creator Panel</h3>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.8, maxWidth: 540, marginBottom: 26 }}>{platformProducts[0].desc[lang]}</p>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                  <Btn href={PANEL_URL} primary style={{ padding: "12px 24px" }}>
+                    {platformProducts[0].ctaPrimary[lang]} <Icon name="arrowRight" size={16} />
+                  </Btn>
+                  <Btn href={PANEL_URL} style={{ padding: "12px 24px" }}>
+                    {platformProducts[0].ctaSecondary[lang]} <Icon name="externalLink" size={14} />
+                  </Btn>
+                </div>
+              </div>
+              <div className="hub-features" style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                {platformProducts[0].highlights.map((h, hi) => (
+                  <div key={hi} style={{ display: "flex", alignItems: "center", gap: 9, padding: "9px 14px", borderRadius: 11, background: "rgba(168,85,247,.07)", border: "1px solid rgba(168,85,247,.15)" }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "linear-gradient(135deg,#a855f7,#38bdf8)", flexShrink: 0 }} />
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,.65)" }}>{h}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Platform Tools — 4 columns */}
+          <div className="platform-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 14 }}>
+            {platformProducts.filter(p => !p.isHub).map((prod, i) => {
+              const isAvail = prod.status === "available";
+              return (
+                <div key={prod.id} data-reveal data-d={`${i + 1}`}
+                  style={{ position: "relative", background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 20, padding: "24px 22px", transition: "transform .3s cubic-bezier(.22,1,.36,1), border-color .3s" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.borderColor = "rgba(168,85,247,.28)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = ""; e.currentTarget.style.borderColor = "rgba(255,255,255,.07)"; }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+                    <div style={{ width: 40, height: 40, borderRadius: 11, background: "rgba(168,85,247,.12)", border: "1px solid rgba(168,85,247,.2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#a855f7" }}>
+                      <Icon name={prod.icon} size={18} />
+                    </div>
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 999, letterSpacing: ".05em",
+                      ...(isAvail ? { background: "rgba(52,211,153,.1)", border: "1px solid rgba(52,211,153,.22)", color: "#34d399" } : { background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", color: "rgba(255,255,255,.35)" })
+                    }}>
+                      {isAvail ? "● Available" : "Coming Soon"}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: ".1em", color: "#38bdf8", textTransform: "uppercase", marginBottom: 5, display: "block" }}>{prod.badge}</span>
+                  <h3 style={{ fontSize: 16, fontWeight: 800, marginBottom: 7, letterSpacing: "-0.02em" }}>{prod.name}</h3>
+                  <p style={{ fontSize: 12.5, color: "rgba(255,255,255,.42)", lineHeight: 1.72, marginBottom: 14 }}>{prod.desc[lang]}</p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 5, marginBottom: 16 }}>
+                    {prod.highlights.slice(0, 3).map((h, hi) => (
+                      <div key={hi} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <div style={{ width: 14, height: 14, borderRadius: 4, background: "rgba(168,85,247,.14)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#a855f7" }}>
+                          <Icon name="check" size={9} />
+                        </div>
+                        <span style={{ fontSize: 12, color: "rgba(255,255,255,.48)", fontWeight: 500 }}>{h}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <a href={isAvail ? PANEL_URL : undefined}
+                    onClick={!isAvail ? (e) => e.preventDefault() : undefined}
+                    style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "9px 0", borderRadius: 10, fontWeight: 700, fontSize: 12.5, textDecoration: "none", transition: "all .2s",
+                      ...(isAvail ? { background: "rgba(168,85,247,.14)", border: "1px solid rgba(168,85,247,.28)", color: "white", cursor: "pointer" } : { background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)", color: "rgba(255,255,255,.28)", cursor: "default" })
+                    }}
+                    onMouseEnter={(e) => { if (isAvail) e.currentTarget.style.background = "rgba(168,85,247,.24)"; }}
+                    onMouseLeave={(e) => { if (isAvail) e.currentTarget.style.background = "rgba(168,85,247,.14)"; }}>
+                    {isAvail ? (<><Icon name="arrowRight" size={13} /> {prod.ctaPrimary[lang]}</>) : prod.ctaPrimary[lang]}
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Commercial Products — 3 columns */}
           <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 18 }}>
             {products.map((prod, i) => (
               <div key={prod.id} data-reveal data-d={`${i + 1}`}
