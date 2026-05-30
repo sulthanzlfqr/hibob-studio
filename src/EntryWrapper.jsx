@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import App from "./App";
 import logoImg from "./assets/HibobStudio-Logo.png";
+import { sfxHover, sfxClick, sfxLoadDone, sfxStart } from "./sfx";
 
 const DISCORD_URL = "https://discord.gg/qzCdpasNhG";
 const PANEL_URL = "https://panel.hibobstudio.com";
@@ -22,6 +23,7 @@ function LoadingScreen({ onDone }) {
       if (t < 1) {
         requestAnimationFrame(tick);
       } else {
+        sfxLoadDone();
         setTimeout(() => { setFadeOut(true); setTimeout(onDone, 500); }, 200);
       }
     };
@@ -95,17 +97,17 @@ function EntryPage({ onContinue }) {
 
         {/* CTA */}
         <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 340, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.3s" }}>
-          <button onClick={onContinue}
+          <button onClick={() => { sfxStart(); onContinue(); }}
             style={{ width: "100%", padding: "15px 24px", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "white", fontSize: 15, fontWeight: 800, fontFamily: "'Plus Jakarta Sans',sans-serif", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)", boxShadow: "0 4px 28px rgba(168,85,247,.4)", letterSpacing: "-0.01em" }}
-            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 8px 50px rgba(168,85,247,.65)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+            onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.boxShadow = "0 8px 50px rgba(168,85,247,.65)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 4px 28px rgba(168,85,247,.4)"; e.currentTarget.style.transform = "translateY(0)"; }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
             Let's Get Started
           </button>
 
-          <a href={PANEL_URL} target="_blank" rel="noreferrer"
+          <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={sfxClick}
             style={{ width: "100%", padding: "13px 24px", borderRadius: 12, border: "1px solid rgba(168,85,247,.25)", background: "rgba(168,85,247,.06)", color: "rgba(255,255,255,.65)", fontSize: 14, fontWeight: 700, fontFamily: "'Plus Jakarta Sans',sans-serif", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)", letterSpacing: "-0.01em", boxSizing: "border-box" }}
-            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(168,85,247,.5)"; e.currentTarget.style.color = "white"; }}
+            onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.borderColor = "rgba(168,85,247,.5)"; e.currentTarget.style.color = "white"; }}
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(168,85,247,.25)"; e.currentTarget.style.color = "rgba(255,255,255,.65)"; }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 12l10 5 10-5M2 17l10 5 10-5" /></svg>
             Buka Creator Panel
