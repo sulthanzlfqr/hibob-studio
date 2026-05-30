@@ -527,14 +527,16 @@ export default function App() {
         @keyframes bgBlob2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(5%,-7%) scale(1.1)} 66%{transform:translate(-5%,6%) scale(0.9)} }
         @keyframes bgBlob3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-7%,7%) scale(1.13)} }
         @keyframes bgBlob4 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(6%,-5%) scale(0.93)} 66%{transform:translate(-4%,7%) scale(1.07)} }
+        @keyframes bgBlob5 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(5%,-6%) scale(1.08)} 70%{transform:translate(-3%,4%) scale(0.95)} }
       `}</style>
 
       {/* Background */}
       <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, background: "#010112", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: "-20%", right: "-10%", width: "70%", height: "80%", borderRadius: "50%", background: "#4a6cf7", filter: "blur(110px)", opacity: 0.6, animation: "bgBlob1 14s ease-in-out infinite", willChange: "transform" }} />
-        <div style={{ position: "absolute", top: "15%", right: "-15%", width: "62%", height: "72%", borderRadius: "50%", background: "#c828c0", filter: "blur(100px)", opacity: 0.65, animation: "bgBlob2 18s ease-in-out infinite", willChange: "transform" }} />
-        <div style={{ position: "absolute", top: "0%", right: "8%", width: "42%", height: "52%", borderRadius: "50%", background: "#8090ff", filter: "blur(80px)", opacity: 0.45, animation: "bgBlob3 11s ease-in-out infinite", willChange: "transform" }} />
-        <div style={{ position: "absolute", bottom: "-15%", left: "-5%", width: "48%", height: "58%", borderRadius: "50%", background: "#5518a8", filter: "blur(120px)", opacity: 0.35, animation: "bgBlob4 22s ease-in-out infinite", willChange: "transform" }} />
+        <div style={{ position: "absolute", top: "-20%", right: "-10%", width: "70%", height: "80%", borderRadius: "50%", background: "#4a6cf7", filter: "blur(110px)", opacity: 0.35, animation: "bgBlob1 14s ease-in-out infinite", willChange: "transform" }} />
+        <div style={{ position: "absolute", top: "15%", right: "-15%", width: "62%", height: "72%", borderRadius: "50%", background: "#c828c0", filter: "blur(100px)", opacity: 0.38, animation: "bgBlob2 18s ease-in-out infinite", willChange: "transform" }} />
+        <div style={{ position: "absolute", top: "0%", right: "8%", width: "42%", height: "52%", borderRadius: "50%", background: "#8090ff", filter: "blur(80px)", opacity: 0.25, animation: "bgBlob3 11s ease-in-out infinite", willChange: "transform" }} />
+        <div style={{ position: "absolute", bottom: "-15%", left: "-5%", width: "48%", height: "58%", borderRadius: "50%", background: "#5518a8", filter: "blur(120px)", opacity: 0.2, animation: "bgBlob4 22s ease-in-out infinite", willChange: "transform" }} />
+        <div style={{ position: "absolute", bottom: "-10%", left: "5%", width: "40%", height: "50%", borderRadius: "50%", background: "#d020a0", filter: "blur(100px)", opacity: 0.28, animation: "bgBlob5 16s ease-in-out infinite", willChange: "transform" }} />
       </div>
 
       <MobileMenu isOpen={menuOpen} active={activeSection} onClose={() => setMenuOpen(false)} />

@@ -31,7 +31,7 @@ function LoadingScreen({ onDone }) {
   }, [onDone]);
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 9999, background: "#07031a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", opacity: fadeOut ? 0 : 1, transition: "opacity 0.5s cubic-bezier(0.22,1,0.36,1)" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 9999, background: "transparent", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", opacity: fadeOut ? 0 : 1, transition: "opacity 0.5s cubic-bezier(0.22,1,0.36,1)" }}>
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(120,40,220,.22) 0%, transparent 65%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px)", backgroundSize: "40px 40px", pointerEvents: "none" }} />
 
@@ -67,7 +67,7 @@ function EntryPage({ onContinue }) {
   const ease = "0.75s cubic-bezier(0.22,1,0.36,1)";
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 9998, background: "#07031a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px", overflowY: "auto" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 9998, background: "transparent", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px", overflowY: "auto" }}>
 
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 90% 70% at 15% 0%, rgba(110,35,190,.35) 0%, transparent 50%)" }} />
@@ -129,6 +129,27 @@ function EntryPage({ onContinue }) {
 }
 
 // ─── Main Wrapper ─────────────────────────────────────────────────────────────
+const AURORA_CSS = `
+  @keyframes bgBlob1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-4%,5%) scale(1.07)} 66%{transform:translate(5%,-4%) scale(0.93)} }
+  @keyframes bgBlob2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(5%,-7%) scale(1.1)} 66%{transform:translate(-5%,6%) scale(0.9)} }
+  @keyframes bgBlob3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-7%,7%) scale(1.13)} }
+  @keyframes bgBlob4 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(6%,-5%) scale(0.93)} 66%{transform:translate(-4%,7%) scale(1.07)} }
+  @keyframes bgBlob5 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(5%,-6%) scale(1.08)} 70%{transform:translate(-3%,4%) scale(0.95)} }
+`;
+
+function AuroraBackground({ zIndex = 9990 }) {
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex, background: "#010112", overflow: "hidden", pointerEvents: "none" }}>
+      <style>{AURORA_CSS}</style>
+      <div style={{ position: "absolute", top: "-20%", right: "-10%", width: "70%", height: "80%", borderRadius: "50%", background: "#4a6cf7", filter: "blur(110px)", opacity: 0.35, animation: "bgBlob1 14s ease-in-out infinite", willChange: "transform" }} />
+      <div style={{ position: "absolute", top: "15%", right: "-15%", width: "62%", height: "72%", borderRadius: "50%", background: "#c828c0", filter: "blur(100px)", opacity: 0.38, animation: "bgBlob2 18s ease-in-out infinite", willChange: "transform" }} />
+      <div style={{ position: "absolute", top: "0%", right: "8%", width: "42%", height: "52%", borderRadius: "50%", background: "#8090ff", filter: "blur(80px)", opacity: 0.25, animation: "bgBlob3 11s ease-in-out infinite", willChange: "transform" }} />
+      <div style={{ position: "absolute", bottom: "-15%", left: "-5%", width: "48%", height: "58%", borderRadius: "50%", background: "#5518a8", filter: "blur(120px)", opacity: 0.2, animation: "bgBlob4 22s ease-in-out infinite", willChange: "transform" }} />
+      <div style={{ position: "absolute", bottom: "-10%", left: "5%", width: "40%", height: "50%", borderRadius: "50%", background: "#d020a0", filter: "blur(100px)", opacity: 0.28, animation: "bgBlob5 16s ease-in-out infinite", willChange: "transform" }} />
+    </div>
+  );
+}
+
 export default function EntryWrapper() {
   const [phase, setPhase] = useState("loading");
   const [mainVisible, setMainVisible] = useState(false);
@@ -141,6 +162,7 @@ export default function EntryWrapper() {
 
   return (
     <>
+      {phase !== "main" && <AuroraBackground zIndex={9990} />}
       {phase === "loading" && <LoadingScreen onDone={handleLoadingDone} />}
       {phase === "entry" && <EntryPage onContinue={handleContinue} />}
       {phase === "main" && (
