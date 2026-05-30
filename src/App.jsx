@@ -382,10 +382,29 @@ function MobileMenu({ isOpen, active, onClose }) {
 
 // ─── Cart Drawer ──────────────────────────────────────────────────────────────
 function CartDrawer({ items, total, onClose, onRemove, onCheckout }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  function handleClose() {
+    setVisible(false);
+    setTimeout(onClose, 340);
+  }
+
+  function handleCheckout() {
+    setVisible(false);
+    setTimeout(onCheckout, 340);
+  }
+
+  const ease = "0.34s cubic-bezier(0.22,1,0.36,1)";
+
   return (
     <>
-      <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(0,0,0,.55)", backdropFilter: "blur(4px)" }} />
-      <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 61, width: "min(100vw, 400px)", background: "#0d0920", borderLeft: "1px solid rgba(168,85,247,.2)", display: "flex", flexDirection: "column", boxShadow: "-32px 0 80px rgba(0,0,0,.7)" }}>
+      <div onClick={handleClose} style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(0,0,0,.55)", backdropFilter: "blur(4px)", opacity: visible ? 1 : 0, transition: `opacity ${ease}` }} />
+      <div style={{ position: "fixed", top: 0, right: 0, bottom: 0, zIndex: 61, width: "min(100vw, 400px)", background: "#0d0920", borderLeft: "1px solid rgba(168,85,247,.2)", display: "flex", flexDirection: "column", boxShadow: "-32px 0 80px rgba(0,0,0,.7)", transform: visible ? "translateX(0)" : "translateX(100%)", transition: `transform ${ease}` }}>
         {/* Header */}
         <div style={{ padding: "22px 24px", borderBottom: "1px solid rgba(255,255,255,.07)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -395,7 +414,7 @@ function CartDrawer({ items, total, onClose, onRemove, onCheckout }) {
               <span style={{ padding: "2px 8px", borderRadius: 999, background: "rgba(168,85,247,.2)", border: "1px solid rgba(168,85,247,.35)", fontSize: 11, fontWeight: 700, color: "#c084fc" }}>{items.length}</span>
             )}
           </div>
-          <button onClick={() => { sfxClick(); onClose(); }} style={{ background: "none", border: "none", color: "rgba(255,255,255,.5)", cursor: "pointer", padding: 4, borderRadius: 8, transition: "color .2s" }}
+          <button onClick={() => { sfxClick(); handleClose(); }} style={{ background: "none", border: "none", color: "rgba(255,255,255,.5)", cursor: "pointer", padding: 4, borderRadius: 8, transition: "color .2s" }}
             onMouseEnter={(e) => e.currentTarget.style.color = "white"}
             onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,.5)"}>
             <Icon name="x" size={20} />
@@ -438,7 +457,7 @@ function CartDrawer({ items, total, onClose, onRemove, onCheckout }) {
               <span style={{ fontSize: 14, color: "rgba(255,255,255,.5)", fontWeight: 600 }}>Total</span>
               <span style={{ fontSize: 18, fontWeight: 900, background: "linear-gradient(135deg,#a855f7,#38bdf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Rp{total.toLocaleString("id-ID")}</span>
             </div>
-            <button onClick={() => { sfxClick(); onCheckout(); }}
+            <button onClick={() => { sfxClick(); handleCheckout(); }}
               style={{ width: "100%", padding: "14px 0", borderRadius: 12, border: "none", background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "white", fontSize: 14, fontWeight: 800, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, fontFamily: "inherit", transition: "opacity .2s" }}
               onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.opacity = ".85"; }}
               onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
