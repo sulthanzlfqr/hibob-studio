@@ -65,60 +65,47 @@ function EntryPage({ onContinue }) {
 
   const ease = "0.75s cubic-bezier(0.22,1,0.36,1)";
 
+  const glass = {
+    position: "relative", width: "100%", padding: "15px 24px", borderRadius: 20,
+    border: "1px solid rgba(255,255,255,.22)",
+    background: "linear-gradient(180deg,rgba(255,255,255,.17) 0%,rgba(255,255,255,.07) 100%)",
+    backdropFilter: "blur(28px) saturate(160%)", WebkitBackdropFilter: "blur(28px) saturate(160%)",
+    color: "white", fontSize: 15, fontWeight: 700, fontFamily: "'Plus Jakarta Sans',sans-serif",
+    cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+    textDecoration: "none", boxSizing: "border-box", letterSpacing: "-0.01em",
+    transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)",
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,.42), inset 0 -1px 0 rgba(0,0,0,.12), 0 4px 24px rgba(0,0,0,.22)",
+    overflow: "hidden",
+  };
+
+  const shine = { position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(255,255,255,.14) 0%,transparent 52%)", borderRadius: 20, pointerEvents: "none" };
+  const onEnter = (e) => { sfxHover(); e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.52), inset 0 -1px 0 rgba(0,0,0,.12), 0 14px 40px rgba(0,0,0,.32)"; };
+  const onLeave = (e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.42), inset 0 -1px 0 rgba(0,0,0,.12), 0 4px 24px rgba(0,0,0,.22)"; };
+
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 9998, background: "transparent", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px", overflowY: "auto" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 9998, background: "transparent", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: 320 }}>
 
-
-      <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: 600, paddingTop: 20, paddingBottom: 40 }}>
-
-        {/* Brand badge */}
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "6px 14px", borderRadius: 999, border: "1px solid rgba(168,85,247,.3)", background: "rgba(168,85,247,.08)", marginBottom: 20, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0s" }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#a855f7" }} />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#c084fc", letterSpacing: ".16em", textTransform: "uppercase", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>Creator Infrastructure Platform</span>
+        {/* Logo */}
+        <div style={{ marginBottom: 52, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: `opacity ${ease}, transform ${ease}` }}>
+          <img src={logoImg} alt="Hibob Studio" style={{ height: "clamp(52px,10vw,88px)", width: "auto", objectFit: "contain", display: "block", filter: "drop-shadow(0 0 32px rgba(168,85,247,.45))" }} />
         </div>
 
-        {/* Headline */}
-        <div style={{ textAlign: "center", marginBottom: 14, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.08s" }}>
-          <img src={logoImg} aria-label="Hibob Studio" alt="Hibob Studio" style={{ height: "clamp(44px,8vw,72px)", width: "auto", objectFit: "contain", display: "block", margin: "0 auto", filter: "drop-shadow(0 0 28px rgba(168,85,247,.35))" }} />
-        </div>
-
-        {/* Subtext */}
-        <p style={{ fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.75, fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 400, textAlign: "center", marginBottom: 32, maxWidth: 440, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.15s" }}>
-          Ekosistem infrastruktur untuk creator Roblox yang serius. Kelola audio, aset, lisensi, identitas, dan komunitas dari satu platform yang terhubung.
-        </p>
-
-        {/* CTA */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 340, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.3s" }}>
-
-          {/* Primary — Liquid Glass Purple */}
-          <button onClick={() => { sfxStart(); onContinue(); }}
-            style={{ position: "relative", width: "100%", padding: "16px 24px", borderRadius: 20, border: "1px solid rgba(200,140,255,.35)", background: "linear-gradient(180deg,rgba(160,80,255,.28) 0%,rgba(100,40,200,.14) 100%)", backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)", color: "white", fontSize: 15, fontWeight: 800, fontFamily: "'Plus Jakarta Sans',sans-serif", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)", boxShadow: "inset 0 1px 0 rgba(255,255,255,.45), 0 8px 32px rgba(100,40,200,.3)", letterSpacing: "-0.01em", overflow: "hidden" }}
-            onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.5), 0 16px 48px rgba(120,50,240,.45)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.45), 0 8px 32px rgba(100,40,200,.3)"; }}>
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(255,255,255,.12) 0%,transparent 55%)", borderRadius: 20, pointerEvents: "none" }} />
+        {/* Buttons */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.18s" }}>
+          <button onClick={() => { sfxStart(); onContinue(); }} style={{ ...glass, fontWeight: 800 }} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+            <div style={shine} />
             <svg style={{ position: "relative" }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7" /></svg>
             <span style={{ position: "relative" }}>Let's Get Started</span>
           </button>
-
-          {/* Secondary — Liquid Glass Neutral */}
-          <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={sfxClick}
-            style={{ position: "relative", width: "100%", padding: "15px 24px", borderRadius: 20, border: "1px solid rgba(255,255,255,.22)", background: "linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.06) 100%)", backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)", color: "rgba(255,255,255,.9)", fontSize: 14, fontWeight: 700, fontFamily: "'Plus Jakarta Sans',sans-serif", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none", transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)", letterSpacing: "-0.01em", boxSizing: "border-box", boxShadow: "inset 0 1px 0 rgba(255,255,255,.35), 0 4px 20px rgba(0,0,0,.2)", overflow: "hidden" }}
-            onMouseEnter={(e) => { sfxHover(); e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.45), 0 12px 36px rgba(0,0,0,.3)"; e.currentTarget.style.color = "white"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.35), 0 4px 20px rgba(0,0,0,.2)"; e.currentTarget.style.color = "rgba(255,255,255,.9)"; }}>
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(255,255,255,.1) 0%,transparent 55%)", borderRadius: 20, pointerEvents: "none" }} />
+          <a href={PANEL_URL} target="_blank" rel="noreferrer" onClick={sfxClick} style={glass} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+            <div style={shine} />
             <svg style={{ position: "relative" }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 12l10 5 10-5M2 17l10 5 10-5" /></svg>
             <span style={{ position: "relative" }}>Buka Creator Panel</span>
           </a>
         </div>
-
-        <p style={{ marginTop: 22, fontSize: 12, color: "rgba(255,255,255,.18)", fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 500, textAlign: "center", opacity: visible ? 1 : 0, transition: `opacity ${ease}`, transitionDelay: "0.4s" }}>
-          hibobstudio.com
-        </p>
       </div>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
-      `}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');`}</style>
     </div>
   );
 }
