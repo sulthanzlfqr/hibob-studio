@@ -64,15 +64,6 @@ function EntryPage({ onContinue }) {
 
   const ease = "0.75s cubic-bezier(0.22,1,0.36,1)";
 
-  const ecosystem = [
-    { name: "Creator Panel", desc: "Command center untuk semua tools", badge: "Hub", color: "#a855f7" },
-    { name: "Audio Forge", desc: "Pipeline audio ke Roblox", badge: "Audio", color: "#38bdf8" },
-    { name: "License Manager", desc: "Proteksi & distribusi produk otomatis", badge: "Security", color: "#34d399" },
-    { name: "Asset Manager", desc: "Repositori aset terpusat", badge: "Assets", color: "#f59e0b" },
-    { name: "Donation System", desc: "Monetisasi komunitas Roblox", badge: "Community", color: "#f472b6" },
-    { name: "Club Kit", desc: "Sistem manajemen club lengkap", badge: "System", color: "#818cf8" },
-  ];
-
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 9998, background: "#07031a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px", overflowY: "auto" }}>
 
@@ -101,22 +92,6 @@ function EntryPage({ onContinue }) {
         <p style={{ fontSize: 15, color: "rgba(255,255,255,.5)", lineHeight: 1.75, fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: 400, textAlign: "center", marginBottom: 32, maxWidth: 440, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.15s" }}>
           Ekosistem infrastruktur untuk creator Roblox yang serius. Kelola audio, aset, lisensi, identitas, dan komunitas dari satu platform yang terhubung.
         </p>
-
-        {/* Ecosystem preview */}
-        <div style={{ width: "100%", marginBottom: 28, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.22s" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-            {ecosystem.map((item, i) => (
-              <div key={i} style={{ padding: "12px 14px", borderRadius: 12, background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
-                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: item.color, flexShrink: 0 }} />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: item.color, letterSpacing: ".08em", textTransform: "uppercase" }}>{item.badge}</span>
-                </div>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.85)", marginBottom: 3 }}>{item.name}</p>
-                <p style={{ fontSize: 11, color: "rgba(255,255,255,.35)", lineHeight: 1.5 }}>{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* CTA */}
         <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%", maxWidth: 340, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)", transition: `opacity ${ease}, transform ${ease}`, transitionDelay: "0.3s" }}>

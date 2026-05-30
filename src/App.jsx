@@ -550,8 +550,8 @@ export default function App() {
                   <span style={{ position: "absolute", top: -4, right: -4, width: 16, height: 16, borderRadius: "50%", background: "#a855f7", fontSize: 9, fontWeight: 900, color: "white", display: "flex", alignItems: "center", justifyContent: "center" }}>{itemCount}</span>
                 )}
               </button>
-              <Btn href={PANEL_URL} primary className="hide-mob pulse" style={{ padding: "9px 20px", borderRadius: 999, fontSize: 13 }}>
-                Buka Creator Panel
+              <Btn href={DISCORD_URL} primary className="hide-mob pulse" style={{ padding: "9px 20px", borderRadius: 999, fontSize: 13 }}>
+                Join Discord
               </Btn>
               <button onClick={() => setMenuOpen((v) => !v)} className="show-mob"
                 style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 12, width: 42, height: 42, alignItems: "center", justifyContent: "center", color: "white", cursor: "pointer", transition: "all .2s" }}>
