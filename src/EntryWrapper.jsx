@@ -84,11 +84,15 @@ function EntryPage({ onContinue }) {
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 9998, background: "transparent", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px" }}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: 320 }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: 360 }}>
 
-        {/* Logo */}
-        <div style={{ marginBottom: 52, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: `opacity ${ease}, transform ${ease}` }}>
-          <img src={logoImg} alt="Hibob Studio" style={{ height: "clamp(52px,10vw,88px)", width: "auto", objectFit: "contain", display: "block", filter: "drop-shadow(0 0 32px rgba(168,85,247,.45))" }} />
+        {/* Logo + Wordmark */}
+        <div style={{ marginBottom: 52, display: "flex", alignItems: "center", gap: 20, opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: `opacity ${ease}, transform ${ease}` }}>
+          <img src={logoImg} alt="Hibob Studio" style={{ height: "clamp(56px,10vw,84px)", width: "auto", objectFit: "contain", filter: "drop-shadow(0 0 32px rgba(168,85,247,.45))" }} />
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.0 }}>
+            <span style={{ fontSize: "clamp(34px,6vw,54px)", fontWeight: 900, color: "white", letterSpacing: "-0.03em", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>Hibob</span>
+            <span style={{ fontSize: "clamp(34px,6vw,54px)", fontWeight: 900, color: "white", letterSpacing: "-0.03em", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>Studio</span>
+          </div>
         </div>
 
         {/* Buttons */}
