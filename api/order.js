@@ -126,14 +126,13 @@ export default async function handler(req) {
   const orderId = generateOrderId();
   const order = { orderId, customerName, customerDiscord, customerEmail, items, total };
 
-  // Send to Discord
+  // Send to Discord — text embed only (no file attachment to avoid memory issues)
   try {
-    const discordForm = new FormData();
-    discordForm.append("payload_json", JSON.stringify(buildEmbed(order)));
-    const ext = (proofFile.name || "jpg").split(".").pop();
-    discordForm.append("files[0]", proofFile, `bukti-${orderId}.${ext}`);
-
-    const discordRes = await fetch(webhookUrl, { method: "POST", body: discordForm });
+    const discordRes = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(buildEmbed(order)),
+    });
 
     if (!discordRes.ok) {
       const errText = await discordRes.text();
