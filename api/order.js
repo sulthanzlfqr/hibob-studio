@@ -127,26 +127,29 @@ export default async function handler(req) {
   const order = { orderId, customerName, customerDiscord, customerEmail, items, total };
 
   // ── Step 1: Kirim embed teks (order details) ─────────────────────────────
+  console.log(`[${orderId}] Sending embed to Discord...`);
   try {
     const ctrl1 = new AbortController();
     const t1 = setTimeout(() => ctrl1.abort(), 8000);
+    const embedBody = JSON.stringify(buildEmbed(order));
     const res1 = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(buildEmbed(order)),
+      body: embedBody,
       signal: ctrl1.signal,
     });
     clearTimeout(t1);
+    const res1Text = await res1.text();
+    console.log(`[${orderId}] Discord embed response: ${res1.status} | ${res1Text}`);
     if (!res1.ok) {
-      const errText = await res1.text();
-      console.error("Discord embed rejected:", res1.status, errText);
       return json({ error: "Gagal mengirim ke Discord. Coba beberapa saat lagi." }, 502);
     }
   } catch (err) {
-    console.error("Discord embed error:", err?.message);
+    console.error(`[${orderId}] Discord embed error:`, err?.message);
     return json({ error: "Terjadi kesalahan server. Coba lagi." }, 500);
   }
 
+  console.log(`[${orderId}] Embed sent. Sending proof image...`);
   // ── Step 2: Kirim gambar bukti transfer (best-effort, max 7 detik) ────────
   // Promise.race memastikan fungsi selalu lanjut meski upload lambat/hang.
   await Promise.race([
